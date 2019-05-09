@@ -1,0 +1,13 @@
+{
+    "path" : "C:/Users/benjk/Desktop/Capstone/DNS/R",
+    "sortOrder" : [
+        {
+            "ascending" : true,
+            "columnIndex" : 2
+        },
+        {
+            "ascending" : false,
+            "columnIndex" : 4
+        }
+    ]
+}
