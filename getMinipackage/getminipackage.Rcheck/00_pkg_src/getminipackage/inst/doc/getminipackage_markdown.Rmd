@@ -1,0 +1,225 @@
+---
+title:  "Classifying Transcripts using getminipackage"
+author:  "Zhenzhen Wang and Biniam Feleke"
+date:  "`r format(Sys.Date(), '%m/%d/%Y')`"
+abstract:  >
+  The purpose of this mini package is to class both coding and noncoding
+  transcripts into biotypes using the most recent GENCODE annotations. This tool
+  can also be used to define potential lncRNAs, given an available genome
+  transcriptome assembly (a gtf file) or any genomic loci of interest. Any long
+  transcripts that cover more than two coding regions of a genome can be
+  identified using this package.Mini-package version: 1.0
+output:  
+  html_document: default
+  word_document: default
+  pdf_document: default
+vignette: >
+  %\VignetteIndexEntry{title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+###### ###### 
+
+  * ##### [Standard workflow](#Standard workflow)
+    *  ##### [Genomic data source](#Genomic data source)
+    *  ##### [Extracting summary of genomic data](#Extracting summary of genomic data)
+    *  ##### [Loading data locally](#Loading data locally)
+    *  ##### [Filtering GRanges object *'gencode_gr'* from summary
+   data](#Filtering GRanges object *'gencode_gr'* from summary data)
+    *  ##### [Examples](#Examples)
+  * ##### [Acknowledgements](#Acknowledgements)
+  * ##### [SessionInfo](#SessionInfo)
+  * ##### [References](#References)
+
+<a name="Genomic data source"></a>\
+
+#### __Genomic data source__ 
+
+  A raw sequencing can be obtained from various sources. We obtained a
+  comprehensive gene annotation reference of human GRCh37 from
+  [GENCODE](https://www.gencodegenes.org/human).
+  The __getBiotypes__ function requires specific input file structure similar to
+  a standard general transfer format(gtf) file. The gtf includes rows and
+  columns (fields). The number of rows depend on the number of reads. There are
+  eight fixed columns with specific headers. For details of the gtf file format
+  visit this
+  [link](https://useast.ensembl.org/info/website/upload/gff.html#tracklines target="_blank").
+  The image below illustrates a standard gtf file format.
+
+
+   ![Chromosome 21 of human GRCh37 gtf](chr21.jpg)
+
+<a name="">[GoTop](#)</a> 
+<a name="Extracting summary of genomic data"></a>\
+
+##### __Extracting summary of genomic data__
+
+
+  There are two way to get genome biotypes: a) "transctipt_type" b) "gene_type".
+  We used the "transcript_type" to extract the regions of interest using python
+  as shown below. __Note__ that the *"PATH_FILE"* refers to the path of the
+  downloded gtf file. Make sure to replac the *"PATH_FILE"*.
+  
+**Python codes:**
+```
+gtf = ('PATH_FILE')
+outF = open('gtf_summary_transbiotype.txt','w')
+
+def getquote(str,f,target):
+    targetLen = len(target)+2
+    strInd = str.find(target)
+    st = strInd + len(target)+2
+    ed = st + str[st:].find('";')
+    #print(st,ed)
+    f.write('\t'+str[st:ed]) if strInd!= -1 else f.write('\t'+'NA.')
+
+with open(gtf, 'r') as f:
+     for line in f:
+        if line[0] != '#':
+            chromosome = line.split('\t')[0]
+            st = line.split('\t')[3]
+            ed = line.split('\t')[4]
+            strand = line.split('\t')[6]
+            type = line.split('\t')[2]
+            outF.write(chromosome+'\t'+st+'\t'+ed+'\t'+strand+'\t'+type)
+            c = 'transcript_id'
+            g = 'gene_name'
+            t = 'transcript_type'
+            getquote(line,outF,c)
+            getquote(line,outF,g)
+            getquote(line,outF,t)
+            outF.write('\n')
+outF.close() 
+```
+***
+<a name="Home">[GoTop](#)</a>
+<a name="Loading data locally"></a>\ 
+
+#### __Loading data locally__
+
+
+  To load data from local drive use the following format shown below. __Note__
+  that the *"PATH_FILE"* refers to the location of the extracted summary of
+  genomic data shown above. For more way of loading data click
+  [here](https://support.rstudio.com/hc/en-us/articles/218611977-Importing-Data-with-RStudio).
+```
+data <- read.delim("PATH_FILE, comment.char = "#")
+head(data, n= 3L)
+```
+***
+<a name="Home">[GoTop](#)</a>
+<a name="Filtering GRanges object *'gencode_gr'* from summary data"></a>\ 
+
+#### __Filtering GRanges object *'gencode_gr'* from summary data__
+
+  Here we have extracted 'gencode_gr' using R commands shown below. Note to
+  replace *"PATH_FILE"* with file direcotry path.
+
+```
+gtf = read.table('PATH_FILE')
+gtf = subset(gtf,V5 == 'transcript')
+colnames(gtf) = c('chr','start','end','strand','biotype')
+gr = GRanges(gtf)
+```
+<a name="Home">[GoTop](#)</a> 
+<a name="Examples"></a>\
+
+#### __Examples__
+
+##### 1) Processing Query
+***
+  > query <- GRanges(c('chr1:2-10:+','chr1:6-10:-'),Row.names =
+  c('trans1','trans2'),score = c(1,2))
+
+```
+  > query 
+  
+           GRanges object with 2 ranges and 2 metadata columns:
+       seqnames    ranges strand  |   Row.names     score
+        <Rle>    <IRanges>  <Rle> | <character>   <numeric>
+    [1]    chr1      2-10      +    |   trans1         1
+    [2]    chr1      6-10      -    |   trans2         2
+```
+
+##### 2) Classifying Biotypes
+***
+
+  > gr <- GRanges(c('chr1:1-5:+','chr1:2-3:+'),biotype = c('lincRNA','CPC'))
+
+```
+  > gr
+  
+           GRanges object with 2 ranges and 1 metadata column:
+           seqnames    ranges  strand |     biotype
+           <Rle>     <IRanges> <Rle>  |   <character>
+    [1]     chr1       1-5      +     |     lincRNA
+    [2]     chr1       2-3      +     |     CPC
+```
+
+##### 3) Extracting intron coordinates
+***
+
+  > intron <- GRanges('chr1:6-8:+')
+
+```
+  > intron
+  
+          GRanges object with 1 range and 0 metadata columns:
+          seqnames    ranges strand
+           <Rle> <IRanges>  <Rle>
+    [1]     chr1       6-8      +
+```
+##### 4) Filtering getBiotypes for coding transcripts
+***
+
+  > coding_trncp <- getBiotypes(query, gr, intron)
+
+```
+  > coding_trncp
+  
+       seqnames start end width strand Row.names score type.fullOverlap
+  1     chr1    2  10     9     +    trans1     1          de novo
+  2     chr1    6  10     5     -    trans2     2            1
+    type.partialOverlap type.50Overlap   hasIntron     type.toPlot
+  1                   1              1       yes   other_noncoding
+  2                   1              1       no    other_noncoding
+```
+##### 5) Filtering getBiotypes for coding transcripts
+***
+
+> cod_gr <- subset(gencode_gr, biotype == 'protein_coding')
+
+> readthrough <- getReadthrough(ILEF_gr, cod_gr)
+
+```
+ > head(x,4)
+    seqnames    start      end  width strand Row.names Readthrough
+  1    chr21 15608524 15710335 101812      +    ABCC13           0
+  2    chr21 43619799 43717938  98140      +     ABCG1           1
+  3    chr21 28208595 28217692   9098      -   ADAMTS1           1
+  4    chr21 28279059 28339668  60610      -   ADAMTS5           1
+```
+
+<a name="Home">[GoTop](#)</a>
+<a name="Acknowledgements"></a>\
+
+### __Acknowledgements__
+
+  The development of this mini-package will not be possible without continous
+  help and feedback from individuals and institutions including:
+  The Bioconductor Core Team, Dr. Xianan Yang ,Dr. Tzintzuni Garcia and and National Institutes of Health R21LM012619.
+
+<a name="SessionInfo"></a>\
+
+```{r SessionInfo}
+sessionInfo()
+```
+<a name="References"></a>
+<a name="Home">[GoTop](#)</a>\
+
+### __References__ 
+
+  * Wang, Z. Z., J. M. Cunningham and X. H. Yang (2018). "CisPi: a transcriptomic
+score for disclosing cis-acting disease-associated lincRNAs."
+Bioinformatics34(17): 664-670"
+
