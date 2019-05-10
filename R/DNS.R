@@ -172,9 +172,9 @@ getBiotypes <- function(full_gr, gencode_gr, intron_gr = NULL, minoverlap = 1L) 
 #' @export
 
 #gencode_gr <- data("gencode_gr.v19_chr21")
-#cod_gr <- subset(gencode_gr, biotype = "protein_coding")
+#cod_gr.chr21 <- subset(gencode_gr, biotype = "protein_coding")
 #cod_gr <- data("cod_gr.chr21")
-#
+
 getReadthrough <- function(gr, cod_gr) {
     full_table = data.frame(gr)
     overlapcount = countOverlaps(gr, cod_gr)
