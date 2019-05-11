@@ -5,12 +5,11 @@ Version: 0.99.0
 Author: Biniam Feleke and Zhenzhen Wang
 Maintainer: Zhenzhen Wang <zhezhen@uchicago.edu>
 Description: Contains functions for classifying transcript biotypes and finding long transcripts that overlap more than two coding regions.
-Depends: R (>= 3.5.0), GenomicRanges, IRanges
+Depends: R (>= 3.6.0), GenomicRanges, IRanges
 Import: 
     BiocManager,
     GenomicRanges,
-    IRanges,
-    stats
+    IRanges
 ImportFrom:
     ("stats""aggregate")
 License: GPL-2
@@ -24,4 +23,5 @@ Suggests:
     markdown,
     roxygen2,
     base,
+    testthat (>= 2.1.0)
 VignetteBuilder: knitr

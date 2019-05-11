@@ -79,20 +79,16 @@ getBiotypes <- function(full_gr, gencode_gr, intron_gr = NULL, minoverlap = 1L) 
     idx$biotype = as.data.frame(mcols(gencode_gr[subjectHits(hits)]))
     idx_collapse = aggregate(as.list(idx["biotype"]), idx["Row.names"], FUN = function(X) paste(unique(X),
         collapse = ", "))
-
     full$type.partialOverlap = "de novo"
     idx_partial = match(idx_collapse$Row.names, full$Row.names)
     full[idx_partial, ]$type.partialOverlap = idx_collapse$biotype
-
     idx$percentOverlap = percentOverlap
     idx_50 = subset(idx, percentOverlap >= 0.5)
     idx_50collapse = aggregate(as.list(idx_50["biotype"]), idx_50["Row.names"], FUN = function(X) paste(unique(X),
         collapse = ", "))
-
     full$type.50Overlap = "de novo"
     idx_50 = match(idx_50collapse$Row.names, full$Row.names)
     full[idx_50, ]$type.50Overlap = idx_50collapse$biotype
-
     if (!is.null(intron_gr)) {
         hits = findOverlaps(full_gr, intron_gr)
         idx = unique(as.data.frame(mcols(full_gr[queryHits(hits)])))
@@ -105,7 +101,6 @@ getBiotypes <- function(full_gr, gencode_gr, intron_gr = NULL, minoverlap = 1L) 
         full$type.50Overlap)
     full$type.toPlot = sapply(full$type.toPlot, function(x) ifelse(grepl("protein_coding", x) & grepl("antisense",
         x), "protein_coding_antisense", x))
-
     full$type.toPlot = sapply(full$type.toPlot, function(x) ifelse(grepl("protein_coding,", x), "protein_coding_mixed",
         x))
     full$type.toPlot = sapply(full$type.toPlot, function(x) ifelse(grepl(", protein_coding", x), "protein_coding_mixed",
@@ -116,7 +111,6 @@ getBiotypes <- function(full_gr, gencode_gr, intron_gr = NULL, minoverlap = 1L) 
         x))
     full$type.toPlot = sapply(full$type.toPlot, function(x) ifelse(grepl(", antisense", x), "antisense",
         x))
-
     label = c("protein_coding", "protein_coding_mixed", "lincRNA", "antisense", "pseudogene, processed_pseudogene",
         "pseudogene, unprocessed_pseudogene", "de novo", "protein_coding_antisense", "protein_coding_intron",
         "miRNA")
@@ -157,9 +151,10 @@ getBiotypes <- function(full_gr, gencode_gr, intron_gr = NULL, minoverlap = 1L) 
 #' Bioinformatics34(17): 664-670'
 #'
 #' @examples
-#' data('gencode_gr.v19_chr21.rda')
-#' data('ILEF_gr.chr21.rda')
-#' data('cod_gr.chr21.rda')
+#' #Load datasets
+#' data('gencode_gr.v19_chr21')
+#' data('ILEF_gr.chr21')
+#' data('cod_gr.chr21')
 #' getReadthrough(ILEF_gr,cod_gr)
 #'
 #' \dontrun{getReadthrough(cod_gr)}
@@ -172,24 +167,23 @@ getBiotypes <- function(full_gr, gencode_gr, intron_gr = NULL, minoverlap = 1L) 
 #' @export
 
 #gencode_gr <- data("gencode_gr.v19_chr21")
-#cod_gr <- subset(gencode_gr, biotype = "protein_coding")
+#cod_gr.chr21 <- subset(gencode_gr, biotype = "protein_coding")
 #cod_gr <- data("cod_gr.chr21")
-#
+
 getReadthrough <- function(gr, cod_gr) {
     full_table = data.frame(gr)
     overlapcount = countOverlaps(gr, cod_gr)
     completeoverlap = unique(subjectHits(findOverlaps(cod_gr, GRanges(full_table$ID), type = "within")))
     if (length(completeoverlap) == 0) {
-        full_table$readthrough = ifelse(overlapcount > 2, 1, 0)
-    } else {
+        full_table$readthrough = ifelse(overlapcount > 2, 1, 0)}
+    else {
         full_table$readthrough = ifelse(overlapcount > 2 & row.names(completeoverlap) %in% completeoverlap,
-                                        1, 0)
-    }
+                                        1, 0)}
     gr = GRanges(subset(full_table, readthrough == 1))
     idx = subset(full_table, readthrough == 1)$ID
     overlaps = as.data.frame(findOverlaps(gr, cod_gr))
     splitoverlaps = split(overlaps, f = overlaps$queryHits)
-    table(sapply(splitoverlaps, nrow) > 1)
+    table(sapply(splitoverlaps, nrow)) > 1
     cod_grL = sapply(splitoverlaps, function(x) cod_gr[x$subjectHits])
     overlapL = sapply(cod_grL, function(x) findOverlaps(x))
     notoverlap = sapply(overlapL, function(x) identical(queryHits(x), subjectHits(x)))

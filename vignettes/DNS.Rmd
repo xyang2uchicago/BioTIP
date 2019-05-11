@@ -20,6 +20,10 @@ vignette: >
 ---
 ###### ###### 
 
+```{r getBiotypes, echo= FALSE, eval=FALSE}
+getBiotypes(ILEF_gr,gencode_gr)
+```
+
   * ##### [Standard workflow](#Standard workflow)
     *  ##### [Genomic data source](#Genomic data source)
     *  ##### [Extracting summary of genomic data](#Extracting summary of genomic data)
@@ -61,7 +65,8 @@ vignette: >
   downloded gtf file. Make sure to replac the *"PATH_FILE"*.
   
 **Python codes:**
-```
+
+```{r "python code", eval = FALSE}
 gtf = ('PATH_FILE')
 outF = open('gtf_summary_transbiotype.txt','w')
 
@@ -102,9 +107,10 @@ outF.close()
   that the *"PATH_FILE"* refers to the location of the extracted summary of
   genomic data shown above. For more way of loading data click
   [here](https://support.rstudio.com/hc/en-us/articles/218611977-Importing-Data-with-RStudio).
-```
-data <- read.delim("PATH_FILE, comment.char = "#")
-head(data, n= 3L)
+
+```{r "data input", echo = FALSE, eval=FALSE}
+data <- read.delim("PATH_FILE", comment.char = "#")
+head(data, n = 3L)
 ```
 ***
 <a name="Home">[GoTop](#)</a>
@@ -115,7 +121,7 @@ head(data, n= 3L)
   Here we have extracted 'gencode_gr' using R commands shown below. Note to
   replace *"PATH_FILE"* with file direcotry path.
 
-```
+```{r eval=FALSE}
 gtf = read.table('PATH_FILE')
 gtf = subset(gtf,V5 == 'transcript')
 colnames(gtf) = c('chr','start','end','strand','biotype')
@@ -131,7 +137,7 @@ gr = GRanges(gtf)
   > query <- GRanges(c('chr1:2-10:+','chr1:6-10:-'),Row.names =
   c('trans1','trans2'),score = c(1,2))
 
-```
+````
   > query 
   
            GRanges object with 2 ranges and 2 metadata columns:
@@ -139,7 +145,7 @@ gr = GRanges(gtf)
         <Rle>    <IRanges>  <Rle> | <character>   <numeric>
     [1]    chr1      2-10      +    |   trans1         1
     [2]    chr1      6-10      -    |   trans2         2
-```
+````
 
 ##### 2) Classifying Biotypes
 ***

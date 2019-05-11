@@ -35,9 +35,10 @@ and \href{http://bioconductor.org/install/index.html}{BiocManager}.
 Replace the path_file when loading data locally to the data directory.
 }
 \examples{
-data('gencode_gr.v19_chr21.rda')
-data('ILEF_gr.chr21.rda')
-data('cod_gr.chr21.rda')
+#Load datasets
+data('gencode_gr.v19_chr21')
+data('ILEF_gr.chr21')
+data('cod_gr.chr21')
 getReadthrough(ILEF_gr,cod_gr)
 
 \dontrun{getReadthrough(cod_gr)}

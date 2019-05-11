@@ -2,6 +2,6 @@
     "installOptions" : {
         "installDependencies" : true,
         "installFromRepository" : true,
-        "libraryPath" : "C:/Users/benjk/OneDrive/Documents/R/win-library/3.5"
+        "libraryPath" : "C:/Users/benjk/OneDrive/Documents/R/win-library/3.6"
     }
 }
