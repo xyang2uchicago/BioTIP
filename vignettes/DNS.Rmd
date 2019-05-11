@@ -20,10 +20,6 @@ vignette: >
 ---
 ###### ###### 
 
-```{r getBiotypes, eval=FALSE}
-getBiotypes(ILEF_gr,gencode_gr)
-```
-
   * ##### [Standard workflow](#Standard workflow)
     *  ##### [Genomic data source](#Genomic data source)
     *  ##### [Extracting summary of genomic data](#Extracting summary of genomic data)
