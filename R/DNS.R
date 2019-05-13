@@ -170,23 +170,28 @@ getBiotypes <- function(full_gr, gencode_gr, intron_gr = NULL, minoverlap = 1L) 
 #cod_gr.chr21 <- subset(gencode_gr, biotype = "protein_coding")
 #cod_gr <- data("cod_gr.chr21")
 
-getReadthrough <- function(gr, cod_gr) {
-    full_table = data.frame(gr)
-    overlapcount = countOverlaps(gr, cod_gr)
-    completeoverlap = unique(subjectHits(findOverlaps(cod_gr, GRanges(full_table$ID), type = "within")))
-    if (length(completeoverlap) == 0) {
-        full_table$readthrough = ifelse(overlapcount > 2, 1, 0)}
-    else {
-        full_table$readthrough = ifelse(overlapcount > 2 & row.names(completeoverlap) %in% completeoverlap,
-                                        1, 0)}
-    gr = GRanges(subset(full_table, readthrough == 1))
-    idx = subset(full_table, readthrough == 1)$ID
-    overlaps = as.data.frame(findOverlaps(gr, cod_gr))
-    splitoverlaps = split(overlaps, f = overlaps$queryHits)
-    table(sapply(splitoverlaps, nrow)) > 1
-    cod_grL = sapply(splitoverlaps, function(x) cod_gr[x$subjectHits])
-    overlapL = sapply(cod_grL, function(x) findOverlaps(x))
-    notoverlap = sapply(overlapL, function(x) identical(queryHits(x), subjectHits(x)))
-    full_table$readthrough = ifelse(full_table$readthrough == 1 & !notoverlap, 1, 0)
-    return(full_table)
+getReadthrough = function(gr,cod_gr){
+  full_table = data.frame(gr)
+  overlapcount = countOverlaps(gr,cod_gr)
+  completeoverlap = unique(subjectHits(findOverlaps(cod_gr,GRanges(full_table$ID),type = 'within')))
+  if(length(completeoverlap) == 0){
+    full_table$readthrough = ifelse(overlapcount>2,1,0)
+  }else{
+    full_table$readthrough = ifelse(overlapcount>2 & row.names(completeoverlap) %in% completeoverlap,1,0)
+  }
+  
+  gr = GRanges(subset(full_table,readthrough ==1))
+  idx = subset(full_table,readthrough==1)$ID
+  
+  overlaps = as.data.frame(findOverlaps(gr,cod_gr))
+  splitoverlaps = split(overlaps,f=overlaps$queryHits)
+  table(sapply(splitoverlaps,nrow)>1)
+  cod_grL = sapply(splitoverlaps,function(x) cod_gr[x$subjectHits])
+  overlapL = sapply(cod_grL,function(x) findOverlaps(x))
+  notoverlap = sapply(overlapL,function(x) identical(queryHits(x),subjectHits(x)))
+  tmp = rep(TRUE,nrow(full_table))
+  tmp[full_table$readthrough==1] = notoverlap
+  
+  full_table$readthrough = ifelse(full_table$readthrough==1 & !tmp,1,0)
+  return(full_table)
 }
