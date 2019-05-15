@@ -1,6 +1,6 @@
 ---
-title:  "Classifying Transcripts using getminipackage"
-author:  "Zhenzhen Wang and Biniam Feleke"
+title:  "Classifying Transcripts using DNS"
+author:  "Zhezhen Wang and Biniam Feleke"
 date:  "`r format(Sys.Date(), '%m/%d/%Y')`"
 abstract:  >
   The purpose of this mini package is to class both coding and noncoding
@@ -20,24 +20,38 @@ vignette: >
 ---
 ###### ###### 
 
-```{r getBiotypes, echo= FALSE, eval=FALSE}
-getBiotypes(ILEF_gr,gencode_gr)
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
   * ##### [Standard workflow](#Standard workflow)
-    *  ##### [Genomic data source](#Genomic data source)
-    *  ##### [Extracting summary of genomic data](#Extracting summary of genomic data)
-    *  ##### [Loading data locally](#Loading data locally)
-    *  ##### [Filtering GRanges object *'gencode_gr'* from summary
-   data](#Filtering GRanges object *'gencode_gr'* from summary data)
+    *  ##### [Quick Start](#Quick Start)
+    *  ##### [Genomic Data Source](#Genomic Data Source)
+    *  ##### [Extracting Summary Data](#Extracting Summary Data)
+    *  ##### [Loading Data](#Loading Data)
+    *  ##### [Filtering gencode_gr](#Filtering gencode_gr)
     *  ##### [Examples](#Examples)
   * ##### [Acknowledgements](#Acknowledgements)
   * ##### [SessionInfo](#SessionInfo)
   * ##### [References](#References)
 
-<a name="Genomic data source"></a>\
+<a name="Quick Start"></a>\
 
-#### __Genomic data source__ 
+#### __Quick Start__
+
+  The general analysis overview for our package is shown below. First load
+  libraray("DNS") and system datasets. Then excute datasets using getBiotypes
+  and getReadthrough functions included in DNS package.
+
+```{r, eval=TRUE, message=TRUE, warning=TRUE}
+library(DNS)
+data("gencode_gr.v19_chr21")
+head(gencode_gr)
+```
+
+<a name="Genomic Data Source"></a>\
+
+#### __Genomic Data Source__ 
 
   A raw sequencing can be obtained from various sources. We obtained a
   comprehensive gene annotation reference of human GRCh37 from
@@ -54,9 +68,9 @@ getBiotypes(ILEF_gr,gencode_gr)
    ![Chromosome 21 of human GRCh37 gtf](chr21.jpg)
 
 <a name="">[GoTop](#)</a> 
-<a name="Extracting summary of genomic data"></a>\
+<a name="Extracting Summary Data"></a>\
 
-##### __Extracting summary of genomic data__
+##### __Extracting Summary Data__
 
 
   There are two way to get genome biotypes: a) "transctipt_type" b) "gene_type".
@@ -98,9 +112,10 @@ outF.close()
 ```
 ***
 <a name="Home">[GoTop](#)</a>
-<a name="Loading data locally"></a>\ 
 
-#### __Loading data locally__
+<a name="Loading Data"></a>\ 
+
+#### __Loading Data__
 
 
   To load data from local drive use the following format shown below. __Note__
@@ -108,25 +123,31 @@ outF.close()
   genomic data shown above. For more way of loading data click
   [here](https://support.rstudio.com/hc/en-us/articles/218611977-Importing-Data-with-RStudio).
 
-```{r "data input", echo = FALSE, eval=FALSE}
-data <- read.delim("PATH_FILE", comment.char = "#")
-head(data, n = 3L)
+     #load data from local drive
+     data <- read.delim("PATH_FILE", comment.char = "#")
+
+     #load data internal system eg. in our package "DNS"
+
+```{r quickstart}
+library(DNS)
+data("gencode_gr.v19_chr21")
+#head(gencod_gr)
 ```
-***
+
 <a name="Home">[GoTop](#)</a>
-<a name="Filtering GRanges object *'gencode_gr'* from summary data"></a>\ 
 
-#### __Filtering GRanges object *'gencode_gr'* from summary data__
+<a name="Filtering gencode_gr"></a>\ 
 
-  Here we have extracted 'gencode_gr' using R commands shown below. Note to
-  replace *"PATH_FILE"* with file direcotry path.
+#### __Filtering *gencode_gr*__
 
-```{r eval=FALSE}
-gtf = read.table('PATH_FILE')
-gtf = subset(gtf,V5 == 'transcript')
-colnames(gtf) = c('chr','start','end','strand','biotype')
-gr = GRanges(gtf)
-```
+  Here we show an extraction of 'gencode_gr' dataset using R commands shown
+  below. Note to replace *"PATH_FILE"* with file direcotry path.
+
+    > gtf = read.table('PATH_FILE')
+    > gtf = subset(gtf, V5 == 'transcript')
+    > colnames(gtf) = c('chr','start','end','strand','biotype')
+    > gr = GRanges(gtf)
+
 <a name="Home">[GoTop](#)</a> 
 <a name="Examples"></a>\
 
@@ -134,76 +155,74 @@ gr = GRanges(gtf)
 
 ##### 1) Processing Query
 ***
-  > query <- GRanges(c('chr1:2-10:+','chr1:6-10:-'),Row.names =
-  c('trans1','trans2'),score = c(1,2))
 
-````
-  > query 
-  
-           GRanges object with 2 ranges and 2 metadata columns:
-       seqnames    ranges strand  |   Row.names     score
-        <Rle>    <IRanges>  <Rle> | <character>   <numeric>
-    [1]    chr1      2-10      +    |   trans1         1
-    [2]    chr1      6-10      -    |   trans2         2
-````
+```{r}
+query <- GRanges(c('chr1:2-10:+','chr1:6-10:-'),Row.names = c('trans1','trans2'),score = c(1,2))
+head(query)
+
+```
 
 ##### 2) Classifying Biotypes
 ***
 
-  > gr <- GRanges(c('chr1:1-5:+','chr1:2-3:+'),biotype = c('lincRNA','CPC'))
+```{r}
+library(DNS)
+gr <- GRanges(c('chr1:1-5:+','chr1:2-3:+'),biotype = c('lincRNA','CPC'))
+head(gr)
+```
 
-```
-  > gr
-  
-           GRanges object with 2 ranges and 1 metadata column:
-           seqnames    ranges  strand |     biotype
-           <Rle>     <IRanges> <Rle>  |   <character>
-    [1]     chr1       1-5      +     |     lincRNA
-    [2]     chr1       2-3      +     |     CPC
-```
 
 ##### 3) Extracting intron coordinates
 ***
 
-  > intron <- GRanges('chr1:6-8:+')
-
-```
-  > intron
+      # Intron coordinates
+      
+       intron <- GRanges('chr1:6-8:+')
   
-          GRanges object with 1 range and 0 metadata columns:
-          seqnames    ranges strand
-           <Rle> <IRanges>  <Rle>
-    [1]     chr1       6-8      +
+```{r}
+library(DNS)
+intron <- GRanges('chr1:6-8:+')
+head(intron)
 ```
-##### 4) Filtering getBiotypes for coding transcripts
+
+
+##### 4) Filtering coding transcripts
 ***
 
-  > coding_trncp <- getBiotypes(query, gr, intron)
+    # Filtering coding regions using products from example 1, 2 and 3
 
+```{r}
+library(DNS)
+coding_trncp <- getBiotypes(query, gr, intron)
+head(coding_trncp)
 ```
-  > coding_trncp
-  
-       seqnames start end width strand Row.names score type.fullOverlap
-  1     chr1    2  10     9     +    trans1     1          de novo
-  2     chr1    6  10     5     -    trans2     2            1
-    type.partialOverlap type.50Overlap   hasIntron     type.toPlot
-  1                   1              1       yes   other_noncoding
-  2                   1              1       no    other_noncoding
+
+    # Coding transcripts from internal datasets
+
+```{r}
+library(DNS)
+data("intron_gr.chr21")
+data("ILEF_gr.chr21")
+data("gencode_gr.v19_chr21")
+
+biotyp <- getBiotypes(ILEF_gr, gencode_gr, intron_gr)
+head(biotyp)
 ```
-##### 5) Filtering getBiotypes for coding transcripts
+
+
+##### 5) Finding overlapping transcripts
 ***
 
-> cod_gr <- subset(gencode_gr, biotype == 'protein_coding')
+    # Overlapping of two coding regions 
+    
+```{r DNS}
+library(DNS)
+data("ILEF_gr.chr21")
+data("gencode_gr.v19_chr21")
+cod_gr <- subset(gencode_gr, biotype == 'protein_coding')
 
-> readthrough <- getReadthrough(ILEF_gr, cod_gr)
-
-```
- > head(readthrough,4)
-    seqnames    start      end  width strand Row.names Readthrough
-  1    chr21 15608524 15710335 101812      +    ABCC13           0
-  2    chr21 43619799 43717938  98140      +     ABCG1           1
-  3    chr21 28208595 28217692   9098      -   ADAMTS1           1
-  4    chr21 28279059 28339668  60610      -   ADAMTS5           1
+rdthrough <- getReadthrough(ILEF_gr,cod_gr)
+head(rdthrough)
 ```
 
 <a name="Home">[GoTop](#)</a>
