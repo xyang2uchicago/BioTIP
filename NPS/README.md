@@ -1,0 +1,2 @@
+# DNS
+dynamic network signal
