@@ -1,15 +1,16 @@
 Package: NPS
 Type: Package
-Title: Classifying Transcripts using DNS 
+Title: "NPS -- Adopting tipping-point theory to transcriptome profiles to unravel disease regulatory trajectory."
 Version: 0.99.0
-Author: Zhenzhen Wang, Biniam Feleke and Xinan H. Yang 
-Maintainer: Zhenzhen Wang <zhezhen@uchicago.edu>
+Author: Zhezhen Wang and Biniam Feleke 
+Maintainer: Zhezhen Wang <zhezhen@uchicago.edu>
 Description: Contains functions for classifying transcript biotypes and finding long transcripts that overlap more than two coding regions.
-Depends: R (>= 3.6.0), GenomicRanges, IRanges
+Depends: R (>= 3.6.0), GenomicRanges, IRanges, GenomeInfoDb, stats
 Import: 
     BiocManager,
     GenomicRanges,
-    IRanges
+    IRanges,
+    GenomeInfoDb
 ImportFrom:
     ("stats""aggregate")
 License: GPL-2
@@ -25,3 +26,5 @@ Suggests:
     base,
     testthat (>= 2.1.0)
 VignetteBuilder: knitr
+biocViews: Sequencing, RNASeq, GeneExpression, Transcription, Software
+URL: https://github.com/xyang2uchicago/NPS
