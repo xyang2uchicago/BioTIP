@@ -1,2 +1,2 @@
-# DNS
-dynamic network signal
+# NPS
+Network Perturbation Signature
