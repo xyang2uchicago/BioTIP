@@ -1,0 +1,672 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={NPS.R},
+            pdfauthor={benjk},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\providecommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{NPS.R}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{benjk}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+      \predate{\centering\large\emph}
+  \postdate{\par}
+    \date{2019-06-05}
+
+
+\begin{document}
+\maketitle
+
+Classifying Transcriptomes into Biotypes
+
+@aliases getBiotypes
+
+@description The purpose of the getBiotypes function is to class both
+coding and noncoding transcripts into biotypes using the most recent
+GENCODE annotations. This tool can also be used to define potential
+lncRNAs, given an available genome transcriptome assembly (a gtf file)
+or any genomic loci of interest.
+
+@param full\_gr A GRanges object of coding and noncoding transctipts.
+Unique identifications for each column must be assigned.More details can
+be found in the GRanges package. @param gencode\_gr This GRanges object
+contains a GENCODE reference annotation.It must have a column of
+biotypes. @param intron\_gr A GRanges object containing the coordinates
+of introns.For details see GRanges package. @param minoverlap Detects
+minimum overlap between two IRanges objects. Details Overlap arguments
+are included in the IRanges package.
+
+@details For details of findOverlaps, type.partialOverlap,
+type.50Overlap type.toPlot, queryhits, and subjecthits see
+\href{https://www.bioconductor.org/packages/release/bioc/html/GenomicRanges.html}{GenomicRanges}
+\href{https://www.bioconductor.org/packages/release/bioc/html/IRanges.html}{IRanges},
+and \href{http://bioconductor.org/install/index.html}{BiocManager}.
+
+@return Returns the classified transcriptome biotypes.
+
+@source
+\href{https://www.gencodegenes.org/human/release_25lift37.html}{Refrence
+GRCh37 genome} for details on gtf format visit
+\href{https://useast.ensembl.org/info/website/upload/gff.html}{ensemble}
+@import GenomicRanges
+
+@references
+
+Wang, Z. Z., J. M. Cunningham and X. H. Yang (2018).'CisPi: a
+transcriptomic score for disclosing cis-acting disease-associated
+lincRNAs.' Bioinformatics34(17): 664-670'
+
+@examples \#Input datasets locally library(``GenomicRanges'' ,
+``IRanges'')
+
+data(``gencode'') data(``intron'') data(``ILEF'') gencode\_gr =
+GRanges(gencode) ILEF\_gr = GRanges(ILEF) cod\_gr = GRanges(cod)
+
+getBiotypes(ILEF\_gr,gencode\_gr)
+
+\dontrun{getBiotypes(intron_gr)}
+
+@note Replace the path\_file when loading data locally to the data
+directory.
+
+@import GenomicRanges IRanges GenomeInfoDb stats @importFrom stats
+aggregate @export
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{getBiotypes <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(full_gr, gencode_gr, }\DataTypeTok{intron_gr =} \OtherTok{NULL}\NormalTok{, }\DataTypeTok{minoverlap =}\NormalTok{ 1L) \{}
+    \ControlFlowTok{if}\NormalTok{ (}\KeywordTok{class}\NormalTok{(full_gr) }\OperatorTok{!=}\StringTok{ "GRanges"}\NormalTok{)}
+        \KeywordTok{stop}\NormalTok{(}\StringTok{"please give full_gr as a }\CharTok{\textbackslash{}"}\StringTok{GRanges}\CharTok{\textbackslash{}"}\StringTok{ object"}\NormalTok{)}
+    \ControlFlowTok{if}\NormalTok{ (}\KeywordTok{class}\NormalTok{(gencode_gr) }\OperatorTok{!=}\StringTok{ "GRanges"}\NormalTok{)}
+        \KeywordTok{stop}\NormalTok{(}\StringTok{"pealse give gencode_gr as a }\CharTok{\textbackslash{}"}\StringTok{GRanges}\CharTok{\textbackslash{}"}\StringTok{ object"}\NormalTok{)}
+    \ControlFlowTok{if}\NormalTok{ (}\KeywordTok{class}\NormalTok{(intron_gr) }\OperatorTok{!=}\StringTok{ "GRanges"} \OperatorTok{&}\StringTok{ }\OperatorTok{!}\KeywordTok{is.null}\NormalTok{(intron_gr))}
+        \KeywordTok{stop}\NormalTok{(}\StringTok{"please give intron_gr as a }\CharTok{\textbackslash{}"}\StringTok{GRanges}\CharTok{\textbackslash{}"}\StringTok{ object"}\NormalTok{)}
+\NormalTok{    hits =}\StringTok{ }\KeywordTok{findOverlaps}\NormalTok{(full_gr, gencode_gr, }\DataTypeTok{type =} \StringTok{"within"}\NormalTok{, }\DataTypeTok{minoverlap =}\NormalTok{ minoverlap)}
+\NormalTok{    full =}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(full_gr)}
+\NormalTok{    full}\OperatorTok{$}\NormalTok{type.fullOverlap =}\StringTok{ "de novo"}
+\NormalTok{    idx =}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{mcols}\NormalTok{(full_gr[}\KeywordTok{queryHits}\NormalTok{(hits)]))}
+    \ControlFlowTok{if}\NormalTok{ (}\KeywordTok{nrow}\NormalTok{(idx) }\OperatorTok{!=}\StringTok{ }\DecValTok{0}\NormalTok{) \{}
+\NormalTok{        idx}\OperatorTok{$}\NormalTok{biotype =}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{mcols}\NormalTok{(gencode_gr[}\KeywordTok{subjectHits}\NormalTok{(hits)]))[, }\DecValTok{1}\NormalTok{]}
+\NormalTok{        idx_collapse =}\StringTok{ }\KeywordTok{aggregate}\NormalTok{(}\KeywordTok{as.list}\NormalTok{(idx[}\StringTok{"biotype"}\NormalTok{]), idx[}\StringTok{"Row.names"}\NormalTok{], }\DataTypeTok{FUN =} \ControlFlowTok{function}\NormalTok{(X) }\KeywordTok{paste}\NormalTok{(}\KeywordTok{unique}\NormalTok{(X),}
+            \DataTypeTok{collapse =} \StringTok{", "}\NormalTok{))}
+\NormalTok{        idx_full =}\StringTok{ }\KeywordTok{match}\NormalTok{(idx_collapse}\OperatorTok{$}\NormalTok{Row.names, full}\OperatorTok{$}\NormalTok{Row.names)}
+\NormalTok{        full[idx_full, ]}\OperatorTok{$}\NormalTok{type.fullOverlap =}\StringTok{ }\NormalTok{idx_collapse}\OperatorTok{$}\NormalTok{biotype\}}
+\NormalTok{    hits =}\StringTok{ }\KeywordTok{findOverlaps}\NormalTok{(full_gr, gencode_gr, }\DataTypeTok{minoverlap =}\NormalTok{ minoverlap)}
+\NormalTok{    overlaps <-}\StringTok{ }\KeywordTok{pintersect}\NormalTok{(full_gr[}\KeywordTok{queryHits}\NormalTok{(hits)], gencode_gr[}\KeywordTok{subjectHits}\NormalTok{(hits)])}
+\NormalTok{    percentOverlap <-}\StringTok{ }\KeywordTok{width}\NormalTok{(overlaps)}\OperatorTok{/}\KeywordTok{width}\NormalTok{(gencode_gr[}\KeywordTok{subjectHits}\NormalTok{(hits)])}
+\NormalTok{    idx =}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{mcols}\NormalTok{(full_gr[}\KeywordTok{queryHits}\NormalTok{(hits)]))}
+\NormalTok{    idx}\OperatorTok{$}\NormalTok{biotype =}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{mcols}\NormalTok{(gencode_gr[}\KeywordTok{subjectHits}\NormalTok{(hits)]))}
+\NormalTok{    idx_collapse =}\StringTok{ }\KeywordTok{aggregate}\NormalTok{(}\KeywordTok{as.list}\NormalTok{(idx[}\StringTok{"biotype"}\NormalTok{]), idx[}\StringTok{"Row.names"}\NormalTok{], }\DataTypeTok{FUN =} \ControlFlowTok{function}\NormalTok{(X) }\KeywordTok{paste}\NormalTok{(}\KeywordTok{unique}\NormalTok{(X),}
+        \DataTypeTok{collapse =} \StringTok{", "}\NormalTok{))}
+\NormalTok{    full}\OperatorTok{$}\NormalTok{type.partialOverlap =}\StringTok{ "de novo"}
+\NormalTok{    idx_partial =}\StringTok{ }\KeywordTok{match}\NormalTok{(idx_collapse}\OperatorTok{$}\NormalTok{Row.names, full}\OperatorTok{$}\NormalTok{Row.names)}
+\NormalTok{    full[idx_partial, ]}\OperatorTok{$}\NormalTok{type.partialOverlap =}\StringTok{ }\NormalTok{idx_collapse}\OperatorTok{$}\NormalTok{biotype}
+\NormalTok{    idx}\OperatorTok{$}\NormalTok{percentOverlap =}\StringTok{ }\NormalTok{percentOverlap}
+\NormalTok{    idx_}\DecValTok{50}\NormalTok{ =}\StringTok{ }\KeywordTok{subset}\NormalTok{(idx, percentOverlap }\OperatorTok{>=}\StringTok{ }\FloatTok{0.5}\NormalTok{)}
+\NormalTok{    idx_50collapse =}\StringTok{ }\KeywordTok{aggregate}\NormalTok{(}\KeywordTok{as.list}\NormalTok{(idx_}\DecValTok{50}\NormalTok{[}\StringTok{"biotype"}\NormalTok{]), idx_}\DecValTok{50}\NormalTok{[}\StringTok{"Row.names"}\NormalTok{], }\DataTypeTok{FUN =} \ControlFlowTok{function}\NormalTok{(X) }\KeywordTok{paste}\NormalTok{(}\KeywordTok{unique}\NormalTok{(X),}
+        \DataTypeTok{collapse =} \StringTok{", "}\NormalTok{))}
+\NormalTok{    full}\OperatorTok{$}\NormalTok{type}\FloatTok{.50}\NormalTok{Overlap =}\StringTok{ "de novo"}
+\NormalTok{    idx_}\DecValTok{50}\NormalTok{ =}\StringTok{ }\KeywordTok{match}\NormalTok{(idx_50collapse}\OperatorTok{$}\NormalTok{Row.names, full}\OperatorTok{$}\NormalTok{Row.names)}
+\NormalTok{    full[idx_}\DecValTok{50}\NormalTok{, ]}\OperatorTok{$}\NormalTok{type}\FloatTok{.50}\NormalTok{Overlap =}\StringTok{ }\NormalTok{idx_50collapse}\OperatorTok{$}\NormalTok{biotype}
+    \ControlFlowTok{if}\NormalTok{ (}\OperatorTok{!}\KeywordTok{is.null}\NormalTok{(intron_gr)) \{}
+\NormalTok{        hits =}\StringTok{ }\KeywordTok{findOverlaps}\NormalTok{(full_gr, intron_gr)}
+\NormalTok{        idx =}\StringTok{ }\KeywordTok{unique}\NormalTok{(}\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{mcols}\NormalTok{(full_gr[}\KeywordTok{queryHits}\NormalTok{(hits)])))}
+\NormalTok{        full}\OperatorTok{$}\NormalTok{hasIntron =}\StringTok{ "no"}
+\NormalTok{        idx_intron =}\StringTok{ }\KeywordTok{match}\NormalTok{(idx}\OperatorTok{$}\NormalTok{Row.names, full}\OperatorTok{$}\NormalTok{Row.names)}
+        \ControlFlowTok{if}\NormalTok{ (}\KeywordTok{length}\NormalTok{(idx_intron) }\OperatorTok{!=}\StringTok{ }\DecValTok{0}\NormalTok{)}
+\NormalTok{            full[idx_intron, ]}\OperatorTok{$}\NormalTok{hasIntron =}\StringTok{ "yes"}
+\NormalTok{    \} }\ControlFlowTok{else}\NormalTok{ (full}\OperatorTok{$}\DataTypeTok{hasIntron =} \OtherTok{NA}\NormalTok{)}
+\NormalTok{    full}\OperatorTok{$}\NormalTok{type.toPlot =}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(full}\OperatorTok{$}\NormalTok{hasIntron }\OperatorTok{==}\StringTok{ "yes"} \OperatorTok{&}\StringTok{ }\NormalTok{full}\OperatorTok{$}\NormalTok{type}\FloatTok{.50}\NormalTok{Overlap }\OperatorTok{==}\StringTok{ "protein_coding"}\NormalTok{, }\StringTok{"protein_coding_intron"}\NormalTok{,}
+\NormalTok{        full}\OperatorTok{$}\NormalTok{type}\FloatTok{.50}\NormalTok{Overlap)}
+\NormalTok{    full}\OperatorTok{$}\NormalTok{type.toPlot =}\StringTok{ }\KeywordTok{sapply}\NormalTok{(full}\OperatorTok{$}\NormalTok{type.toPlot, }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{ifelse}\NormalTok{(}\KeywordTok{grepl}\NormalTok{(}\StringTok{"protein_coding"}\NormalTok{, x) }\OperatorTok{&}\StringTok{ }\KeywordTok{grepl}\NormalTok{(}\StringTok{"antisense"}\NormalTok{,}
+\NormalTok{        x), }\StringTok{"protein_coding_antisense"}\NormalTok{, x))}
+\NormalTok{    full}\OperatorTok{$}\NormalTok{type.toPlot =}\StringTok{ }\KeywordTok{sapply}\NormalTok{(full}\OperatorTok{$}\NormalTok{type.toPlot, }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{ifelse}\NormalTok{(}\KeywordTok{grepl}\NormalTok{(}\StringTok{"protein_coding,"}\NormalTok{, x), }\StringTok{"protein_coding_mixed"}\NormalTok{,}
+\NormalTok{        x))}
+\NormalTok{    full}\OperatorTok{$}\NormalTok{type.toPlot =}\StringTok{ }\KeywordTok{sapply}\NormalTok{(full}\OperatorTok{$}\NormalTok{type.toPlot, }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{ifelse}\NormalTok{(}\KeywordTok{grepl}\NormalTok{(}\StringTok{", protein_coding"}\NormalTok{, x), }\StringTok{"protein_coding_mixed"}\NormalTok{,}
+\NormalTok{        x))}
+\NormalTok{    full}\OperatorTok{$}\NormalTok{type.toPlot =}\StringTok{ }\KeywordTok{sapply}\NormalTok{(full}\OperatorTok{$}\NormalTok{type.toPlot, }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{ifelse}\NormalTok{(}\KeywordTok{grepl}\NormalTok{(}\StringTok{"lincRNA"}\NormalTok{, x), }\StringTok{"lincRNA"}\NormalTok{,}
+\NormalTok{        x))}
+\NormalTok{    full}\OperatorTok{$}\NormalTok{type.toPlot =}\StringTok{ }\KeywordTok{sapply}\NormalTok{(full}\OperatorTok{$}\NormalTok{type.toPlot, }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{ifelse}\NormalTok{(}\KeywordTok{grepl}\NormalTok{(}\StringTok{"antisense,"}\NormalTok{, x), }\StringTok{"antisense"}\NormalTok{,}
+\NormalTok{        x))}
+\NormalTok{    full}\OperatorTok{$}\NormalTok{type.toPlot =}\StringTok{ }\KeywordTok{sapply}\NormalTok{(full}\OperatorTok{$}\NormalTok{type.toPlot, }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{ifelse}\NormalTok{(}\KeywordTok{grepl}\NormalTok{(}\StringTok{", antisense"}\NormalTok{, x), }\StringTok{"antisense"}\NormalTok{,}
+\NormalTok{        x))}
+\NormalTok{    label =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"protein_coding"}\NormalTok{, }\StringTok{"protein_coding_mixed"}\NormalTok{, }\StringTok{"lincRNA"}\NormalTok{, }\StringTok{"antisense"}\NormalTok{, }\StringTok{"pseudogene, processed_pseudogene"}\NormalTok{,}
+        \StringTok{"pseudogene, unprocessed_pseudogene"}\NormalTok{, }\StringTok{"de novo"}\NormalTok{, }\StringTok{"protein_coding_antisense"}\NormalTok{, }\StringTok{"protein_coding_intron"}\NormalTok{,}
+        \StringTok{"miRNA"}\NormalTok{)}
+\NormalTok{    full}\OperatorTok{$}\NormalTok{type.toPlot =}\StringTok{ }\KeywordTok{sapply}\NormalTok{(full}\OperatorTok{$}\NormalTok{type.toPlot, }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{ifelse}\NormalTok{(}\OperatorTok{!}\NormalTok{x }\OperatorTok{%in%}\StringTok{ }\NormalTok{label, }\StringTok{"other_noncoding"}\NormalTok{,}
+\NormalTok{        x))}
+    \KeywordTok{return}\NormalTok{(full)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+Finding Overlaps in Coding Regions
+
+@description A getReadthrough functions that will The getReadthrough
+function is used to find long transcripts that covers more than two
+coding regions of a genome. The variables are as follows.
+
+@param gr A GRanges object that shows the start and end loci on genome.
+@param cod\_gr A GRanges object that contains coding regions. For
+details please visit /R/data.R.
+
+@details For details of findOverlaps, type.partialOverlap,
+type.50Overlap type.toPlot, queryhits, readthrough and subjecthits see,
+\href{https://www.bioconductor.org/packages/release/bioc/html/GenomicRanges.html}{GenomicRanges},
+\href{https://www.bioconductor.org/packages/release/bioc/html/IRanges.html}{IRanges},
+and \href{http://bioconductor.org/install/index.html}{BiocManager}.
+
+@return Returns the classified transcriptome biotypes.
+
+@source
+\href{https://www.gencodegenes.org/human/release_25lift37.html}{Refrence
+GRCh37 genome} for details on gtf format visit
+\href{https://useast.ensembl.org/info/website/upload/gff.html}{ensemble}
+
+@import GenomeInfoDb GenomicRanges @importFrom stats aggregate
+
+@references Wang, Z. Z., J. M. Cunningham and X. H. Yang (2018).'CisPi:
+a transcriptomic score for disclosing cis-acting disease-associated
+lincRNAs.' Bioinformatics34(17): 664-670'
+
+@examples \#First Load datasets library(``GenomicRanges'' , ``IRanges'')
+
+data(``gencode'') data(``ILEF'') data(``cod'') gencode\_gr =
+GRanges(gencode) ILEF\_gr = GRanges(ILEF) cod\_gr = GRanges(cod)
+
+getReadthrough(ILEF\_gr,cod\_gr)
+
+\dontrun{getReadthrough(cod_gr)}
+
+@note Replace the path\_file when loading data locally to the data
+directory.
+
+@import GenomicRanges IRanges GenomeInfoDb @importFrom stats aggregate
+@export
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{getReadthrough =}\StringTok{ }\ControlFlowTok{function}\NormalTok{(gr,cod_gr)\{}
+\NormalTok{  full_table =}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(gr)}
+\NormalTok{  overlapcount =}\StringTok{ }\KeywordTok{countOverlaps}\NormalTok{(gr,cod_gr)}
+\NormalTok{  completeoverlap =}\StringTok{ }\KeywordTok{unique}\NormalTok{(}\KeywordTok{subjectHits}\NormalTok{(}\KeywordTok{findOverlaps}\NormalTok{(cod_gr,}\KeywordTok{GRanges}\NormalTok{(full_table}\OperatorTok{$}\NormalTok{ID),}\DataTypeTok{type =} \StringTok{'within'}\NormalTok{)))}
+  \ControlFlowTok{if}\NormalTok{(}\KeywordTok{length}\NormalTok{(completeoverlap) }\OperatorTok{==}\StringTok{ }\DecValTok{0}\NormalTok{)\{}
+\NormalTok{    full_table}\OperatorTok{$}\NormalTok{readthrough =}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(overlapcount}\OperatorTok{>}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)}
+\NormalTok{  \}}\ControlFlowTok{else}\NormalTok{\{}
+\NormalTok{    full_table}\OperatorTok{$}\NormalTok{readthrough =}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(overlapcount}\OperatorTok{>}\DecValTok{2} \OperatorTok{&}\StringTok{ }\KeywordTok{row.names}\NormalTok{(completeoverlap) }\OperatorTok{%in%}\StringTok{ }\NormalTok{completeoverlap,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)}
+\NormalTok{  \}}
+\NormalTok{  gr =}\StringTok{ }\KeywordTok{GRanges}\NormalTok{(}\KeywordTok{subset}\NormalTok{(full_table,readthrough }\OperatorTok{==}\DecValTok{1}\NormalTok{))}
+\NormalTok{  idx =}\StringTok{ }\KeywordTok{subset}\NormalTok{(full_table,readthrough}\OperatorTok{==}\DecValTok{1}\NormalTok{)}\OperatorTok{$}\NormalTok{ID}
+\NormalTok{  overlaps =}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{findOverlaps}\NormalTok{(gr,cod_gr))}
+\NormalTok{  splitoverlaps =}\StringTok{ }\KeywordTok{split}\NormalTok{(overlaps,}\DataTypeTok{f=}\NormalTok{overlaps}\OperatorTok{$}\NormalTok{queryHits)}
+  \KeywordTok{table}\NormalTok{(}\KeywordTok{sapply}\NormalTok{(splitoverlaps,nrow)}\OperatorTok{>}\DecValTok{1}\NormalTok{)}
+\NormalTok{  cod_grL =}\StringTok{ }\KeywordTok{sapply}\NormalTok{(splitoverlaps,}\ControlFlowTok{function}\NormalTok{(x) cod_gr[x}\OperatorTok{$}\NormalTok{subjectHits])}
+\NormalTok{  overlapL =}\StringTok{ }\KeywordTok{sapply}\NormalTok{(cod_grL,}\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{findOverlaps}\NormalTok{(x))}
+\NormalTok{  notoverlap =}\StringTok{ }\KeywordTok{sapply}\NormalTok{(overlapL,}\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{identical}\NormalTok{(}\KeywordTok{queryHits}\NormalTok{(x),}\KeywordTok{subjectHits}\NormalTok{(x)))}
+\NormalTok{  tmp =}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\OtherTok{TRUE}\NormalTok{,}\KeywordTok{nrow}\NormalTok{(full_table))}
+\NormalTok{  tmp[full_table}\OperatorTok{$}\NormalTok{readthrough}\OperatorTok{==}\DecValTok{1}\NormalTok{] =}\StringTok{ }\NormalTok{notoverlap}
+\NormalTok{  full_table}\OperatorTok{$}\NormalTok{readthrough =}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(full_table}\OperatorTok{$}\NormalTok{readthrough}\OperatorTok{==}\DecValTok{1} \OperatorTok{&}\StringTok{ }\OperatorTok{!}\NormalTok{tmp,}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{)}
+  \KeywordTok{return}\NormalTok{(full_table)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+The length of a string (in characters).
+
+@param df a count matrix with unique loci row names:ID X column
+names:samples. @param samplesL a list of characters with stages as
+names. @param cutoff numeric value, if \textless{} 1 automaticlly goes
+to select top x\% transcripts if \textgreater{} 1 goes to select by
+x-fold more than the selected method (which is either the reference,
+other stages or pervious stage) default 0.01. @param method select from
+`reference',`other', or `previous'. for `reference', the reference has
+to be the first for `previous', make sure sampleL is in the right order
+from benign to malign default uses `other'
+
+@return numeric vector giving number of characters in each element of
+the character vector. Missing strings have missing length. @export
+@examples GSE6136 =
+read.table(``C:/Users/benjk/Desktop/GSE6136\_matrix.txt'', header =
+TRUE, comment = `!') row.names(GSE6136) =
+GSE6136\(ID_REF GSE6136 = GSE6136[,-1] cli = read.delim("C:/Users/benjk/Desktop/GSE6136_cli.txt", head = F) cli = t(cli) colnames(cli) = str_split_fixed(cli[1,],'_',2)[,2] cli = cli[-1,] cli = data.frame(cli) cli[,'cell-type:ch1'] = str_split_fixed(cli\)characteristics\_ch1.1,`:',2){[},2{]}
+cli{[},`Ig clonality:ch1'{]} =
+str\_split\_fixed(cli\(characteristics_ch1.3,': ',2)[,2] colnames(cli)[colnames(cli) == 'cell-type:ch1'] = 'group' cli\)Row.names
+= cli{[},1{]}
+
+dat \textless- GSE6136 df \textless- log2(dat+1) tmp \textless-
+names(table(cli\(group)) sampleL <- split(cli[,1],f = cli\)group) test
+\textless- sd\_selection(df,sampleL,0.01) View(test)
+
+@author Zhezhen Wang and Biniam Feleke
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sd_selection <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(df,samplesL,}\DataTypeTok{cutoff =} \FloatTok{0.01}\NormalTok{, }\DataTypeTok{method =} \StringTok{'other'}\NormalTok{)\{}
+  \ControlFlowTok{if}\NormalTok{(}\KeywordTok{is.null}\NormalTok{(}\KeywordTok{names}\NormalTok{(samplesL))) }\KeywordTok{stop}\NormalTok{(}\StringTok{'please provide name to samplesL'}\NormalTok{)}
+\NormalTok{  tmp =}\StringTok{ }\KeywordTok{names}\NormalTok{(samplesL)}
+\NormalTok{  samplesL =}\StringTok{ }\KeywordTok{lapply}\NormalTok{(samplesL,as.character)}
+\NormalTok{  test2 =}\StringTok{ }\KeywordTok{sapply}\NormalTok{(tmp, }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{apply}\NormalTok{(df[,samplesL[[x]]],}\DecValTok{1}\NormalTok{,sd,}\DataTypeTok{na.rm =}\NormalTok{ T))}
+
+  \ControlFlowTok{if}\NormalTok{(method }\OperatorTok{==}\StringTok{ 'reference'}\NormalTok{)\{}
+\NormalTok{    ref =}\StringTok{ }\KeywordTok{as.character}\NormalTok{(sampleL[[}\DecValTok{1}\NormalTok{]])}
+\NormalTok{    sdref =}\StringTok{ }\KeywordTok{apply}\NormalTok{(df[,ref],}\DecValTok{1}\NormalTok{,sd,}\DataTypeTok{na.rm =}\NormalTok{ T)}
+\NormalTok{    sds =}\StringTok{ }\KeywordTok{lapply}\NormalTok{(tmp,}\ControlFlowTok{function}\NormalTok{(x) test2[,x]}\OperatorTok{/}\NormalTok{sdref)}
+    \KeywordTok{names}\NormalTok{(sds) =}\StringTok{ }\NormalTok{tmp}
+
+\NormalTok{  \}}\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{(method }\OperatorTok{==}\StringTok{ 'other'}\NormalTok{)\{}
+\NormalTok{    othersample =}\StringTok{ }\KeywordTok{lapply}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\StringTok{ }\KeywordTok{length}\NormalTok{(samplesL), }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{do.call}\NormalTok{(c,samplesL[}\OperatorTok{-}\NormalTok{x]))}
+    \KeywordTok{names}\NormalTok{(othersample) =}\StringTok{ }\NormalTok{tmp}
+\NormalTok{    sdother =}\StringTok{ }\KeywordTok{sapply}\NormalTok{(tmp, }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{apply}\NormalTok{(df[,}\KeywordTok{as.character}\NormalTok{(othersample[[x]])],}\DecValTok{1}\NormalTok{,sd,}\DataTypeTok{na.rm =}\NormalTok{ T))}
+
+\NormalTok{    sds =}\StringTok{ }\KeywordTok{lapply}\NormalTok{(tmp,}\ControlFlowTok{function}\NormalTok{(x) test2[,x]}\OperatorTok{/}\NormalTok{sdother[,x])}
+    \KeywordTok{names}\NormalTok{(sds) =}\StringTok{ }\NormalTok{tmp}
+
+\NormalTok{  \}}\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{(method }\OperatorTok{==}\StringTok{ 'previous'}\NormalTok{)\{}
+    \KeywordTok{warning}\NormalTok{(}\StringTok{'Using method "previous", make sure sampleL is in the right order'}\NormalTok{)}
+\NormalTok{    sds =}\StringTok{ }\KeywordTok{lapply}\NormalTok{(}\DecValTok{2}\OperatorTok{:}\KeywordTok{ncol}\NormalTok{(test2),}\ControlFlowTok{function}\NormalTok{(x) test2[,x]}\OperatorTok{/}\NormalTok{test2[,x}\DecValTok{-1}\NormalTok{])}
+\NormalTok{    tmp =}\StringTok{ }\NormalTok{tmp[}\OperatorTok{-}\DecValTok{1}\NormalTok{]}
+    \KeywordTok{names}\NormalTok{(sds) =}\StringTok{ }\NormalTok{tmp}
+
+\NormalTok{  \}}\ControlFlowTok{else}\NormalTok{\{}
+    \KeywordTok{stop}\NormalTok{(}\StringTok{"method need to be selected from 'reference','other','previous'"}\NormalTok{)}
+\NormalTok{  \}}
+
+  \ControlFlowTok{if}\NormalTok{(cutoff}\OperatorTok{<}\DecValTok{1}\NormalTok{)\{}
+\NormalTok{    topdf =}\StringTok{ }\KeywordTok{nrow}\NormalTok{(df)}\OperatorTok{*}\NormalTok{cutoff}
+\NormalTok{    sdtop =}\StringTok{ }\KeywordTok{lapply}\NormalTok{(tmp,}\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{names}\NormalTok{(sds[[x]][}\KeywordTok{order}\NormalTok{(sds[[x]],}\DataTypeTok{decreasing =}\NormalTok{ T)[}\DecValTok{1}\OperatorTok{:}\NormalTok{topdf]]))}
+\NormalTok{  \}}\ControlFlowTok{else}\NormalTok{\{}
+\NormalTok{    sdtop =}\StringTok{ }\KeywordTok{lapply}\NormalTok{(tmp,}\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{names}\NormalTok{(sds[[x]][sds[[x]]}\OperatorTok{>}\NormalTok{cutoff]))}
+\NormalTok{  \}}
+
+  \ControlFlowTok{if}\NormalTok{(method }\OperatorTok{==}\StringTok{ 'reference'}\NormalTok{) tmp =}\StringTok{ }\NormalTok{tmp[}\OperatorTok{-}\DecValTok{1}\NormalTok{]}
+  \KeywordTok{names}\NormalTok{(sdtop) =}\StringTok{ }\NormalTok{tmp}
+\NormalTok{  subdf =}\StringTok{ }\KeywordTok{lapply}\NormalTok{(tmp,}\ControlFlowTok{function}\NormalTok{(x) df[,}\KeywordTok{as.character}\NormalTok{(samplesL[[x]])])}
+  \KeywordTok{names}\NormalTok{(subdf) =}\StringTok{ }\NormalTok{tmp}
+\NormalTok{  subm =}\StringTok{ }\KeywordTok{lapply}\NormalTok{(}\KeywordTok{names}\NormalTok{(subdf), }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{subset}\NormalTok{(subdf[[x]],}\KeywordTok{row.names}\NormalTok{(subdf[[x]]) }\OperatorTok{%in%}\StringTok{ }\NormalTok{sdtop[[x]]))}
+  \KeywordTok{names}\NormalTok{(subm)  =}\StringTok{ }\NormalTok{tmp}
+  \KeywordTok{return}\NormalTok{(subm)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+get an igraph object based on Pearson Correlation Coefficiency(PCC)
+
+@description get a igraph object based on Pearson Correlation
+Coefficiency(PCC)
+
+@param optimal a list of count matrix @param p a numeric cutoff @return
+a list of an igraph object @export @examples igraphL \textless-
+getNetwork(test, p=1)
+
+@importFrom stringr psych igraph
+
+@author Zhezhen Wang and Biniam Feleke
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{getNetwork <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(optimal, }\DataTypeTok{p =} \FloatTok{0.05}\NormalTok{)\{}
+\NormalTok{  rL =}\StringTok{ }\KeywordTok{lapply}\NormalTok{(optimal,}\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{corr.test}\NormalTok{(}\KeywordTok{t}\NormalTok{(x),}\DataTypeTok{adjust =} \StringTok{'fdr'}\NormalTok{,}\DataTypeTok{ci=}\NormalTok{F)}\OperatorTok{$}\NormalTok{r)}
+  \KeywordTok{names}\NormalTok{(rL) =}\StringTok{ }\KeywordTok{names}\NormalTok{(optimal)}
+\NormalTok{  pL =}\StringTok{ }\KeywordTok{lapply}\NormalTok{(optimal,}\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{corr.test}\NormalTok{(}\KeywordTok{t}\NormalTok{(x),}\DataTypeTok{adjust =} \StringTok{'fdr'}\NormalTok{,}\DataTypeTok{ci=}\NormalTok{F)}\OperatorTok{$}\NormalTok{p)}
+  \ControlFlowTok{if}\NormalTok{(}\KeywordTok{is.null}\NormalTok{(}\KeywordTok{names}\NormalTok{(rL))) }\KeywordTok{stop}\NormalTok{(}\StringTok{'give names to the input list'}\NormalTok{)}
+\NormalTok{  igraphL =}\StringTok{ }\KeywordTok{list}\NormalTok{()}
+  \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \KeywordTok{names}\NormalTok{(rL))\{}
+\NormalTok{    test =}\StringTok{ }\NormalTok{rL[[i]]}
+\NormalTok{    test.p =}\StringTok{ }\NormalTok{pL[[i]]}
+\NormalTok{    test[}\KeywordTok{lower.tri}\NormalTok{(test,}\DataTypeTok{diag =}\NormalTok{ T)] =}\StringTok{ }\OtherTok{NA}
+    \CommentTok{#test.p[lower.tri(test,diag = T)] = 1}
+\NormalTok{    tmp =}\StringTok{ }\KeywordTok{lapply}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\KeywordTok{nrow}\NormalTok{(test),}\ControlFlowTok{function}\NormalTok{(x) test[x,test.p[x,]}\OperatorTok{<}\NormalTok{p])}
+\NormalTok{    tmp_name =}\StringTok{ }\KeywordTok{lapply}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\KeywordTok{nrow}\NormalTok{(test),}\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{which}\NormalTok{(test.p[x,]}\OperatorTok{<}\NormalTok{p))}
+\NormalTok{    idx =}\StringTok{ }\KeywordTok{which}\NormalTok{(}\KeywordTok{lengths}\NormalTok{(tmp_name)}\OperatorTok{==}\DecValTok{1}\NormalTok{)}
+    \ControlFlowTok{for}\NormalTok{(j }\ControlFlowTok{in}\NormalTok{ idx)\{}
+      \KeywordTok{names}\NormalTok{(tmp[[j]]) =}\StringTok{ }\KeywordTok{names}\NormalTok{(tmp_name[[j]])}
+\NormalTok{    \}}
+    \KeywordTok{names}\NormalTok{(tmp) =}\StringTok{ }\KeywordTok{row.names}\NormalTok{(test)}
+\NormalTok{    edges =}\StringTok{ }\KeywordTok{stack}\NormalTok{(}\KeywordTok{do.call}\NormalTok{(c,tmp))}
+\NormalTok{    edges =}\StringTok{ }\KeywordTok{subset}\NormalTok{(edges, }\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(values))}
+\NormalTok{    tmp2 =}\StringTok{ }\KeywordTok{subset}\NormalTok{(edges,}\KeywordTok{grepl}\NormalTok{(}\StringTok{'}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{.[1-9,A-z]}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{.'}\NormalTok{,ind))}
+    \ControlFlowTok{if}\NormalTok{(}\KeywordTok{nrow}\NormalTok{(tmp2)}\OperatorTok{!=}\DecValTok{0}\NormalTok{)\{}
+\NormalTok{      tmp2}\OperatorTok{$}\NormalTok{node1 =}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\KeywordTok{str_split_fixed}\NormalTok{(tmp2}\OperatorTok{$}\NormalTok{ind,}\StringTok{'}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{.'}\NormalTok{,}\DecValTok{3}\NormalTok{)[,}\DecValTok{1}\NormalTok{],}\StringTok{'.'}\NormalTok{,}\KeywordTok{str_split_fixed}\NormalTok{(tmp2}\OperatorTok{$}\NormalTok{ind,}\StringTok{'}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{.'}\NormalTok{,}\DecValTok{3}\NormalTok{)[,}\DecValTok{2}\NormalTok{])}
+\NormalTok{      tmp2}\OperatorTok{$}\NormalTok{node2 =}\StringTok{ }\KeywordTok{str_split_fixed}\NormalTok{(tmp2}\OperatorTok{$}\NormalTok{ind,}\StringTok{'}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{.'}\NormalTok{,}\DecValTok{3}\NormalTok{)[,}\DecValTok{3}\NormalTok{]}
+\NormalTok{    \}}
+\NormalTok{    edges =}\StringTok{ }\KeywordTok{subset}\NormalTok{(edges,}\OperatorTok{!}\KeywordTok{grepl}\NormalTok{(}\StringTok{'}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{.[1-9,A-z]}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{.'}\NormalTok{,ind))}
+\NormalTok{    edges}\OperatorTok{$}\NormalTok{node1 =}\StringTok{ }\KeywordTok{str_split_fixed}\NormalTok{(edges}\OperatorTok{$}\NormalTok{ind,}\StringTok{'}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{.'}\NormalTok{,}\DecValTok{2}\NormalTok{)[,}\DecValTok{1}\NormalTok{]}
+\NormalTok{    edges}\OperatorTok{$}\NormalTok{node2 =}\StringTok{ }\KeywordTok{str_split_fixed}\NormalTok{(edges}\OperatorTok{$}\NormalTok{ind,}\StringTok{'}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{.'}\NormalTok{,}\DecValTok{2}\NormalTok{)[,}\DecValTok{2}\NormalTok{]}
+\NormalTok{    edges =}\StringTok{ }\KeywordTok{rbind}\NormalTok{(edges,tmp2)}
+    \KeywordTok{dim}\NormalTok{(edges) }\CommentTok{#[1] 1270    4}
+    \KeywordTok{dim}\NormalTok{(edges) }\CommentTok{#[1] 583   4}
+\NormalTok{    edges =}\StringTok{ }\NormalTok{edges[,}\KeywordTok{c}\NormalTok{(}\StringTok{'node1'}\NormalTok{,}\StringTok{'node2'}\NormalTok{,}\StringTok{'values'}\NormalTok{)]}
+\NormalTok{    edges}\OperatorTok{$}\NormalTok{weight =}\StringTok{ }\KeywordTok{abs}\NormalTok{(edges}\OperatorTok{$}\NormalTok{values) }\CommentTok{# added in 1/8/2019}
+    \CommentTok{#colnames(edges) = c('node1','node2','weight') # added in 12/18/2018}
+
+\NormalTok{    nodes =}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\KeywordTok{unique}\NormalTok{(}\KeywordTok{c}\NormalTok{(edges}\OperatorTok{$}\NormalTok{node1,edges}\OperatorTok{$}\NormalTok{node2)))}
+    \KeywordTok{print}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(i,}\StringTok{':'}\NormalTok{,}\KeywordTok{nrow}\NormalTok{(nodes),}\StringTok{' nodes'}\NormalTok{)) }\CommentTok{#[1] 48    1}
+\NormalTok{    routes_igraph <-}\StringTok{ }\KeywordTok{graph_from_data_frame}\NormalTok{(}\DataTypeTok{d =}\NormalTok{ edges, }\DataTypeTok{vertices =}\NormalTok{ nodes, }\DataTypeTok{directed =}\NormalTok{ F)}
+\NormalTok{    igraphL[[i]] =}\StringTok{ }\NormalTok{routes_igraph}
+\NormalTok{  \}}
+  \KeywordTok{return}\NormalTok{(igraphL)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+getCluster
+
+@param igraphL a list of count matrix or a list of igraph object @param
+steps number of steps @return A list of objects @export @examples
+getCluster(igraphL, steps = 4)
+
+@author Zhezhen Wang
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{getCluster <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(igraphL, }\DataTypeTok{steps =} \DecValTok{4}\NormalTok{)\{}
+  \CommentTok{#   if(is.na(step))\{}
+  \CommentTok{#     step = sapply(igraphL,function(x) nrow(as_data_frame(x, what="vertices"))*2)}
+  \CommentTok{#     print(step)}
+  \CommentTok{#   \}else}
+  \ControlFlowTok{if}\NormalTok{(}\KeywordTok{length}\NormalTok{(steps) }\OperatorTok{==}\StringTok{ }\DecValTok{1} \OperatorTok{&}\StringTok{ }\NormalTok{steps }\OperatorTok{%%}\StringTok{ }\DecValTok{1} \OperatorTok{==}\StringTok{ }\DecValTok{0}\NormalTok{)\{               }\CommentTok{##grepl("^[1-9]\{1,\}$", step) only works for 1 digit}
+\NormalTok{    steps =}\StringTok{ }\KeywordTok{rep}\NormalTok{(steps,}\KeywordTok{length}\NormalTok{(igraphL))}
+\NormalTok{  \}}\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{(}\KeywordTok{length}\NormalTok{(steps) }\OperatorTok{!=}\StringTok{ }\DecValTok{1} \OperatorTok{|}\StringTok{ }\KeywordTok{length}\NormalTok{(steps) }\OperatorTok{!=}\StringTok{ }\KeywordTok{length}\NormalTok{(igraphL))\{}
+    \KeywordTok{stop}\NormalTok{(}\StringTok{'check step: must be postive integer(s) of length 1 or length of igraphL'}\NormalTok{)}
+\NormalTok{  \}}
+\NormalTok{  groups =}\StringTok{ }\KeywordTok{list}\NormalTok{()}
+  \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(igraphL))\{}
+    \ControlFlowTok{if}\NormalTok{(}\KeywordTok{nrow}\NormalTok{(}\KeywordTok{as_data_frame}\NormalTok{(igraphL[[i]])) }\OperatorTok{!=}\StringTok{ }\DecValTok{0}\NormalTok{)\{}
+\NormalTok{      groups[[i]] =}\StringTok{ }\KeywordTok{cluster_walktrap}\NormalTok{(igraphL[[i]],}\DataTypeTok{weight =} \KeywordTok{abs}\NormalTok{(}\KeywordTok{E}\NormalTok{(igraphL[[i]])}\OperatorTok{$}\NormalTok{weight),}\DataTypeTok{steps =}\NormalTok{ steps[i])}
+\NormalTok{    \}}\ControlFlowTok{else}\NormalTok{\{}
+\NormalTok{      groups[[i]] =}\StringTok{ }\OtherTok{NA}
+\NormalTok{    \}}
+\NormalTok{  \}}
+  \CommentTok{#groups = lapply(1:length(igraphL), function(x) cluster_walktrap(igraphL[[x]],weight = abs(E(igraphL[[x]])$weight),steps = steps[x])) # changed weight to abs(PCC) 12/18/2018}
+  \KeywordTok{names}\NormalTok{(groups) =}\StringTok{ }\KeywordTok{names}\NormalTok{(igraphL)}
+  \KeywordTok{return}\NormalTok{(groups)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+get clusters of nodes by clustering methods
+
+@param igraphL a list of count matrix or a list of igraph object @param
+method a character need to be select from `rw', `hcm', `km', `pam', or
+`natrual'. Uses `rw' by default for `hcm', using complete. for `km'
+using `euclidean'. @param cutoff a numeric value, default NULL @param
+countsL a list of count matrix @return A list of vertex id vectors that
+can be used in plot function in igraph package as `mark.groups'
+parameter @export @examples cluster \textless-
+getCluster\_methods(igraphL) head(cluster)
+
+@author Zhezhen Wang and Biniam Feleke
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{getCluster_methods <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(igraphL, }\DataTypeTok{method =} \StringTok{'rw'}\NormalTok{, }\DataTypeTok{cutoff =} \OtherTok{NULL}\NormalTok{)\{}
+  \ControlFlowTok{if}\NormalTok{(method }\OperatorTok{==}\StringTok{ 'rw'}\NormalTok{)\{}
+    \ControlFlowTok{if}\NormalTok{(}\KeywordTok{all}\NormalTok{(}\KeywordTok{sapply}\NormalTok{(igraphL,class) }\OperatorTok{!=}\StringTok{ 'igraph'}\NormalTok{))}
+      \KeywordTok{stop}\NormalTok{(}\StringTok{'random walk clustering needs a list of igraph object which can be obtained using getNetwork'}\NormalTok{)}
+    \ControlFlowTok{if}\NormalTok{(}\KeywordTok{is.null}\NormalTok{(cutoff)) cutoff =}\StringTok{ }\DecValTok{4}
+    \ControlFlowTok{if}\NormalTok{(cutoff}\OperatorTok{%%}\DecValTok{1} \OperatorTok{!=}\DecValTok{0}\NormalTok{) }\KeywordTok{warning}\NormalTok{(}\StringTok{'Please provide a integer as "cutoff" for the cluster method random walk'}\NormalTok{)}
+\NormalTok{    groups =}\StringTok{ }\KeywordTok{getCluster}\NormalTok{(igraphL,cutoff)}
+\NormalTok{  \}}\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{(method }\OperatorTok{==}\StringTok{ 'hcm'}\NormalTok{)\{}
+    \ControlFlowTok{if}\NormalTok{(}\KeywordTok{all}\NormalTok{(}\OperatorTok{!}\KeywordTok{sapply}\NormalTok{(igraphL,class) }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'matrix'}\NormalTok{,}\StringTok{'data.frame'}\NormalTok{)))}
+      \KeywordTok{stop}\NormalTok{(}\StringTok{'random walk clustering needs a list of igraph object as the 1st argument which can be obtained using getNetwork'}\NormalTok{)}
+\NormalTok{    testL =}\StringTok{ }\KeywordTok{lapply}\NormalTok{(igraphL, }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{corr.test}\NormalTok{(}\KeywordTok{t}\NormalTok{(x),}\DataTypeTok{adjust =} \StringTok{'fdr'}\NormalTok{,}\DataTypeTok{ci=}\NormalTok{F)}\OperatorTok{$}\NormalTok{r)}
+\NormalTok{    groups =}\StringTok{ }\KeywordTok{lapply}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(testL), }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{hclust}\NormalTok{(}\KeywordTok{dist}\NormalTok{(testL[[x]]), }\DataTypeTok{method =} \StringTok{"complete"}\NormalTok{))}
+\NormalTok{  \}}\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{(method }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'km'}\NormalTok{,}\StringTok{'pam'}\NormalTok{))\{}
+    \ControlFlowTok{if}\NormalTok{(}\KeywordTok{all}\NormalTok{(}\OperatorTok{!}\KeywordTok{sapply}\NormalTok{(igraphL,class) }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{'matrix'}\NormalTok{,}\StringTok{'data.frame'}\NormalTok{)))}
+      \KeywordTok{stop}\NormalTok{(}\StringTok{'random walk clustering needs a list of igraph object as the 1st argument which can be obtained using getNetwork'}\NormalTok{)}
+\NormalTok{    testL =}\StringTok{ }\KeywordTok{lapply}\NormalTok{(igraphL, }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{corr.test}\NormalTok{(}\KeywordTok{t}\NormalTok{(x),}\DataTypeTok{adjust =} \StringTok{'fdr'}\NormalTok{,}\DataTypeTok{ci=}\NormalTok{F)}\OperatorTok{$}\NormalTok{r)}
+\NormalTok{    groups =}\StringTok{ }\KeywordTok{lapply}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(testL), }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{KMedoids}\NormalTok{(testL[[x]],}\DecValTok{3}\NormalTok{,}\DataTypeTok{distance =} \StringTok{'euclidean'}\NormalTok{))}
+\NormalTok{  \}}\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{(method }\OperatorTok{==}\StringTok{ 'natrual'}\NormalTok{)\{}
+    \ControlFlowTok{if}\NormalTok{(}\KeywordTok{all}\NormalTok{(}\KeywordTok{sapply}\NormalTok{(igraphL,class) }\OperatorTok{!=}\StringTok{ 'igraph'}\NormalTok{))}
+      \KeywordTok{stop}\NormalTok{(}\StringTok{'random walk clustering needs a list of igraph object as the 1st argument which can be obtained using getNetwork'}\NormalTok{)}
+\NormalTok{    groups =}\StringTok{ }\KeywordTok{lapply}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(igraphL), }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{components}\NormalTok{(igraphL[[x]])}\OperatorTok{$}\NormalTok{membership)}
+
+\NormalTok{  \}}\ControlFlowTok{else}\NormalTok{(}\KeywordTok{stop}\NormalTok{(}\StringTok{'please select from "rw", "hcm","km", "pam", "natrual" as method'}\NormalTok{))}
+  \KeywordTok{return}\NormalTok{(groups)}
+\NormalTok{\}}
+
+\CommentTok{# step3: calulate CI}
+\end{Highlighting}
+\end{Shaded}
+
+get CI score
+
+@description get CI score
+
+@param groups A list of vertex id vectors @param countsL a list of
+numeric count matrix @param plot a boolean to decide if plot a bar plot
+of CI scores or not. Default TRUE @param adjust.size a boolean to decide
+if CI score should be adjust by size or not. Default FALSE @param ylim a
+vector needed if the output barplots need to be on the same y scale
+@param nr the number of rows to plot @param nc the number of column to
+plot @param order the order of the barplot. default NULL which is using
+the input list order @return a list of CI score and their components
+@export @examples par(mfrow \textless- c(1,5)) membersL\_noweight
+\textless- getCI(cluster,test,adjust.size = F,ylim = c(0,8))
+head(membersL\_noweight) maxCIms \textless-
+getMaxCImember(membersL\_noweight{[}{[}1{]}{]},membersL\_noweight{[}{[}2{]}{]},min
+=3) head(maxCIms)
+
+@importFrom psych igraph @author Zhezhen Wang
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#}
+
+\NormalTok{getCI <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(groups,countsL,}\DataTypeTok{plot =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{adjust.size =} \OtherTok{FALSE}\NormalTok{,}\DataTypeTok{ylim =} \OtherTok{NULL}\NormalTok{,}\DataTypeTok{nr=}\DecValTok{1}\NormalTok{,}\DataTypeTok{nc =} \KeywordTok{length}\NormalTok{(countsL),}\DataTypeTok{order =} \OtherTok{NULL}\NormalTok{)\{}
+  \ControlFlowTok{if}\NormalTok{(}\KeywordTok{any}\NormalTok{(}\KeywordTok{sapply}\NormalTok{(groups,class) }\OperatorTok{==}\StringTok{ "communities"}\NormalTok{))\{}
+\NormalTok{    membersL =}\StringTok{ }\KeywordTok{lapply}\NormalTok{(groups,membership)\}}
+  \ControlFlowTok{else}\NormalTok{\{}
+\NormalTok{    membersL =}\StringTok{ }\NormalTok{groups}
+\NormalTok{  \}}
+\NormalTok{  CIl =}\StringTok{ }\NormalTok{PCCol =}\StringTok{ }\NormalTok{PCCl =}\StringTok{ }\NormalTok{sdl =}\KeywordTok{list}\NormalTok{()}
+  \KeywordTok{names}\NormalTok{(membersL) =}\StringTok{ }\KeywordTok{names}\NormalTok{(countsL) }\CommentTok{# probably need to be changed to names(groups) instead of names(countsL)}
+  \ControlFlowTok{if}\NormalTok{(}\KeywordTok{is.null}\NormalTok{(}\KeywordTok{names}\NormalTok{(countsL))) }\KeywordTok{warning}\NormalTok{(}\StringTok{'No names provided for the countsL'}\NormalTok{)}
+  \ControlFlowTok{if}\NormalTok{(}\KeywordTok{is.null}\NormalTok{(nc)) nc =}\StringTok{ }\KeywordTok{length}\NormalTok{(groups)}
+  \ControlFlowTok{if}\NormalTok{(plot) }\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow =}\KeywordTok{c}\NormalTok{(nr,nc))}
+
+  \ControlFlowTok{if}\NormalTok{(}\KeywordTok{is.null}\NormalTok{(order))\{}
+\NormalTok{    loop =}\StringTok{ }\DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(membersL)}
+\NormalTok{  \}}\ControlFlowTok{else}\NormalTok{\{}
+\NormalTok{    loop =}\StringTok{ }\NormalTok{order}
+\NormalTok{  \}}
+
+  \ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in}\NormalTok{ loop)\{}
+\NormalTok{    test =}\StringTok{ }\NormalTok{membersL[[i]]}
+    \ControlFlowTok{if}\NormalTok{(}\KeywordTok{all}\NormalTok{(}\KeywordTok{is.na}\NormalTok{(test)))\{}
+\NormalTok{      CI =}\StringTok{ }\NormalTok{sdL =}\StringTok{ }\NormalTok{PCC =}\StringTok{ }\NormalTok{PCCo =}\StringTok{ }\OtherTok{NA}
+\NormalTok{    \}}
+    \ControlFlowTok{else}\NormalTok{\{}
+\NormalTok{      test.counts =}\StringTok{ }\NormalTok{countsL[[i]]}
+\NormalTok{      m =}\StringTok{ }\KeywordTok{lapply}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\KeywordTok{max}\NormalTok{(test),}\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{subset}\NormalTok{(test.counts, }\KeywordTok{row.names}\NormalTok{(test.counts) }\OperatorTok{%in%}\StringTok{ }\KeywordTok{names}\NormalTok{(test[test}\OperatorTok{==}\NormalTok{x])))}
+\NormalTok{      comple =}\StringTok{ }\KeywordTok{lapply}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\KeywordTok{max}\NormalTok{(test),}\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{subset}\NormalTok{(test.counts, }\OperatorTok{!}\KeywordTok{row.names}\NormalTok{(test.counts) }\OperatorTok{%in%}\StringTok{ }\KeywordTok{names}\NormalTok{(test[test}\OperatorTok{==}\NormalTok{x])))}
+      \KeywordTok{names}\NormalTok{(m) =}\StringTok{ }\KeywordTok{names}\NormalTok{(comple) =}\StringTok{ }\NormalTok{letters[}\DecValTok{1}\OperatorTok{:}\KeywordTok{max}\NormalTok{(test)]}
+
+      \CommentTok{#PCCo = mapply(function(x,y) abs(cor(t(x),t(y))),comple,m)}
+\NormalTok{      PCCo =}\StringTok{ }\KeywordTok{lapply}\NormalTok{(}\KeywordTok{names}\NormalTok{(m), }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{abs}\NormalTok{(}\KeywordTok{cor}\NormalTok{(}\KeywordTok{t}\NormalTok{(comple[[x]]),}\KeywordTok{t}\NormalTok{(m[[x]]))))}
+\NormalTok{      PCCo_avg =}\StringTok{ }\KeywordTok{sapply}\NormalTok{(PCCo,mean)}
+
+\NormalTok{      PCC =}\StringTok{ }\KeywordTok{lapply}\NormalTok{(m,}\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{abs}\NormalTok{(}\KeywordTok{cor}\NormalTok{(}\KeywordTok{t}\NormalTok{(x))))}
+      \CommentTok{#for(j in 1:length(PCC))\{}
+      \CommentTok{#  PCC[[j]][lower.tri(PCC[[j]],diag = T)] = NA}
+      \CommentTok{#\}}
+\NormalTok{      PCC_avg =}\StringTok{ }\KeywordTok{sapply}\NormalTok{(PCC,}\ControlFlowTok{function}\NormalTok{(x) (}\KeywordTok{sum}\NormalTok{(x,}\DataTypeTok{na.rm =}\NormalTok{ T)}\OperatorTok{-}\KeywordTok{nrow}\NormalTok{(x))}\OperatorTok{/}\NormalTok{(}\KeywordTok{nrow}\NormalTok{(x)}\OperatorTok{^}\DecValTok{2}\OperatorTok{-}\KeywordTok{nrow}\NormalTok{(x)))}
+      \CommentTok{#PCC_avg = sapply(PCC,function(x) mean(x,na.rm = T))}
+\NormalTok{      sdL =}\StringTok{ }\KeywordTok{lapply}\NormalTok{(m, }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{apply}\NormalTok{(x,}\DecValTok{1}\NormalTok{,sd))}
+      \ControlFlowTok{if}\NormalTok{(adjust.size)\{}
+\NormalTok{        CI =}\StringTok{ }\KeywordTok{mapply}\NormalTok{(}\ControlFlowTok{function}\NormalTok{(x,y,z,w) }\KeywordTok{mean}\NormalTok{(x)}\OperatorTok{*}\NormalTok{(y}\OperatorTok{/}\NormalTok{z)}\OperatorTok{*}\KeywordTok{sqrt}\NormalTok{(}\KeywordTok{nrow}\NormalTok{(w)), sdL,PCC_avg,PCCo_avg,m)}
+\NormalTok{      \}}\ControlFlowTok{else}\NormalTok{\{}
+\NormalTok{        CI =}\StringTok{ }\KeywordTok{mapply}\NormalTok{(}\ControlFlowTok{function}\NormalTok{(x,y,z) }\KeywordTok{mean}\NormalTok{(x)}\OperatorTok{*}\NormalTok{(y}\OperatorTok{/}\NormalTok{z), sdL,PCC_avg,PCCo_avg)}
+\NormalTok{      \}}
+
+      \ControlFlowTok{if}\NormalTok{(plot) \{}
+\NormalTok{        tn =}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(}\KeywordTok{is.null}\NormalTok{(order),}\KeywordTok{names}\NormalTok{(membersL)[i],i)}
+\NormalTok{        cex =}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(}\KeywordTok{length}\NormalTok{(CI)}\OperatorTok{>}\DecValTok{20}\NormalTok{,}\FloatTok{0.7}\NormalTok{,}\DecValTok{1}\NormalTok{) }\CommentTok{## added 1/9/2019}
+        \CommentTok{## 3/1/2019 changed legend 'n=' to #letters=}
+        \KeywordTok{barplot}\NormalTok{(CI,}\DataTypeTok{legend =} \KeywordTok{paste0}\NormalTok{(}\StringTok{'#'}\NormalTok{,}\KeywordTok{names}\NormalTok{(m),}\StringTok{'='}\NormalTok{,}\KeywordTok{sapply}\NormalTok{(m,nrow)),}\DataTypeTok{col =} \KeywordTok{rainbow}\NormalTok{(}\KeywordTok{length}\NormalTok{(m), }\DataTypeTok{alpha =} \FloatTok{0.3}\NormalTok{),}
+                \DataTypeTok{main =}\NormalTok{ tn,}\DataTypeTok{ylab =} \StringTok{'CI'}\NormalTok{,}\DataTypeTok{xlab=}\StringTok{'modules'}\NormalTok{,}\DataTypeTok{args.legend =} \KeywordTok{list}\NormalTok{(}\DataTypeTok{cex =}\NormalTok{ cex),}\DataTypeTok{ylim =}\NormalTok{ylim)}
+\NormalTok{      \}}
+\NormalTok{    \}}
+\NormalTok{    CIl[[i]] =}\StringTok{ }\NormalTok{CI}
+\NormalTok{    sdl[[i]] =}\StringTok{ }\NormalTok{sdL}
+\NormalTok{    PCCl[[i]] =}\StringTok{ }\NormalTok{PCC}
+\NormalTok{    PCCol[[i]] =}\StringTok{ }\NormalTok{PCCo}
+\NormalTok{  \}}
+  \KeywordTok{names}\NormalTok{(CIl) =}\StringTok{ }\KeywordTok{names}\NormalTok{(PCCol) =}\StringTok{ }\KeywordTok{names}\NormalTok{(PCCl) =}\StringTok{ }\KeywordTok{names}\NormalTok{(sdl) =}\StringTok{ }\KeywordTok{names}\NormalTok{(countsL)}
+  \KeywordTok{return}\NormalTok{(}\KeywordTok{list}\NormalTok{(}\DataTypeTok{members =}\NormalTok{ membersL,}\DataTypeTok{CI =}\NormalTok{ CIl,}\DataTypeTok{sd =}\NormalTok{ sdl,}\DataTypeTok{PCC=}\NormalTok{PCCl,}\DataTypeTok{PCCo=}\NormalTok{PCCol))}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+get the index and members with the maximum CI score
+
+@description get the index and members with the maximum CI score
+
+@param membersL a list of characters, the first element of output from
+function getCI @param CIl alist of numerics, the secned element of
+output from function getCI @param minsize a numeric value of minimum
+size allowed for a cluster @return a list of index and members @export
+@examples membersL\_noweight \textless- getCI(cluster,test,adjust.size =
+F,ylim = c(0,8)) maxCIms \textless-
+getMaxCImember(membersL\_noweight{[}{[}1{]}{]},membersL\_noweight{[}{[}2{]}{]},min
+=3) head(maxCIms)
+
+@author Zhezhen Wang
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{getMaxCImember <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(membersL,CIl,}\DataTypeTok{minsize =} \DecValTok{1}\NormalTok{)\{}
+\NormalTok{  listn =}\StringTok{ }\KeywordTok{names}\NormalTok{(membersL)}
+  \ControlFlowTok{if}\NormalTok{(}\OperatorTok{!}\NormalTok{minsize }\OperatorTok{<}\DecValTok{1}\NormalTok{)\{}
+\NormalTok{    minsize =}\StringTok{ }\NormalTok{minsize}\DecValTok{-1}
+\NormalTok{    CIl =}\StringTok{ }\KeywordTok{lapply}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(membersL),}\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{ifelse}\NormalTok{(}\KeywordTok{table}\NormalTok{(membersL[[x]])}\OperatorTok{>}\NormalTok{minsize,CIl[[x]],}\OtherTok{NA}\NormalTok{))}
+    \CommentTok{# bug unsolved case     1     2     3     4     5     6}
+    \CommentTok{#                      TRUE  TRUE  TRUE  FALSE  TRUE FALSE}
+    \CommentTok{#CIl = lapply(1:length(membersL),function(x) CIl[[x]][table(membersL[[x]])>minsize])}
+\NormalTok{    module_keep =}\StringTok{ }\KeywordTok{lapply}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(membersL), }\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{names}\NormalTok{(}\KeywordTok{table}\NormalTok{(membersL[[x]])[}\KeywordTok{table}\NormalTok{(membersL[[x]])}\OperatorTok{>}\NormalTok{(minsize}\DecValTok{-1}\NormalTok{)]))}
+\NormalTok{    membersL =}\StringTok{ }\KeywordTok{lapply}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(membersL),}\ControlFlowTok{function}\NormalTok{(x) membersL[[x]][membersL[[x]] }\OperatorTok{%in%}\StringTok{ }\NormalTok{module_keep[[x]]])}
+\NormalTok{  \}}\ControlFlowTok{else}\NormalTok{(}\KeywordTok{stop}\NormalTok{(}\StringTok{'please provide a minimum size for the cluster, which should be integer that is larger than 0'}\NormalTok{))}
+
+\NormalTok{  idx =}\StringTok{ }\KeywordTok{sapply}\NormalTok{(CIl,which.max)}
+\NormalTok{  maxCI =}\StringTok{ }\KeywordTok{sapply}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(idx),}\ControlFlowTok{function}\NormalTok{(x) }\KeywordTok{names}\NormalTok{(membersL[[x]][membersL[[x]] }\OperatorTok{==}\StringTok{ }\NormalTok{idx[x]]))}
+  \CommentTok{#lapply(names(memberL_weight[[1]]),function(x) names(memberL_weight[[1]][[x]][memberL_weight[[1]][[x]]==maxCIms[[1]][[x]]]))}
+  \KeywordTok{names}\NormalTok{(maxCI) =}\StringTok{ }\NormalTok{listn}
+  \KeywordTok{names}\NormalTok{(idx) =}\StringTok{ }\NormalTok{listn}
+  \KeywordTok{return}\NormalTok{(}\KeywordTok{list}\NormalTok{(}\DataTypeTok{idx =}\NormalTok{ idx,}\DataTypeTok{members =}\NormalTok{ maxCI))}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+
+\end{document}

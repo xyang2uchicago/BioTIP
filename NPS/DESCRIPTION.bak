@@ -1,0 +1,28 @@
+Package: DNS
+Type: Package
+Title: Classifying Transcripts using DNS 
+Version: 0.99.0
+Author: Biniam Feleke and Zhenzhen Wang
+Maintainer: Zhenzhen Wang <zhezhen@uchicago.edu>
+Description: Contains functions for classifying transcript biotypes and finding long transcripts that overlap more than two coding regions.
+Depends: R (>= 3.6.0), GenomicRanges, IRanges
+Import: 
+    BiocManager,
+    GenomicRanges,
+    IRanges
+    stats
+ImportFrom:
+    ("stats""aggregate")
+License: GPL-2
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 6.1.1
+Suggests: 
+    knitr,
+    devtools,
+    markdown,
+    roxygen2,
+    base,
+    testthat (>= 2.1.0)
+VignetteBuilder: knitr
