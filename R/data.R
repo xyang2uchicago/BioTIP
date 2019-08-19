@@ -56,3 +56,30 @@
 #'   \item{strand}{specific strand of the genomic location (+,-,*)}
 #' }
 "cod"
+
+
+#' GSE6136 matrix dataset
+#'
+#' A gene annotation samples with their corresponding geneId extracted from GENCODE database.
+#' A python script was then run to extcat GSE6136_cli dataset. The script is included in the R/data_raw folder.
+#'
+#' @format A dataframe with 22690 columns and 27 rows column.
+#' \describe{
+#'    \item{GSM142398-GSM142423}{Names of gene interest}
+#'    \item{ID_REF}{Reference ID of the target genes}
+#' }
+#'@source \url{https://www.gencodegenes.org/human/}
+"GSE6136_matrix"
+
+#' GSE6136 cli dataset
+#'
+#' A gene annotation samples with their corresponding geneId extracted from GENCODE database.
+#' A python script was then run to extcat GSE6136_cli dataset. The script is included in the R/data_raw folder.
+#'
+#' @format A dataframe with 22690 columns and 27 rows column.
+#' \describe{
+#'    \item{GSM142398-GSM142423}{Names of gene interest}
+#'    \item{Rows}{Summary of GSM genes}
+#' }
+#'@source \url{https://www.gencodegenes.org/human/}
+"GSE6136_cli"

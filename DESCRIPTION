@@ -1,18 +1,17 @@
-Package: NPS
+Package: BioTIP
 Type: Package
-Title: "NPS -- Adopting tipping-point theory to transcriptome profiles to unravel disease regulatory trajectory."
-Version: 0.99.0
-Author: Zhezhen Wang and Biniam Feleke 
+Title: BioTIP: An R package for characterization of Biological Tipping-Point
+Version: 1.0
+Author: Zhezhen Wang, Biniam Feleke, Qi An, Antonio Feliciano y Pleyto and Xinan Yang
 Maintainer: Zhezhen Wang <zhezhen@uchicago.edu>
-Description: Contains functions for classifying transcript biotypes and finding long transcripts that overlap more than two coding regions.
-Depends: R (>= 3.6.0), GenomicRanges, IRanges, GenomeInfoDb, stats
+Description: Adopting tipping-point theory to transcriptome profiles 
+     to unravel disease regulatory trajectory.
+Depends: 
+    R (>= 3.5.0), GenomeInfoDb, GenomicRanges, IRanges, TSdist,igraph,psych,stringr
 Import: 
     BiocManager,
-    GenomicRanges,
-    IRanges,
-    GenomeInfoDb
-ImportFrom:
-    ("stats""aggregate")
+    GenomeInfoDb,
+    ggplot2
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
@@ -20,11 +19,16 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1
 Suggests: 
     knitr,
-    devtools,
     markdown,
-    roxygen2,
     base,
-    testthat (>= 2.1.0)
+    rmarkdown
 VignetteBuilder: knitr
 biocViews: Sequencing, RNASeq, GeneExpression, Transcription, Software
 URL: https://github.com/xyang2uchicago/NPS
+Imports: 
+    igraph,
+    psych,
+    stringr,
+    cluster,
+    testthat,
+    TSdist

@@ -1,5 +1,4 @@
 library(testthat)
-library(DNS)
+library(BioTIP)
 
-test_check("DNS")
-
+test_check("BioTIP")
