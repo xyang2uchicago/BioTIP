@@ -47,6 +47,7 @@
 #' @examples
 #' # Input datasets from our package's data folder
 #' library(BioTIP)
+#' library(GenomicRanges)
 #' data("gencode")
 #' data("intron")
 #' data("ILEF")
@@ -163,6 +164,7 @@ getBiotypes <- function(full_gr, gencode_gr, intron_gr = NULL, minoverlap = 1L) 
 #'
 #' @examples
 #' #First Load datasets and libraries
+#' library(GenomicRanges)
 #' library(BioTIP)
 #' data("gencode")
 #' data("ILEF")

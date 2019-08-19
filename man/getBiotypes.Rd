@@ -47,6 +47,7 @@ Replace the PATH_FILE when loading your data locally.
 \examples{
 # Input datasets from our package's data folder
 library(BioTIP)
+library(GenomicRanges)
 data("gencode")
 data("intron")
 data("ILEF")

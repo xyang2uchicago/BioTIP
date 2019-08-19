@@ -34,6 +34,7 @@ Replace the path_file when loading data locally to the data directory.
 }
 \examples{
 #First Load datasets and libraries
+library(GenomicRanges)
 library(BioTIP)
 data("gencode")
 data("ILEF")
