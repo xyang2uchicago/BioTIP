@@ -1,17 +1,3 @@
-r---
-BioTIP: an R package for characterization of Biological Tipping-Point
----
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
-)
-```
 # BioTIP
 
 <!-- badges: start -->
