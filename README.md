@@ -1,5 +1,5 @@
 r---
-output: github_document
+BioTIP: an R package for characterization of Biological Tipping-Point
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
