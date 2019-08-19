@@ -3,7 +3,7 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of BioTIP is to perform critical transition analysis
+an R package for characterization of Biological Tipping-Point
 
 ## Installation
 
