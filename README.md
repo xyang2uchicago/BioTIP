@@ -62,5 +62,7 @@ samplesL <- split(cli[,1],f = cli$group)
 test <- sd_selection(df, samplesL,0.01)
 igraphL <- getNetwork(test, fdr = 0.05)
 cluster <- getCluster_methods(igraphL)
+membersL_noweight <- getMCI(cluster,test,adjust.size = F)
+plotBar_MCI(membersL_noweight,ylim = c(0,6))
 ```
 
