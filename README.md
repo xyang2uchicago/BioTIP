@@ -1,4 +1,4 @@
----
+r---
 output: github_document
 ---
 
@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of BioTIP is to ...
+The goal of BioTIP is to perform critical transition analysis
 
 ## Installation
 
