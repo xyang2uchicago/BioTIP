@@ -1,6 +1,6 @@
 ---
 title: "BioTIP- an R package for characterization of Biological Tipping-Point"
-author: "Zhezhen Wang, Biniam Feleke, Qi An, Antonio Feliciano and Xinan H Yang"
+author: "Zhezhen Wang, Biniam Feleke, Qier An, Antonio Feliciano and Xinan H Yang"
 date: '`r format(Sys.Date(), "%m/%d/%Y" )`'
 output:
   html_document:
@@ -9,6 +9,10 @@ output:
     toc: yes
   pdf_document: default
   word_document: default
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{BioTIP- an R package for characterization of Biological Tipping-Point}
+  %\VignetteEncoding{UTF-8}
 abstract: "Heterogeneous cells within a stable state must under the control of organized gene regulation. Besides gradually and linearly changing phenomena, nonlinear critical transitions (or, tipping points) exhibit in cell-state transition (Moris 2016). This abrupt transition between two stable states has been well described in a tipping-point model (Scheffer 2012). Tipping points in complex systems may imply risks of unwanted collapse, but also opportunities for positive change. There is a state-of-the-art review with the introduction to open-source software for tipping-point prediction (http://www.early-warning-signals.org/). The purpose of this R package BioTIP is to characterize Biological Tipping-Point through analyses of a high-throughput data matrix. Generally, rows represent molecular features such as transcripts and columns represent samples in a data matrix. BioTIP implicated one new and two published methods to analyze not only longitudinal but also cross-sectional datasets. Existing R package, early-warning, was designed for longitudinal data analysis and well applicable to the ecosystem, ecology, space, and other fields. However, we found that it is hard to apply for high-throughput omics data. One published method to do biological tipping-point characterization was Dynamic Network Biomarker (DNB) (Chen 2012). This method indexes gene-oscillation per state, thus not always comparable across states to indicate a tipping point. Another published method called Index of critical transition (Ic-score) predicts tipping point based on pre-defined features (Mojtahedi 2016). Besides overcoming these limitations mentioned above, BioTIP provides functions to optimize feature pre-selection and evaluates empirical significance. Additionally, BioTIP defines transcript biotypes according the GENCODE annotation, allowing a study of noncoding transcription (Wang 2018). These improvements allow for an application to cross-sectional datasets. The BioTIP scheme acts as a hybrid model to join the advantages of both DNB and Ic-scoring, and providing enhanced features for high-throughput omics data analysis."
 ---
 
