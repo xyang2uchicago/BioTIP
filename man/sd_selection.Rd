@@ -11,30 +11,19 @@ sd_selection(df, samplesL, cutoff = 0.01, method = "other")
 unique transcript IDs (geneID) and sample names, respectively.}
 
 \item{samplesL}{A list of vectors, whose length is the number of states. Each
-vector gives the sample names in a state, therefore most possibly to be a
-vector of character or integer. Note that the vector s (sample names) has
+vector gives the sample names in a state. Note that the vectors (sample names) has
 to be among the column names of the R object 'df'.}
 
-\item{cutoff}{A positive numeric value. Default is 0.01, if < 1,
-automatically goes to select top x  transcripts using the a selecting
-method (which is either the 'reference', 'other' stages or 'previous'
+\item{cutoff}{A positive numeric value. Default is 0.01. If < 1,
+automatically selects top x  transcripts using the a selecting
+method (which is either the \code{reference}, \code{other} stages or \code{previous}
 stage), e.g. by default it will select top 1\% of the transcripts.}
-
-\item{method}{Selection of methods from 'reference', 'other', 'previous',
-'itself' or 'longitudinal reference'.
-\itemize{
-\item 'reference': the reference (control) state is the first (or earliest) state.
-\item 'previous': make sure sampleL is in the right order from benign to malign.
-\item 'other': all other states in the dataset are gathered as a reference control state.
-\item 'itself': make sure the cutoff is smaller than 1.
-\item 'longitudinal reference': make sure control_df and control_samplesL are not NULL.
-}}
 }
 \value{
-\code{sd_selection} A list of data frames, whose length is the number
+\code{sd_selection()} A list of data frames, whose length is the number
 of states. The rows in each data frame are the filtered transcripts with
-highest standard deviation selected from \code{df} and based on a cutoff
-value assigned. Each resulting data frame represents a subset of the raw
+highest standard deviation selected from \code{df} and based on an assigned cutoff
+value. Each resulting data frame represents a subset of the raw
 input \code{df}, with the sample ID of the same state in the column.
 }
 \description{

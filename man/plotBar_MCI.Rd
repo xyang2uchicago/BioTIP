@@ -8,26 +8,23 @@ plotBar_MCI(MCIl, ylim = NULL, nr = 1, nc = NULL, order = NULL,
   minsize = 3, states = NULL)
 }
 \arguments{
-\item{MCIl}{a list can be obtained through getMCI}
+\item{MCIl}{A list can be obtained through getMCI}
 
-\item{ylim}{a vector needed if the output barplots need to be on the same y scale}
+\item{ylim}{A vector needed if the output barplots need to be on the same y scale}
 
-\item{nr}{the number of rows to plot}
+\item{nr}{The number of rows to plot}
 
-\item{nc}{the number of column to plot, default length(groups)}
+\item{nc}{The number of columns to plot, default length(groups)}
 
-\item{order}{a character vector of the order of the barplot. default NULL which is using the input list order}
+\item{order}{A character vector of the order of the barplot. Default isNULL which uses the input list order}
 
-\item{minsize}{a non-negative numeric value of minimum size allowed for a cluster}
+\item{minsize}{A non-negative numeric value of minimum size allowed for a cluster}
 
-\item{states}{state names should be shown on the plot, default NULL,
+\item{states}{State names should be shown on the plot. Default is NULL,
 assign this if you want to show all states including states without nodes.}
 }
-\value{
-a list of CI score and their components
-}
 \description{
-a barplot of MCI for all clusters in all states
+A barplot of MCI for all clusters in all states
 }
 \examples{
 test = list('state1' = matrix(sample(1:10,6),4,3),'state2' = matrix(sample(1:10,6),4,3),'state3' = matrix(sample(1:10,6),4,3))

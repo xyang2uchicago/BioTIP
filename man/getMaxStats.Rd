@@ -7,15 +7,15 @@
 getMaxStats(membersL, idx)
 }
 \arguments{
-\item{membersL}{A two-layer nest list of character or numeric values, any one out of the five elements outputed by the function \code{\link{getMCI}}.}
+\item{membersL}{A two-layer nested list of character or numeric values, any one out of the five elements outputed by the function \code{\link{getMCI}}.}
 
-\item{idx}{A vector of integers which is cluster ids of biomodule (the module with the highest MCI score) per state. This is the first element of the result from \code{\link{getMaxMCImember}}}
+\item{idx}{A vector of integers that are cluster ids of the biomodule (the module with the highest MCI score) per state. This is the first element of the result from \code{\link{getMaxMCImember}}}
 }
 \value{
-A list describing the biomodule per state, respecting to one of the five elements (members, MCI, Sd, PCC, and PCCo) by the function \code{\link{getMCI}}. The calss of the vector is dependening on the class of the input parameter \code{membersL}.
+A list describing the biomodule of each state, corresponding to one of the five elements (members, MCI, Sd, PCC, and PCCo) outputted by the function \code{\link{getMCI}}. The calss of the vector depends on the class of the input parameter \code{membersL}.
 }
 \description{
-This function retrives the cluster index and network-node ids for the identified biomodule (taht showing the maximum MCI score) at each state in the study
+This function retrives the cluster index and network-node ids for the identified biomodule (that shows the maximum MCI score) at each state in the study.
 }
 \examples{
 test = list('state1' = matrix(sample(1:10,6),4,3),'state2' = matrix(sample(1:10,6),4,3),'state3' = matrix(sample(1:10,6),4,3))

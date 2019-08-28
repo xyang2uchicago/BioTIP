@@ -26,8 +26,5 @@ Imports:
     psych,
     stringr,
     cluster,
-    testthat,
     TSdist,
-    GenomicRanges,
-    BiocManager,
-    testthat
+    GenomicRanges

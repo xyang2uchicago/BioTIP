@@ -4,8 +4,8 @@
 \alias{getReadthrough}
 \title{Overlapping Coding Regions}
 \source{
-Refrence GRCh37 genome \url{https://www.gencodegenes.org/human/release_25lift37.html}
-for details on gtf format visit ensemble \url{https://useast.ensembl.org/info/website/upload/gff.html}
+Reference GRCh37 genome \url{https://www.gencodegenes.org/human/release_25lift37.html}.
+For details on gtf format visit ensemble \url{https://useast.ensembl.org/info/website/upload/gff.html}.
 }
 \usage{
 getReadthrough = function(gr,cod_gr)
@@ -16,7 +16,7 @@ getReadthrough = function(gr,cod_gr)
 \item{cod_gr}{A GRanges object contaning coding regions.}
 }
 \value{
-A GRanges object which returns overlapping regions of the classified transcript biotypes.
+A GRanges object that returns overlapping regions of the classified transcript biotypes.
 }
 \description{
 The \code{getReadthrough}() function is used to find long transcripts that cover more
@@ -40,7 +40,7 @@ data("gencode")
 data("ILEF")
 data("cod")
 
-#Asigning datasets a GRanges object
+#Assigning datasets a GRanges object
 gencode_gr = GRanges(gencode)
 ILEF_gr = GRanges(ILEF)
 cod_gr = GRanges(cod)

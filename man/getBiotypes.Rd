@@ -4,7 +4,7 @@
 \alias{getBiotypes}
 \title{Assigning Transcript Biotypes}
 \source{
-Refrence GRCh37 genome \url{https://www.gencodegenes.org/human/release_25lift37.html}
+Reference GRCh37 genome \url{https://www.gencodegenes.org/human/release_25lift37.html}
 for details on gtf format visit ensemble \url{https://useast.ensembl.org/info/website/upload/gff.html}
 }
 \usage{
@@ -12,21 +12,21 @@ getBiotypes <- function(full_gr, gencode_gr, intron_gr = NULL, minoverlap = 1L)
 }
 \arguments{
 \item{full_gr}{A GRanges object which contains either coding or noncoding
-transctipts. Each GRanges objects columns' requires a unique
-identifications.For further details refer to the GRanges package.}
+transcripts. Each GRanges objects' columns requires a unique
+identifications. For further details refer to the GRanges package.}
 
 \item{gencode_gr}{A GRanges object contatining a human Chr21 GENCODE reference
-annotations. A metadata column, "biotype", describes the transcript type.}
+annotation. A metadata column, "biotype", describes the transcript type.}
 
 \item{intron_gr}{A GRanges object containing the coordinates of non-coding
 transcripts.}
 
-\item{minoverlap}{An IRanges arguments which detects minimum overlap between
-two IRanges objects. For more information minoverlap argument refer to the
+\item{minoverlap}{An IRanges argument which detects minimum overlap between
+two IRanges objects. For more information about minoverlap argument refer to the
 IRanges package.}
 }
 \value{
-A GRanges object that returns a classified transcriptome biotypes.
+A GRanges object that returns classified transcriptome biotypes.
 }
 \description{
 The purpose of the \code{getBiotypes}() function is to class both coding and noncoding
@@ -65,7 +65,7 @@ getBiotypes(ILEF_gr, gencode_gr, intron_gr)
 }
 \references{
 Wang, Z. Z., J. M. Cunningham and X. H. Yang (2018).'CisPi: a transcriptomic score for disclosing cis-acting disease-associated lincRNAs.'
-Bioinformatics34(17): 664-670', PMID: 30423099'
+Bioinformatics 34(17): 664-670', PMID: 30423099'
 }
 \author{
 Zhezhen Wang and Biniam Feleke

@@ -2,16 +2,16 @@
 % Please edit documentation in R/BioTIP.R
 \name{plotIc}
 \alias{plotIc}
-\title{plot a line plot of Ic score for each state}
+\title{plot a line plot of Ic scores for each state.}
 \usage{
 plotIc(Ic, las = 0, order = NULL)
 }
 \arguments{
-\item{Ic}{A vector with names of states. if order is not assigned then plot by the order of this vector}
+\item{Ic}{A vector with names of states. If order is not assigned, then plot by the order of this vector.}
 
-\item{las}{Numeric in {0,1,2,3}; the style of axis labels. Default is, meaning labels are parallel (=0). (link to http://127.0.0.1:21580/library/graphics/html/par.html)}
+\item{las}{Numeric in {0,1,2,3}; the style of axis labels. Default is 0, meaning labels are parallel. (link to http://127.0.0.1:21580/library/graphics/html/par.html)}
 
-\item{order}{A vector of state names in the customalized order to be plotted, setting to NULL by default.}
+\item{order}{A vector of state names in the customized order to be plotted, set to NULL by default.}
 }
 \description{
 plot a line plot with Ic score for each state

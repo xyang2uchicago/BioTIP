@@ -15,7 +15,7 @@ list of igraph objects can be the output from the getNetwork function.}
 \item rw: the number of steps needed, see \href{https://igraph.org/r/doc/cluster_walktrap.html}{cluster_walktrap}
 for more detail. If "cutoff" is not assigned, default of 4 will be used.
 \item hcm, km and pam: number of clusters wanted. No default assigned.
-\item natrual: does not use this parameter.
+\item natural: does not use this parameter.
 }}
 
 \item{steps}{A mathematical clustering model for analyzing network nodes.
@@ -36,8 +36,8 @@ sub-networks.
 When method=rw: A list of \code{\link[igraph]{communities}} objects of R package
 igraph, whose length is the length of the input object \code{igraphL}.
 These \code{\link[igraph]{communities}} objects can be used for
-visualization when it being assigned to the 'mark.groups' parameter of the
-\code{\link[igraph]{plot}} function of igraph package. Otherwise this
+visualization when being assigned to the 'mark.groups' parameter of the
+\code{\link[igraph]{plot}} function of the igraph package. Otherwise this
 function returns a list of vectors, whose length is the length of the input
 object \code{igraphL}. The names of each vector are the pre-selected
 transcript IDs by th function \code{\link{ sd_selection}}. Each vector,

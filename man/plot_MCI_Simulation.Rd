@@ -8,20 +8,20 @@ plot_MCI_Simulation(MCI, simulation, las = 0, order = NULL,
   ylim = NULL, main = NULL)
 }
 \arguments{
-\item{MCI}{A named vector of max CI scores per states, can be obtained from function \code{\link{getMaxStats}}}
+\item{MCI}{A named vector of max CI scores per state, can be obtained from function \code{\link{getMaxStats}}}
 
 \item{simulation}{A matrix state * number of simulated times, can be obtained from function \code{\link{simulationMCI}}}
 
-\item{las}{Numeric in {0,1,2,3}; the style of axis labels. Default is, meaning labels are parallel (=0). (link to http://127.0.0.1:21580/library/graphics/html/par.html)}
+\item{las}{Numeric in {0,1,2,3}; the style of axis labels. Default is 0, meaning labels are parallel. (link to http://127.0.0.1:21580/library/graphics/html/par.html)}
 
-\item{order}{A vector of state names in the customalized order to be plotted, setting to NULL by default.}
+\item{order}{A vector of state names in the customized order to be plotted, set to NULL by default.}
 
-\item{ylim}{A interger vector of length 2. Default is NULL.}
+\item{ylim}{An integer vector of length 2. Default is NULL.}
 
-\item{main}{A character vector. The title of the plot. Defulalt is NULL.}
+\item{main}{A character vector. The title of the plot. Defualt is NULL.}
 }
 \description{
-simulation of loci to calculate the Ic score
+simulation of loci to calculate the Ic score.
 }
 \examples{
 MCI = c(1:3); names(MCI) = c('a','b','c')

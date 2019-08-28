@@ -9,15 +9,15 @@ simulation_Ic(obs.x, sampleL, counts, B = 1000)
 \arguments{
 \item{obs.x}{A integer, length of identified BioTiP}
 
-\item{sampleL}{A list of vectors, whose length is the number of states. Each vector gives the sample names in a state, therefore most possibly to be a vector of character or integer. Note that the vector s (sample names) has to be among the column names of the R object 'df'.}
+\item{sampleL}{A list of vectors, whose length is the number of states. Each vector gives the sample names in a state. Note that the vector s (sample names) has to be among the column names of the R object 'df'.}
 
 \item{counts}{A numeric matrix or dataframe in which columns are samples and rows are transcripts.
-Each row need to have a unique row name(i.e. transcript ID)}
+Each row needs to have a unique row name (i.e. transcript ID)}
 
 \item{B}{A integer, setting the permutation with \code{B} runs. Default is 1000.}
 }
 \value{
-A matrix of \code{y} rows and \code{B} columns where \code{y} is the length of sampleL and \code{B} is self-defined. Each column is a set of Ic scores calculated for each states
+A matrix of \code{y} rows and \code{B} columns where \code{y} is the length of sampleL and \code{B} is self-defined. Each column is a set of Ic scores calculated for each state
 }
 \description{
 simulate \code{x} loci \code{B} to calculate the Ic score, where x should be the same as the length of identified BioTiP and B is self-defined.

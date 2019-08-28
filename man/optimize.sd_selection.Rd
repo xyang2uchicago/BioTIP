@@ -9,44 +9,42 @@ optimize.sd_selection(df, samplesL, B = 100, percent = 0.8,
   control_samplesL = NULL)
 }
 \arguments{
-\item{df}{A dataframe of numerics, factor or character.The rows and columns
+\item{df}{A dataframe of numerics. The rows and columns
 represent unique transcript IDs (geneID) and sample names, respectively.}
 
-\item{samplesL}{An R list of n vectors, where n equals to the number of
-states. Each vector gives the sample names in a state, therefore most
-possibly to be a vector of character or integer. Note that the vectors
+\item{samplesL}{A list of n vectors, where n equals to the number of
+states. Each vector gives the sample names in a state. Note that the vectors
 (sample names) has to be among the column names of the R object 'df'.}
 
-\item{cutoff}{A positive numeric value. Default is 0.01, if < 1, automaticlly
+\item{cutoff}{A positive numeric value. Default is 0.01. If < 1, automatically
 goes to select top x# transcripts using the a selecting method (which is
-either the ?reference?, ?other? stages or ?pervious?# stage), e.g. by
+either the \code{reference}, \code{other} or \code{previous} stage), e.g. by
 default it will select top 1\% of the transcripts.}
 
-\item{method}{Selection of methods from 'reference', 'other', 'previous',
-'itself', or ?longitudinal reference?. Some specific requirements for each
+\item{method}{Selection of methods from \code{reference}, \code{other}, \code{previous},
+\code{itself}, or \code{longitudinal reference}. Some specific requirements for each
 option:
 \itemize{
-\item 'reference', the reference has to be the first
-\item 'previous', make sure sampleL is in the right order from benign to malign
-\item 'itself', make sure the cutoff is smaller than 1
-\item 'longitudinal reference', make sure control_df and control_samplesL are not NULL
-\item default uses 'other'
+\item \code{reference}, the reference has to be the first
+\item \code{previous}, make sure sampleL is in the right order from benign to malign
+\item \code{itself}, make sure the cutoff is smaller than 1
+\item \code{longitudinal reference'} make sure control_df and control_samplesL are not NULL
+\item default uses \code{other}
 }}
 
-\item{control_df}{a count matrix with unique loci row names:ID X column
-names:samples names of control samples, required for method 'longitudinal
-reference'}
+\item{control_df}{A count matrix with unique loci as row names and samples names of control samples as column names, only used for method \code{longitudinal
+reference}}
 
-\item{control_samplesL}{a list of characters with stages as names of control
+\item{control_samplesL}{A list of characters with stages as names of control
 samples, required for method 'longitudinal reference'}
 }
 \value{
-A list of dataframe of filtered transcripts with highest standard
+A list of dataframe of filtered transcripts with the highest standard
 deviation are selected from \code{df} based on a cutoff value assigned. The
 resulting dataframe represents a subset of the raw input \code{df}.
 }
 \description{
-The \code{sd_selection.simulation} filter a multi-state dataset based on a cutoff value for standard deviation per state and optimize. By default, a cutoff value of 0.01 is used. Suggested if each state contains more than 10 samples.
+The \code{sd_selection.simulation} filters a multi-state dataset based on a cutoff value for standard deviation per state and optimizes. By default, a cutoff value of 0.01 is used. Suggested if each state contains more than 10 samples.
 }
 \examples{
 

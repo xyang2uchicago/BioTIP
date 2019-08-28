@@ -13,21 +13,21 @@ of this list is equal to the number of states in the study. This can be the
 first element of the output from function \code{getMCI} or the output from
 \code{getCluster_methods}, see Examples for more detail.}
 
-\item{MCIl}{A list of numeric vectors with unique cluster number as names.
+\item{MCIl}{A list of numeric vectors with unique cluster numbers as names.
 Each vector represents the MCI scores of that module. This can be the
 second element of the output from function \code{getMCI}.}
 
 \item{minsize}{A numerical value of the minimum module size (the number of
-transcript in a cluster) to output for downstream analysis.}
+transcripts in a cluster) to output for downstream analysis.}
 }
 \value{
 A nested list whose length is the length of the input object
-\code{membersL}.  Each internal list contains two objects, one object is
-the vector of biomodule IDs cross states, and the other object is a list of
-transcript IDs (each defines the biomodule per state) cross states.
+\code{membersL}.  Each internal list contains two objects: one object is
+the vector of biomodule IDs across states, and the other object is a list of
+transcript IDs (each defines the biomodule per state) across states.
 }
 \description{
-This function reports the 'biomodule' which is the module with
+This function reports the 'biomodule', which is the module with
 the maximum Module Critical Index (MCI) scores for each state. Each state
 can have multiple modules (groups of subnetworks derived from the function
 \code{\link{ getCluster_methods}}). This function runs over all states.

@@ -8,13 +8,13 @@ plot_Ic_Simulation(Ic, simulation, las = 0, ylim = NULL,
   order = NULL, main = NULL)
 }
 \arguments{
-\item{Ic}{A vector with names of states. if order is not assigned then plot by the order of this vector}
+\item{Ic}{A vector with names of states. If order is not assigned, then plot by the order of this vector.}
 
 \item{simulation}{A numeric matrix of Ic scores in which rows are states and columns are numbers of simulated times. It can be obtained from \code{\link{simulation_loci}}}
 
-\item{las}{Numeric in {0,1,2,3}; the style of axis labels. Default is, meaning labels are parallel (=0). (link to http://127.0.0.1:21580/library/graphics/html/par.html)}
+\item{las}{Numeric in {0,1,2,3}; the style of axis labels. Default is 0, meaning labels are parallel. (link to http://127.0.0.1:21580/library/graphics/html/par.html)}
 
-\item{order}{A vector of state names in the customalized order to be plotted, setting to NULL by default.}
+\item{order}{A vector of state names in the customized order to be plotted, set to NULL by default.}
 }
 \description{
 generate a line plot of Ic score and simulated Ic scores.

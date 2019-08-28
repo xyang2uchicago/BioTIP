@@ -10,13 +10,13 @@ plot_simulation_sample(counts, sampleNo, Ic, genes, B = 1000,
 \arguments{
 \item{counts}{A  numeric matrix or data frame. The rows and columns represent unique transcript IDs (geneID) and sample names, respectively.}
 
-\item{sampleNo}{A integer of sample size of the tipping point}
+\item{sampleNo}{An integer of sample size of the tipping point}
 
 \item{Ic}{A numeric value. Ic score of identified BioTiP}
 
 \item{genes}{A character vector of identified BioTiP unique ids}
 
-\item{B}{A integer indicating number of times to run this simulation, default 1000}
+\item{B}{An integer indicating number of times to run this simulation, default 1000}
 }
 \description{
 simulate \code{x} samples \code{B} times to calculate the Ic score, where x should be the same as the length of identified BioTiP and B is self-defined.

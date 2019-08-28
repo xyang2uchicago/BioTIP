@@ -7,7 +7,7 @@
 getNetwork(optimal, fdr = 0.05)
 }
 \arguments{
-\item{optimal}{An R list of x numerical data frames, where x is the number of
+\item{optimal}{A list of x numeric data frames, where x is the number of
 states studied. Each data frame consists of loci with high standard
 deviations. This object can be obtained through \code{sd_selection}
 function.}
@@ -17,16 +17,16 @@ function.}
 their correlations meet this PCC-significance criterion.}
 }
 \value{
-A list of igraph objects, whose length is the length of the input
+A list of igraph objects whose length is the length of the input
 object \code{optimal}. Each object is a network of correlated nodes whose
-PCCs met the significant criteria based on the false discovery rate (FDR)
+PCCs meet the significant criteria based on the false discovery rate (FDR)
 control. The length of the list is the number of states with PCC networks.
-If there is no PCC met the significant criteria in one state, this state
+If no PCC meets the significant criteria in a state, the state
 will be deleted from the output.
 }
 \description{
 This function builds one correlation network for each state
-(sample group) and runs over all states. The network nodes are defined by
+(sample group) and runs across all states. The network nodes are defined by
 the context of the input dataset. For transcriptomic network analysis,
 network nodes can be the expressed transcript IDs and network links can be
 the correlation coefficients. Using the Pearson Correlation Coefficiency

@@ -9,18 +9,18 @@ getIc(counts, sampleL, genes, output = "Ic")
 \arguments{
 \item{counts}{A  numeric matrix or data frame. The rows and columns represent unique transcript IDs (geneID) and sample names, respectively.}
 
-\item{sampleL}{A list of vectors, whose length is the number of states. Each vector gives the sample names in a state, therefore most possibly to be a vector of character or integer. Note that the vector s (sample names) has to be among the column names of the R object 'df'.}
+\item{sampleL}{A list of vectors, whose length is the number of states. Each vector gives the sample names in a state. Note that the vector s (sample names) has to be among the column names of the R object 'df'.}
 
-\item{genes}{A character vector consists of unique BioTiP ids. This can be obtained from \code{\link{getMaxMCImember}}}
+\item{genes}{A character vector consisting of unique BioTiP ids. This can be obtained from \code{\link{getMaxMCImember}}}
 
-\item{output}{A string. Please select from 'Ic','PCCg', or 'PCCs'. Uses 'Ic' by default.
+\item{output}{A string. Please select from 'Ic', 'PCCg', or 'PCCs'. Uses 'Ic' by default.
 'PCCg' is the PCC between genes (numerator) and 'PCCs' is PCC between samples (denominator)}
 }
 \value{
-a list of numeric values, whose length and names are inherited from \code{sampleL}
+A list of numeric values, whose length and names are inherited from \code{sampleL}
 }
 \description{
-retrive Ic scores (Pearson correlation of genes / Pearson correlation of samples) for the identified BioTiP
+retreive Ic scores (Pearson correlation of genes / Pearson correlation of samples) for the identified BioTiP
 }
 \examples{
 counts = matrix(sample(1:100,27),3,9)

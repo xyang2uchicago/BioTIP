@@ -7,15 +7,15 @@
 plotMaxMCI(maxMCIms, MCIl, las = 0, order = NULL, states = NULL)
 }
 \arguments{
-\item{maxMCIms}{A list of 2 elements. The 1st element is a integer vector of module ids whose names are the state names. The 2nd element is a list of character vectors per state. The vectors are network nodes (e.g. transcript ids). This parameter can be obtained by run function \code{\link{getMaxCImember}}}
+\item{maxMCIms}{A list of 2 elements. The 1st element is an integer vector of module ids whose names are the state names. The 2nd element is a list of character vectors per state. The vectors are network nodes (e.g. transcript ids). This parameter can be obtained by running function \code{\link{getMaxCImember}}}
 
 \item{MCIl}{A list of numeric vectors whose names are unique cluster ids. Each vector represents the MCI scores of modules in a state. This can be the second element of the output from the function \code{\link{getMCI}}.}
 
-\item{las}{Numeric in {0,1,2,3}; the style of axis labels. Default is, meaning labels are parallel (=0). (link to http://127.0.0.1:21580/library/graphics/html/par.html)}
+\item{las}{Numeric in {0,1,2,3}; the style of axis labels. Default is 0, meaning labels are parallel. (link to http://127.0.0.1:21580/library/graphics/html/par.html)}
 
-\item{order}{A vector of state names in the customalized order to be plotted, setting to NULL by default.}
+\item{order}{A vector of state names in the customized order to be plotted, set to NULL by default.}
 
-\item{states}{A character vector of state names that will be shown on the plot, setting to NULL by default. Assign this if you want to show all states including a state with no resultant module. This parameter will overwrite the parameter 'order'}
+\item{states}{A character vector of state names that will be shown on the plot, set to NULL by default. Assign this if you want to show all states, including states with no resultind modules. This parameter will overwrite the parameter 'order'}
 }
 \description{
 This function generates a line plot over multiple states with the maximum MCI score per state. The module size (i.e., number of nodes) is specified at each state in parentheses.

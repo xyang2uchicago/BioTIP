@@ -3,7 +3,7 @@
 \docType{data}
 \name{ILEF}
 \alias{ILEF}
-\title{one example of transcripts in chr21}
+\title{Chromosome ranges of chr21 dataset}
 \format{A data frame of chr21 with 137 rows and 4 variables:
 \describe{
 \item{seqnames}{chromosome names (chr1,chr6,chr21)}

@@ -1,5 +1,5 @@
 ---
-title: "BioTIP- an R package for characterization of Biological Tipping-Point"
+title: "BioTIP- an R package for characterization of Biological Tipping-Points"
 author: "Zhezhen Wang, Biniam Feleke, Qier An, Antonio Feliciano and Xinan H Yang"
 date: '`r format(Sys.Date(), "%m/%d/%Y" )`'
 output:
@@ -13,7 +13,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{BioTIP- an R package for characterization of Biological Tipping-Point}
   %\VignetteEncoding{UTF-8}
-abstract: "Heterogeneous cells within a stable state must under the control of organized gene regulation. Besides gradually and linearly changing phenomena, nonlinear critical transitions (or, tipping points) exhibit in cell-state transition (Moris 2016). This abrupt transition between two stable states has been well described in a tipping-point model (Scheffer 2012). Tipping points in complex systems may imply risks of unwanted collapse, but also opportunities for positive change. There is a state-of-the-art review with the introduction to open-source software for tipping-point prediction (http://www.early-warning-signals.org/). The purpose of this R package BioTIP is to characterize Biological Tipping-Point through analyses of a high-throughput data matrix. Generally, rows represent molecular features such as transcripts and columns represent samples in a data matrix. BioTIP implicated one new and two published methods to analyze not only longitudinal but also cross-sectional datasets. Existing R package, early-warning, was designed for longitudinal data analysis and well applicable to the ecosystem, ecology, space, and other fields. However, we found that it is hard to apply for high-throughput omics data. One published method to do biological tipping-point characterization was Dynamic Network Biomarker (DNB) (Chen 2012). This method indexes gene-oscillation per state, thus not always comparable across states to indicate a tipping point. Another published method called Index of critical transition (Ic-score) predicts tipping point based on pre-defined features (Mojtahedi 2016). Besides overcoming these limitations mentioned above, BioTIP provides functions to optimize feature pre-selection and evaluates empirical significance. Additionally, BioTIP defines transcript biotypes according the GENCODE annotation, allowing a study of noncoding transcription (Wang 2018). These improvements allow for an application to cross-sectional datasets. The BioTIP scheme acts as a hybrid model to join the advantages of both DNB and Ic-scoring, and providing enhanced features for high-throughput omics data analysis."
+abstract: "Heterogeneous cells within a stable state are controlled by gene regulatory networks. Cell-state state transitions are not just gradually and linearly changing phenomena, but rather can be described as nonlinear critical transitions or tipping points (Moris 2016). This abrupt transition between two stable states has been well described using a tipping-point model (Scheffer 2012). When a complex system arrives at a tipping point, there exists fundamental instability in the system. Although this brings a potential risks of unwanted collapse, it also presents an opportunity for positive change through reversal of trajectory. The idea of tipping-point prediction has been previously pursued and implimented, however existing methods each have their limitations. The 'early-warning' package in R (http://www.early-warning-signals.org/) is designed for longitudinal data analysis and is applicable to ecosystems, ecology, space, and other fields. However, we found  it hard to apply to high-throughput 'omics' data. Another published method for biological tipping-point characterization is Dynamic Network Biomarker (DNB) (Chen 2012). This method relies on indexing gene-oscillation per state, and thus is not always feasible for cross-state comparisons and indication of tipping points. Another published method, Index of critical transition (Ic-score), predicts tipping point is limited by its reliance on pre-defined features (Mojtahedi 2016). The purpose of this R package BioTIP is to characterize Biological Tipping-Points from a high-throughput data matrix where rows represent molecular features such as transcripts and columns represent samples or cells in a data matrix. BioTIP implicates one new method and the two aforementioned published methods(DNB and Ic-score) to allow for flexible analysis of not only longitudinal, but also cross-sectional datasets. Besides overcoming the limitations of previous methods, BioTIP provides functions to optimize feature pre-selection and evaluate empirical significance. Additionally, BioTIP defines transcript biotypes according the GENCODE annotation, allowing for study of noncoding transcription (Wang 2018). These improvements allow for an application to cross-sectional datasets. The BioTIP scheme acts as a hybrid model to join the advantages of both DNB and Ic-scoring, and providing enhanced features for high-throughput 'omics' data analysis."
 ---
 
 #### ####
@@ -26,7 +26,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r, echo=FALSE, fig.cap="Fig 1. BioTIP workflow with five key analytic steps. RTF: relative transcript fluctuation; PCC: Pearson correlation coefficient; MCI: Module-Criticality Index; Ic: index of critical transition.", fig.align='center', out.width = '60%'}
-knitr::include_graphics("Fig1.jpg")
+knitr::include_graphics("Fig1.pdf")
 ```
 
 #### [Standard workflow](#Standard workflow)
@@ -55,7 +55,7 @@ knitr::include_graphics("Fig1.jpg")
 <a name="Data Preprocessing"></a>
  __Data Preprocessing__
 
-An existing dataset, GSE6136, is used to demonstrate how our functions are applied. Samples were a collection of transgenic mouse lymphomas divided into five groups based on clinical presentation, pathology and flow cytometry (Lenburg 2007), thus belonging to cross-sectional profiles. Noticing these five group represent a control stage similar to non-transgenic B cells and four major periods of B-cell lymphomagenesis, Dr. Chen and coauthors used the DNB method to identify the pre-disease state exists around the normal activated period (P2), i.e., the system transitions to the disease state around the transitional lymphoma period (Figure S12 in publication (Chen 2012)). 
+An existing dataset, GSE6136, is used to demonstrate how our functions are applied. Samples were collected from transgenic mouse lymphomas and divided into five groups based on clinical presentation, pathology and flow cytometry (Lenburg 2007), thus belonging to cross-sectional profiles. Noticing these five group represent a control stage similar to non-transgenic B cells and four major periods of B-cell lymphomagenesis, Dr. Chen and coauthors used the DNB method to identify the pre-disease state exists around the normal activated period (P2), i.e., the system transitions to the disease state around the transitional lymphoma period (Figure S12 in publication (Chen 2012)). 
 Start by loading packages stringr, psych, and igraph. If these packages are not installed, use the `source('https //bioconductor.org/bioclite.r')`, and biocLite("packages") function to install them. Then load them using library("package"). Below are some examples.
 
 ```{r}
@@ -74,7 +74,7 @@ GSE6136 = GSE6136_matrix[,-1]
 dim(GSE6136)               #[1] 22690 rows and 26 columns
 ```
 
-  The summary of GSE6136_matrix is GSE6136_cli shown below.
+  The summary of GSE6136_matrix is GSE6136_cli shown below. These two kind of data files can be downloaded from GSE database
 
 ```{r}
 #requires library(stringr)
@@ -111,9 +111,9 @@ head(df)
 
  __Pre-selection Transcript__
 
-  Once normailized, we can now classify diffrernt stages. The tipping point
-  which is within the "activated" state in this case. Here we see the number of
-  samples that are clasified into states "activated", "lymphoma_aggressive",
+  Once normalized, we can now classify different stages. The tipping point
+  is within the "activated" state in this case. Here we see the number of
+  samples that are classified into states "activated", "lymphoma_aggressive",
   "lymphoma_marginal", "lymphoma_transitional" and "resting". For instance,
   states "activated" and "resting" contain three and four samples, respectively.
   All the contents of the data set "test" can be viewed using `View(test)`. Each
@@ -198,7 +198,7 @@ head(maxSD)
 CTS = getCTS(maxMCI, maxMCIms[[2]])
 ```
 
- To visualize the trendence of every state represented by the cluster with the highest MCI scores.
+ Run the following to visualize the trendence of every state represented by the cluster with the highest MCI scores.
 ```{r,echo=TRUE, warning=FALSE}
 par(mar = c(10,5,0,2))
 plotMaxMCI(maxMCIms,membersL_noweight[[2]],states = names(samplesL),las = 2)
@@ -319,7 +319,7 @@ visit this
 target="_blank").
 
 
-   ![Chromosome 21 of human GRCh37 gtf](chr21.jpg)
+   ![Chromosome 21 of human GRCh37 gtf](chr21.JPG)
 
 The table above contains a chr21 dataset which was extracted from a full genome
 dataset. An extraction method for filtering chr21 from `gencode` file is
@@ -332,12 +332,12 @@ described below.
  __Extracting Summary Data__
 
   Before any further analysis, we need to summarize the content of the raw gtf
-  data. There are two ways to get genome biotypes: a) "transctipt_type" b)
+  data. There are two ways to get genome biotypes: a) "transcript_type" b)
   "gene_type". Due to our interst in coding and noncoding regions, the
   `transcript_type` method was used to extract the regions of interest using
   python script shown below. __Note__ that the `"PATH_FILE"` refers to the path
   where the downloded gtf file is located. For instance, if the gtf file is
-  located on your `desktop`, replace the `"PATH_FILE"` with
+  located on your `desktop`, replace the `"PATH_FILE"` Cc
   `"Users/user/Desktop/gtf"`.
 
 **Python codes:**

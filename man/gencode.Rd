@@ -3,13 +3,13 @@
 \docType{data}
 \name{gencode}
 \alias{gencode}
-\title{A chr21 data from GENCODE GRCh37}
-\format{A data frame of chr21 with 2619444 rows and 9 variables:
+\title{chr21 reference genome from GENCODE GRCh37}
+\format{A GRanges object of chr21 with 28082 rows and 4 variables:
 \describe{
-\item{Rows}{Rows, include chromosome numbers}
-\item{Columns}{Columns include seqname, source, feature, start , end,
-score, strand, frame and attribute}
-\item{cod_gr}{cod_gr is a subset of sample data 'gencode_gr'}
+\item{senames}{chromosome names ex.chr21}
+\item{ranges}{genomic ranges on the genome}
+\item{strand}{specific strand of the genomic location ex.+,-,*}
+\item{biotype}{biotype obtained through gtf file}
 }}
 \usage{
 gencode
