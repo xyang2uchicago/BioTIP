@@ -28,7 +28,7 @@ option:
 \item \code{reference}, the reference has to be the first
 \item \code{previous}, make sure sampleL is in the right order from benign to malign
 \item \code{itself}, make sure the cutoff is smaller than 1
-\item \code{longitudinal reference} make sure control_df and control_samplesL are not NULL
+\item \code{longitudinal reference'} make sure control_df and control_samplesL are not NULL
 \item default uses \code{other}
 }}
 

@@ -341,7 +341,7 @@ sd_selection = function(df, samplesL, cutoff = 0.01, method = 'other', control_d
 #' * \code{reference}, the reference has to be the first
 #' * \code{previous}, make sure sampleL is in the right order from benign to malign
 #' * \code{itself}, make sure the cutoff is smaller than 1
-#' * \code{longitudinal reference'} make sure control_df and control_samplesL are not NULL
+#' * \code{longitudinal reference} make sure control_df and control_samplesL are not NULL
 #' * default uses \code{other}
 #'
 #' @param control_df A count matrix with unique loci as row names and samples names of control samples as column names, only used for method \code{longitudinal
