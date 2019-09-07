@@ -4,7 +4,7 @@
 \alias{getMaxMCImember}
 \title{Identifying the 'Biomodule'}
 \usage{
-getMaxCImember(membersL, MCIl, minsize = 1)
+getMaxMCImember(membersL, MCIl, minsize = 1)
 }
 \arguments{
 \item{membersL}{A list of integer vectors with unique ids as names. Each
@@ -30,7 +30,7 @@ transcript IDs (each defines the biomodule per state) across states.
 This function reports the 'biomodule', which is the module with
 the maximum Module Critical Index (MCI) scores for each state. Each state
 can have multiple modules (groups of subnetworks derived from the function
-\code{\link{ getCluster_methods}}). This function runs over all states.
+\code{\link{getCluster_methods}}). This function runs over all states.
 }
 \examples{
 #1st option: get the input directly from getMCI function

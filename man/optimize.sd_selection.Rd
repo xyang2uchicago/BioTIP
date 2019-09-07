@@ -5,7 +5,7 @@
 \title{optimization of sd selection}
 \usage{
 optimize.sd_selection(df, samplesL, B = 100, percent = 0.8,
-  times = 80, cutoff = 0.01, method = "other", control_df = NULL,
+  times = 0.8, cutoff = 0.01, method = "other", control_df = NULL,
   control_samplesL = NULL)
 }
 \arguments{
@@ -16,20 +16,25 @@ represent unique transcript IDs (geneID) and sample names, respectively.}
 states. Each vector gives the sample names in a state. Note that the vectors
 (sample names) has to be among the column names of the R object 'df'.}
 
+\item{B}{An integer indicating number of times to run this optimization, default 1000.}
+
+\item{percent}{A numeric value indicating the percentage of samples will be selected in each round of simulation.}
+
+\item{times}{A numeric value indicating the percentage ofnumber of time a transcript.}
+
 \item{cutoff}{A positive numeric value. Default is 0.01. If < 1, automatically
 goes to select top x# transcripts using the a selecting method (which is
 either the \code{reference}, \code{other} or \code{previous} stage), e.g. by
 default it will select top 1\% of the transcripts.}
 
-\item{method}{Selection of methods from \code{reference}, \code{other}, \code{previous},
-\code{itself}, or \code{longitudinal reference}. Some specific requirements for each
-option:
+\item{method}{Selection of methods from \code{reference}, \code{other}, \code{previous}, default uses \code{other}
 \itemize{
-\item \code{reference}, the reference has to be the first
-\item \code{previous}, make sure sampleL is in the right order from benign to malign
-\item \code{itself}, make sure the cutoff is smaller than 1
-\item \code{longitudinal reference} make sure control_df and control_samplesL are not NULL
-\item default uses \code{other}
+\item \code{itself}, or \code{longitudinal reference}. Some specific requirements for each
+option:
+\item \code{reference}, the reference has to be the first.
+\item \code{previous}, make sure sampleL is in the right order from benign to malign.
+\item \code{itself}, make sure the cutoff is smaller than 1.
+\item \code{longitudinal reference} make sure control_df and control_samplesL are not NULL. The row numbers of control_df is the same as df and all trancript in df is also in control_df.
 }}
 
 \item{control_df}{A count matrix with unique loci as row names and samples names of control samples as column names, only used for method \code{longitudinal
@@ -44,7 +49,7 @@ deviation are selected from \code{df} based on a cutoff value assigned. The
 resulting dataframe represents a subset of the raw input \code{df}.
 }
 \description{
-The \code{sd_selection.simulation} filters a multi-state dataset based on a cutoff value for standard deviation per state and optimizes. By default, a cutoff value of 0.01 is used. Suggested if each state contains more than 10 samples.
+The \code{optimize.sd_selection} filters a multi-state dataset based on a cutoff value for standard deviation per state and optimizes. By default, a cutoff value of 0.01 is used. Suggested if each state contains more than 10 samples.
 }
 \examples{
 

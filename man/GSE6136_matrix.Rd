@@ -6,11 +6,11 @@
 \title{GSE6136 matrix dataset}
 \format{A dataframe with 22690 columns and 27 rows column.
 \describe{
-\item{Columns}{Sample names or IDs}
-\item{Rows}{transcript symbol or IDs}
+\item{GSM142398-GSM142423}{Names of gene interest}
+\item{ID_REF}{Reference ID of the target genes}
 }}
 \source{
-\url{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE6136}
+\url{https://www.gencodegenes.org/human/}
 }
 \usage{
 GSE6136_matrix

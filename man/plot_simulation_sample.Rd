@@ -5,7 +5,7 @@
 \title{calculating Ic scores based on simulated samples}
 \usage{
 plot_simulation_sample(counts, sampleNo, Ic, genes, B = 1000,
-  title = "simulation of samples")
+  main = "simulation of samples")
 }
 \arguments{
 \item{counts}{A  numeric matrix or data frame. The rows and columns represent unique transcript IDs (geneID) and sample names, respectively.}
@@ -16,7 +16,9 @@ plot_simulation_sample(counts, sampleNo, Ic, genes, B = 1000,
 
 \item{genes}{A character vector of identified BioTiP unique ids}
 
-\item{B}{An integer indicating number of times to run this simulation, default 1000}
+\item{B}{An integer indicating number of times to run this simulation, default 1000.}
+
+\item{main}{A character vector. The title of the plot. Defualt is NULL.}
 }
 \description{
 simulate \code{x} samples \code{B} times to calculate the Ic score, where x should be the same as the length of identified BioTiP and B is self-defined.

@@ -232,13 +232,18 @@ getReadthrough = function(gr,cod_gr){
 #'   method (which is either the \code{reference}, \code{other} stages or \code{previous}
 #'   stage), e.g. by default it will select top 1\% of the transcripts.
 #'
-#' @param method Selection of methods from \code{reference}, \code{other}, \code{previous},
-#'   \code{itself} or \code{longitudinal reference'.
-#' * \code{reference}: the reference (control) state is the first (or earliest) state.
-#' * \code{previous}: make sure \code{samplesL} is in the correct chronological order.
-#' * \code{other}: all other states in the dataset are gathered as a reference control state.
-#' * \code{itself}: make sure the cutoff is smaller than 1.
-#' * \code{longitudinal reference}: make sure control_df and control_samplesL are not NULL.
+#' @param method Selection of methods from \code{reference}, \code{other}, \code{previous}, default uses \code{other}
+#' * \code{itself}, or \code{longitudinal reference}. Some specific requirements for each
+#'   option:
+#' * \code{reference}, the reference has to be the first.
+#' * \code{previous}, make sure sampleL is in the right order from benign to malign.
+#' * \code{itself}, make sure the cutoff is smaller than 1.
+#' * \code{longitudinal reference} make sure control_df and control_samplesL are not NULL. The row numbers of control_df is the same as df and all trancript in df is also in control_df.
+#'
+#' @param control_df A count matrix with unique loci as row names and samples names of control samples as column names, only used for method \code{longitudinal
+#'   reference}
+#' @param control_samplesL A list of characters with stages as names of control
+#'   samples, required for method 'longitudinal reference'
 #'
 #' @return \code{sd_selection()} A list of data frames, whose length is the number
 #'   of states. The rows in each data frame are the filtered transcripts with
@@ -298,6 +303,8 @@ sd_selection = function(df, samplesL, cutoff = 0.01, method = 'other', control_d
   }else if(method == 'longitudinal reference'){
     if(is.null(control_df) | is.null(control_samplesL))
       stop('Using method "longitudinal reference", make sure "control_df" and "sampleL" are assigned')
+    if(nrow(df) != nrow(control_df) | !all(row.names(df) %in% row.names(control_df))) 
+      stop('please make sure the row numbers of "control_df" is the same as "df" and all trancript in "df" is also in "control_df".')
     control = sapply(tmp, function(x) apply(control_df[,as.character(control_samplesL[[x]])],1,sd,na.rm = T))
     sds = lapply(tmp,function(x) test2[,x]/control[,x])
     names(sds) = tmp
@@ -335,14 +342,13 @@ sd_selection = function(df, samplesL, cutoff = 0.01, method = 'other', control_d
 #'   goes to select top x# transcripts using the a selecting method (which is
 #'   either the \code{reference}, \code{other} or \code{previous} stage), e.g. by
 #'   default it will select top 1\% of the transcripts.
-#' @param method Selection of methods from \code{reference}, \code{other}, \code{previous},
-#'   \code{itself}, or \code{longitudinal reference}. Some specific requirements for each
+#' @param method Selection of methods from \code{reference}, \code{other}, \code{previous}, default uses \code{other}
+#' * \code{itself}, or \code{longitudinal reference}. Some specific requirements for each
 #'   option:
-#' * \code{reference}, the reference has to be the first
-#' * \code{previous}, make sure sampleL is in the right order from benign to malign
-#' * \code{itself}, make sure the cutoff is smaller than 1
-#' * \code{longitudinal reference'} make sure control_df and control_samplesL are not NULL
-#' * default uses \code{other}
+#' * \code{reference}, the reference has to be the first.
+#' * \code{previous}, make sure sampleL is in the right order from benign to malign.
+#' * \code{itself}, make sure the cutoff is smaller than 1.
+#' * \code{longitudinal reference} make sure control_df and control_samplesL are not NULL. The row numbers of control_df is the same as df and all trancript in df is also in control_df.
 #'
 #' @param control_df A count matrix with unique loci as row names and samples names of control samples as column names, only used for method \code{longitudinal
 #'   reference}
@@ -416,6 +422,8 @@ optimize.sd_selection = function(df,samplesL,B=100,percent=0.8,times=80,cutoff=0
   }else if(method == 'longitudinal reference'){
     if(is.null(control_df) | is.null(control_samplesL))
       stop('Using method "longitudinal reference", make sure "control_df" and "sampleL" are assigned')
+    if(nrow(df) != nrow(control_df) | !all(row.names(df) %in% row.names(control_df))) 
+      stop('please make sure the row numbers of "control_df" is the same as "df" and all trancript in "df" is also in "control_df".')
     control = sapply(tmp, function(x) apply(control_df[,as.character(control_samplesL[[x]])],1,sd,na.rm = T))
     sds = lapply(tmp,function(x) test2[,x]/control[,x])
     names(sds) = tmp

@@ -6,12 +6,9 @@
 \title{cod dataset}
 \format{A dataframe with 3 data columns and 1 metadata column.
 \describe{
-\item{seqnames}{chromosome names ex.chr21}
-\item{start}{a numeric value of genome starting site}
-\item{end}{a numeric value of genome ending site}
-\item{width}{a numeric value of end-start+1}
+\item{seqnames}{chromosome names (chr21)}
+\item{ranges}{ranges}{chromosome ranges on the genome (10906201-11029719)}
 \item{strand}{specific strand of the genomic location (+,-,*)}
-\item{biotype}{biotype obtained through gtf file}
 }}
 \usage{
 cod

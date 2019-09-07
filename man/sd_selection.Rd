@@ -4,7 +4,8 @@
 \alias{sd_selection}
 \title{Selecting Highly Oscillating Transcripts}
 \usage{
-sd_selection(df, samplesL, cutoff = 0.01, method = "other")
+sd_selection(df, samplesL, cutoff = 0.01, method = "other",
+  control_df = NULL, control_samplesL = NULL)
 }
 \arguments{
 \item{df}{A numeric matrix or data frame. The rows and columns represent
@@ -18,6 +19,22 @@ to be among the column names of the R object 'df'.}
 automatically selects top x  transcripts using the a selecting
 method (which is either the \code{reference}, \code{other} stages or \code{previous}
 stage), e.g. by default it will select top 1\% of the transcripts.}
+
+\item{method}{Selection of methods from \code{reference}, \code{other}, \code{previous}, default uses \code{other}
+\itemize{
+\item \code{itself}, or \code{longitudinal reference}. Some specific requirements for each
+option:
+\item \code{reference}, the reference has to be the first.
+\item \code{previous}, make sure sampleL is in the right order from benign to malign.
+\item \code{itself}, make sure the cutoff is smaller than 1.
+\item \code{longitudinal reference} make sure control_df and control_samplesL are not NULL. The row numbers of control_df is the same as df and all trancript in df is also in control_df.
+}}
+
+\item{control_df}{A count matrix with unique loci as row names and samples names of control samples as column names, only used for method \code{longitudinal
+reference}}
+
+\item{control_samplesL}{A list of characters with stages as names of control
+samples, required for method 'longitudinal reference'}
 }
 \value{
 \code{sd_selection()} A list of data frames, whose length is the number

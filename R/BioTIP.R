@@ -37,7 +37,7 @@
 #'
 #' @source Reference GRCh37 genome \url{https://www.gencodegenes.org/human/release_25lift37.html}
 #' for details on gtf format visit ensemble \url{https://useast.ensembl.org/info/website/upload/gff.html}
-#' @import GenomicRanges
+#' @importFrom GenomicRanges findOverlaps pintersect mcols width
 #'
 #' @references
 #'
@@ -65,17 +65,17 @@
 #' @note
 #' Replace the PATH_FILE when loading your data locally.
 #'
-#' @import GenomicRanges
+#' @importFrom GenomicRanges findOverlaps pintersect mcols width
 #' @export
 #' @author Zhezhen Wang and Biniam Feleke
 
 getBiotypes <- function(full_gr, gencode_gr, intron_gr = NULL, minoverlap = 1L) {
   require(GenomicRanges)
-  if (class(full_gr) != "GRanges")
+  if (all(is(full_gr) != "GRanges"))
     stop("please give full_gr as a \"GRanges\" object")
-  if (class(gencode_gr) != "GRanges")
+  if (all(is(gencode_gr) != "GRanges"))
     stop("pealse give gencode_gr as a \"GRanges\" object")
-  if (class(intron_gr) != "GRanges" & !is.null(intron_gr))
+  if (all(is(intron_gr) != "GRanges" & !is.null(intron_gr)))
     stop("please give intron_gr as a \"GRanges\" object")
   hits = findOverlaps(full_gr, gencode_gr, type = "within", minoverlap = minoverlap)
   full = as.data.frame(full_gr)
@@ -139,7 +139,6 @@ getBiotypes <- function(full_gr, gencode_gr, intron_gr = NULL, minoverlap = 1L) 
 #' @description
 #' The \code{getReadthrough}() function is used to find long transcripts that cover more
 #' than two coding regions for gene regions of interst.
-#' @usage getReadthrough = function(gr,cod_gr)
 #'
 #' @param gr A GRanges object that shows the start and end loci on genome.
 #' @param cod_gr A GRanges object contaning coding regions.
@@ -155,7 +154,6 @@ getBiotypes <- function(full_gr, gencode_gr, intron_gr = NULL, minoverlap = 1L) 
 #' @source Reference GRCh37 genome \url{https://www.gencodegenes.org/human/release_25lift37.html}.
 #' For details on gtf format visit ensemble \url{https://useast.ensembl.org/info/website/upload/gff.html}.
 #'
-#' @import GenomicRanges
 #'
 #' @references
 #' Wang, Z. Z., J. M. Cunningham and X. H. Yang (2018).'CisPi: a transcriptomic
@@ -218,8 +216,6 @@ getReadthrough = function(gr,cod_gr){
 #' a cutoff value for standard deviation. The default cutoff value is 0.01
 #' (i.e., higher than the top 1\% standard deviation).
 #'
-#' @usage sd_selection(df, samplesL, cutoff = 0.01, method = "other")
-#'
 #' @param df A numeric matrix or data frame. The rows and columns represent
 #'   unique transcript IDs (geneID) and sample names, respectively.
 #'
@@ -232,13 +228,18 @@ getReadthrough = function(gr,cod_gr){
 #'   method (which is either the \code{reference}, \code{other} stages or \code{previous}
 #'   stage), e.g. by default it will select top 1\% of the transcripts.
 #'
-#' @param method Selection of methods from \code{reference}, \code{other}, \code{previous},
-#'   \code{itself} or \code{longitudinal reference'.
-#' * \code{reference}: the reference (control) state is the first (or earliest) state.
-#' * \code{previous}: make sure \code{samplesL} is in the correct chronological order.
-#' * \code{other}: all other states in the dataset are gathered as a reference control state.
-#' * \code{itself}: make sure the cutoff is smaller than 1.
-#' * \code{longitudinal reference}: make sure control_df and control_samplesL are not NULL.
+#' @param method Selection of methods from \code{reference}, \code{other}, \code{previous}, default uses \code{other}
+#' * \code{itself}, or \code{longitudinal reference}. Some specific requirements for each
+#'   option:
+#' * \code{reference}, the reference has to be the first.
+#' * \code{previous}, make sure sampleL is in the right order from benign to malign.
+#' * \code{itself}, make sure the cutoff is smaller than 1.
+#' * \code{longitudinal reference} make sure control_df and control_samplesL are not NULL. The row numbers of control_df is the same as df and all trancript in df is also in control_df.
+#'
+#' @param control_df A count matrix with unique loci as row names and samples names of control samples as column names, only used for method \code{longitudinal
+#'   reference}
+#' @param control_samplesL A list of characters with stages as names of control
+#'   samples, required for method 'longitudinal reference'
 #'
 #' @return \code{sd_selection()} A list of data frames, whose length is the number
 #'   of states. The rows in each data frame are the filtered transcripts with
@@ -268,18 +269,18 @@ sd_selection = function(df, samplesL, cutoff = 0.01, method = 'other', control_d
   if(any(lengths(samplesL)<2)) stop('please make sure there are at least one sample in every state')
   tmp = names(samplesL)
   samplesL = lapply(samplesL,as.character)
-  test2 = sapply(tmp, function(x) apply(df[,as.character(samplesL[[x]])],1,sd,na.rm = T))
+  test2 = sapply(tmp, function(x) apply(df[,as.character(samplesL[[x]])],1,sd,na.rm = TRUE))
 
   if(method == 'reference'){
     ref = as.character(samplesL[[1]])
-    sdref = apply(df[,ref],1,sd,na.rm = T)
+    sdref = apply(df[,ref],1,sd,na.rm = TRUE)
     sds = lapply(tmp,function(x) test2[,x]/sdref)
     names(sds) = tmp
 
   }else if(method == 'other'){
     othersample = lapply(1: length(samplesL), function(x) do.call(c,samplesL[-x]))
     names(othersample) = tmp
-    sdother = sapply(tmp, function(x) apply(df[,as.character(othersample[[x]])],1,sd,na.rm = T))
+    sdother = sapply(tmp, function(x) apply(df[,as.character(othersample[[x]])],1,sd,na.rm = TRUE))
 
     sds = lapply(tmp,function(x) test2[,x]/sdother[,x])
     names(sds) = tmp
@@ -298,7 +299,9 @@ sd_selection = function(df, samplesL, cutoff = 0.01, method = 'other', control_d
   }else if(method == 'longitudinal reference'){
     if(is.null(control_df) | is.null(control_samplesL))
       stop('Using method "longitudinal reference", make sure "control_df" and "sampleL" are assigned')
-    control = sapply(tmp, function(x) apply(control_df[,as.character(control_samplesL[[x]])],1,sd,na.rm = T))
+    if(nrow(df) != nrow(control_df) | !all(row.names(df) %in% row.names(control_df)))
+      stop('please make sure the row numbers of "control_df" is the same as "df" and all trancript in "df" is also in "control_df".')
+    control = sapply(tmp, function(x) apply(control_df[,as.character(control_samplesL[[x]])],1,sd,na.rm = TRUE))
     sds = lapply(tmp,function(x) test2[,x]/control[,x])
     names(sds) = tmp
 
@@ -308,7 +311,7 @@ sd_selection = function(df, samplesL, cutoff = 0.01, method = 'other', control_d
 
   if(cutoff<1){
     topdf = nrow(df)*cutoff
-    sdtop = lapply(tmp,function(x) names(sds[[x]][order(sds[[x]],decreasing = T)[1:topdf]]))
+    sdtop = lapply(tmp,function(x) names(sds[[x]][order(sds[[x]],decreasing = TRUE)[1:topdf]]))
   }else{
     sdtop = lapply(tmp,function(x) names(sds[[x]][sds[[x]]>cutoff]))
   }
@@ -324,25 +327,27 @@ sd_selection = function(df, samplesL, cutoff = 0.01, method = 'other', control_d
 
 #' optimization of sd selection
 #'
-#' @description The \code{sd_selection.simulation} filters a multi-state dataset based on a cutoff value for standard deviation per state and optimizes. By default, a cutoff value of 0.01 is used. Suggested if each state contains more than 10 samples.
+#' @description The \code{optimize.sd_selection} filters a multi-state dataset based on a cutoff value for standard deviation per state and optimizes. By default, a cutoff value of 0.01 is used. Suggested if each state contains more than 10 samples.
 #'
 #' @param df A dataframe of numerics. The rows and columns
 #'   represent unique transcript IDs (geneID) and sample names, respectively.
 #' @param samplesL A list of n vectors, where n equals to the number of
 #'   states. Each vector gives the sample names in a state. Note that the vectors
 #'   (sample names) has to be among the column names of the R object 'df'.
+#' @param B An integer indicating number of times to run this optimization, default 1000.
+#' @param percent A numeric value indicating the percentage of samples will be selected in each round of simulation.
+#' @param times A numeric value indicating the percentage ofnumber of time a transcript.
 #' @param cutoff A positive numeric value. Default is 0.01. If < 1, automatically
 #'   goes to select top x# transcripts using the a selecting method (which is
 #'   either the \code{reference}, \code{other} or \code{previous} stage), e.g. by
 #'   default it will select top 1\% of the transcripts.
-#' @param method Selection of methods from \code{reference}, \code{other}, \code{previous},
-#'   \code{itself}, or \code{longitudinal reference}. Some specific requirements for each
+#' @param method Selection of methods from \code{reference}, \code{other}, \code{previous}, default uses \code{other}
+#' * \code{itself}, or \code{longitudinal reference}. Some specific requirements for each
 #'   option:
-#' * \code{reference}, the reference has to be the first
-#' * \code{previous}, make sure sampleL is in the right order from benign to malign
-#' * \code{itself}, make sure the cutoff is smaller than 1
-#' * \code{longitudinal reference} make sure control_df and control_samplesL are not NULL
-#' * default uses \code{other}
+#' * \code{reference}, the reference has to be the first.
+#' * \code{previous}, make sure sampleL is in the right order from benign to malign.
+#' * \code{itself}, make sure the cutoff is smaller than 1.
+#' * \code{longitudinal reference} make sure control_df and control_samplesL are not NULL. The row numbers of control_df is the same as df and all trancript in df is also in control_df.
 #'
 #' @param control_df A count matrix with unique loci as row names and samples names of control samples as column names, only used for method \code{longitudinal
 #'   reference}
@@ -364,7 +369,7 @@ sd_selection = function(df, samplesL, cutoff = 0.01, method = 'other', control_d
 #' samplesL <- split(cli[,1],f = cli[,'group'])
 #' test_sd_selection <- optimize.sd_selection(counts, samplesL, B = 3, cutoff =0.01)
 
-optimize.sd_selection = function(df,samplesL,B=100,percent=0.8,times=80,cutoff=0.01,method = 'other',control_df = NULL,control_samplesL = NULL){
+optimize.sd_selection = function(df,samplesL,B=100,percent=0.8,times=0.8,cutoff=0.01,method = 'other',control_df = NULL,control_samplesL = NULL){
    if(is.null(names(samplesL))) stop('please provide name to samplesL')
    if(any(!do.call(c,lapply(samplesL,as.character)) %in% colnames(df))) stop('please check if all sample names provided in "samplesL" are in colnames of "df"')
    if(any(lengths(samplesL)<2)) stop('please make sure there are at least one sample in every state')
@@ -379,16 +384,16 @@ optimize.sd_selection = function(df,samplesL,B=100,percent=0.8,times=80,cutoff=0
 #  Y <- sapply(lociL,nrow)
 
   for(i in c(1:B)) {
-    random_sample = lapply(1:length(k),function(x) sample(1:n[[x]],k[[x]]))  # replace=F by default
+    random_sample = lapply(1:length(k),function(x) sample(1:n[[x]],k[[x]]))  # replace=FALSE by default
     names(random_sample) = names(samplesL)
     selected_counts = lapply(names(samplesL), function(x) df[,random_sample[[x]]])
-    test2 = sapply(selected_counts, function(x) apply(x,1,sd,na.rm = T))
+    test2 = sapply(selected_counts, function(x) apply(x,1,sd,na.rm = TRUE))
     tmp = names(samplesL)
     colnames(test2) = tmp
 
   if(method == 'reference'){
     ref = selected_counts[[1]]
-    sdref = apply(ref,1,sd,na.rm = T)
+    sdref = apply(ref,1,sd,na.rm = TRUE)
     sds = lapply(tmp,function(x) test2[,x]/sdref[,x])
     names(sds) = tmp
 
@@ -398,7 +403,7 @@ optimize.sd_selection = function(df,samplesL,B=100,percent=0.8,times=80,cutoff=0
     names(othersample) = tmp
     selecteddf = do.call(cbind,selected_counts)
     #selecteds = lapply(tmp, function(x) othersample[[x]][othersample[[x]] %in% colnames(selecteddf)])
-    sdother = sapply(tmp, function(x) apply(df[,othersample[[x]]],1,function(y) sd(y,na.rm = T)))
+    sdother = sapply(tmp, function(x) apply(df[,othersample[[x]]],1,function(y) sd(y,na.rm = TRUE)))
 
     sds = lapply(tmp,function(x) test2[,x]/sdother[,x])
     names(sds) = tmp
@@ -416,7 +421,9 @@ optimize.sd_selection = function(df,samplesL,B=100,percent=0.8,times=80,cutoff=0
   }else if(method == 'longitudinal reference'){
     if(is.null(control_df) | is.null(control_samplesL))
       stop('Using method "longitudinal reference", make sure "control_df" and "sampleL" are assigned')
-    control = sapply(tmp, function(x) apply(control_df[,as.character(control_samplesL[[x]])],1,sd,na.rm = T))
+    if(nrow(df) != nrow(control_df) | !all(row.names(df) %in% row.names(control_df)))
+      stop('please make sure the row numbers of "control_df" is the same as "df" and all trancript in "df" is also in "control_df".')
+    control = sapply(tmp, function(x) apply(control_df[,as.character(control_samplesL[[x]])],1,sd,na.rm = TRUE))
     sds = lapply(tmp,function(x) test2[,x]/control[,x])
     names(sds) = tmp
 
@@ -426,7 +433,7 @@ optimize.sd_selection = function(df,samplesL,B=100,percent=0.8,times=80,cutoff=0
 
   if(cutoff<1){
     topdf = nrow(selected_counts[[1]])*cutoff
-    sdtop = lapply(tmp,function(x) names(sds[[x]][order(sds[[x]],decreasing = T)[1:topdf]]))
+    sdtop = lapply(tmp,function(x) names(sds[[x]][order(sds[[x]],decreasing = TRUE)[1:topdf]]))
   }else{
     sdtop = lapply(tmp,function(x) names(sds[[x]][sds[[x]]>cutoff]))
   }
@@ -436,7 +443,7 @@ optimize.sd_selection = function(df,samplesL,B=100,percent=0.8,times=80,cutoff=0
       N.random[[j]][sdtop[[j]],i] = 1
     }
   }
-
+  times = times*B
   stable = lapply(N.random,function(x) row.names(x[rowSums(x)>times,]))
   names(stable) = tmp
   subdf = lapply(tmp,function(x) df[,as.character(samplesL[[x]])])
@@ -495,17 +502,17 @@ getNetwork = function(optimal,fdr = 0.05){
   require(psych)
   require(igraph)
 
-  rL = lapply(optimal,function(x) corr.test(t(x),adjust = 'fdr',ci=F)$r)
+  rL = lapply(optimal,function(x) corr.test(t(x),adjust = 'fdr',ci=FALSE)$r)
   names(rL) = names(optimal)
-  pL = lapply(optimal,function(x) corr.test(t(x),adjust = 'fdr',ci=F)$p)
+  pL = lapply(optimal,function(x) corr.test(t(x),adjust = 'fdr',ci=FALSE)$p)
   if(is.null(names(rL))) stop('give names to the input list')
 
   igraphL = list()
   for(i in names(rL)){
     test = rL[[i]]
     test.p = pL[[i]]
-    test[lower.tri(test,diag = T)] = NA
-    #test.p[lower.tri(test,diag = T)] = 1
+    test[lower.tri(test,diag = TRUE)] = NA
+    #test.p[lower.tri(test,diag = TRUE)] = 1
     tmp = lapply(1:nrow(test),function(x) test[x,test.p[x,]<fdr])
     tmp_name = lapply(1:nrow(test),function(x) which(test.p[x,]<fdr))
     idx = which(lengths(tmp_name)==1)
@@ -532,7 +539,7 @@ getNetwork = function(optimal,fdr = 0.05){
 
     nodes = data.frame(unique(c(edges$node1,edges$node2)))
     print(paste0(i,':',nrow(nodes),' nodes')) #[1] 48    1
-    routes_igraph <- graph_from_data_frame(d = edges, vertices = nodes, directed = F)
+    routes_igraph <- graph_from_data_frame(d = edges, vertices = nodes, directed = FALSE)
     igraphL[[i]] = routes_igraph
   }
   return(igraphL)
@@ -572,19 +579,19 @@ getCluster = function(igraphL,steps = 4){
 #'
 #' @param igraphL A list of numerical matrices or a list of igraph objects. The
 #'   list of igraph objects can be the output from the getNetwork function.
-#' @param steps A mathematical clustering model for analyzing network nodes.
+#' @param method A mathematical clustering model for analyzing network nodes.
 #'   Default is a random walk ('rw'). A method could be 'rw', 'hcm', 'km',
 #'   'pam', or 'natural', where:
 #' * rw: random walk using cluster_walktrap function in igraph package.
 #'   'igraphL' has to be a list of igraph.
-#' * hcm: hierarchical clustering using function [hclust](http://127.0.0.1:17309/library/stats/html/hclust.html)
-#'   and [dist](http://127.0.0.1:17309/library/stats/html/dist.html), using method
+#' * hcm: hierarchical clustering using function \link[stats]{hclust})
+#'   and \link[stats]{dist}, using method
 #'   'complete'.
-#' * km and pam: k-medoids or PAM algorithm using [KMedoids](http://127.0.0.1:17309/library/TSdist/html/KMedoids.html).
+#' * km and pam: k-medoids or PAM algorithm using \link[TSdist]{KMedoids}.
 #' * natrual: if nodes are disconnected, they may naturally cluster and form
 #'   sub-networks.
 #' @param cutoff A numeric value, default is NULL. For each method it means:
-#' * rw: the number of steps needed, see [cluster_walktrap](https://igraph.org/r/doc/cluster_walktrap.html)
+#' * rw: the number of steps needed, see \link[igraph]{cluster_walktrap}
 #'   for more detail. If "cutoff" is not assigned, default of 4 will be used.
 #' * hcm, km and pam: number of clusters wanted. No default assigned.
 #' * natural: does not use this parameter.
@@ -593,10 +600,10 @@ getCluster = function(igraphL,steps = 4){
 #'   igraph, whose length is the length of the input object \code{igraphL}.
 #'   These \code{\link[igraph]{communities}} objects can be used for
 #'   visualization when being assigned to the 'mark.groups' parameter of the
-#'   \code{\link[igraph]{plot}} function of the igraph package. Otherwise this
+#'  \code{\link[igraph]{plot.igraph}} function of the igraph package. Otherwise this
 #'   function returns a list of vectors, whose length is the length of the input
 #'   object \code{igraphL}. The names of each vector are the pre-selected
-#'   transcript IDs by th function \code{\link{ sd_selection}}. Each vector,
+#'   transcript IDs by th function \code{\link{sd_selection}}. Each vector,
 #'   whose length is the number of pre-selected transcript in a state, contains
 #'   the module IDs.
 #'
@@ -638,7 +645,7 @@ getCluster_methods = function(igraphL, method = 'rw', cutoff = NULL){
     if(all(!sapply(igraphL,class) %in% c('matrix','data.frame')))
       stop('hierarchical clustering needs a list of matrix or data.frame as the 1st argument')
     if(is.null(cutoff)) stop('hierarchical clustering needs "cutoff" to be assigned as the number of clusters wanted')
-    testL = lapply(igraphL, function(x) corr.test(t(x),adjust = 'fdr',ci=F)$r)
+    testL = lapply(igraphL, function(x) corr.test(t(x),adjust = 'fdr',ci=FALSE)$r)
     groupsL = lapply(1:length(testL), function(x) hclust(dist(testL[[x]]), method = "complete"))
     par(mfrow = c(1,length(groupsL)))
     sapply(groupsL, function(x) plot(x))
@@ -647,7 +654,7 @@ getCluster_methods = function(igraphL, method = 'rw', cutoff = NULL){
     if(all(!sapply(igraphL,class) %in% c('matrix','data.frame')))
       stop('k-mediods or PAM clustering needs a list of matrix or data.frame as the 1st argument')
     if(is.null(cutoff)) stop('hierarchical clustering needs "cutoff" to be assigned as the number of clusters wanted')
-    testL = lapply(igraphL, function(x) corr.test(t(x),adjust = 'fdr',ci=F)$r)
+    testL = lapply(igraphL, function(x) corr.test(t(x),adjust = 'fdr',ci=FALSE)$r)
     groups = lapply(1:length(testL), function(x) KMedoids(testL[[x]],cutoff,distance = 'euclidean'))
   }else if(method == 'natrual'){
     warning('selecting "natural" which will not use "cutoff" parameter')
@@ -664,17 +671,16 @@ getCluster_methods = function(igraphL, method = 'rw', cutoff = NULL){
 #'
 #' @description This function calculates a module critical index (MCI) score for
 #'   each module per state within a dataset. Each module is a cluster of
-#'   transcripts generated from the function \code{\link{ getCluster_methods }}.
+#'   transcripts generated from the function \code{\link{getCluster_methods}}.
 #'   Note that a dataset should contains three or more states (samples in
 #'   groups).
-#' @usage getMCI(groups, countsL, plot = TRUE, adjust.size = FALSE, ylim = NULL,
-#'   nr = 1, nc = length(countsL), order = NULL)
+#' @usage getMCI(groups, countsL, adjust.size = FALSE)
 #'
 #' @param groups A list of elements whose length is the member of states. The
 #'   elements could be either be vectors or \code{communities} object of the
 #'   R package \code{\link{igraph}}. If a vector, it is the output of the function
 #'   \code{getCluster_methods}. The names of each vector are the pre-selected
-#'   transcript IDs generated by the function \code{\link{ sd_selection}}. Each
+#'   transcript IDs generated by the function \code{\link{sd_selection}}. Each
 #'   vector, whose length is the number of pre-selected transcripts in a state,
 #'   contains the module IDs. If a \code{communities} object, it can be obtained
 #'   by \code{getCluster_methods} using the "rw" method. It is also an output of
@@ -682,7 +688,7 @@ getCluster_methods = function(igraphL, method = 'rw', cutoff = NULL){
 #' @param countsL A list of x numeric count matrices or x data frame, where x is
 #'   the number of states.
 #' @param plot A boolean to decide whether to plot a bar plot of CI scores or not.
-#'   Default TRUE.F
+#'   Default TRUE.
 #' @param adjust.size A boolean value indicating if MCI score should be adjusted
 #'   by module size (the number of transcripts in the module) or not. Default
 #'   FALSE.
@@ -756,7 +762,7 @@ getMCI = function(groups,countsL,adjust.size = FALSE){
            PCCo_avg = sapply(PCCo,mean)
 
            PCC = lapply(m,function(x) abs(cor(t(x))))
-           PCC_avg = sapply(PCC,function(x) (sum(x,na.rm = T)-nrow(x))/(nrow(x)^2-nrow(x)))
+           PCC_avg = sapply(PCC,function(x) (sum(x,na.rm = TRUE)-nrow(x))/(nrow(x)^2-nrow(x)))
            sdL = lapply(m, function(x) apply(x,1,sd))
            if(adjust.size){
              CI = mapply(function(x,y,z,w) mean(x)*(y/z)*sqrt(nrow(w)), sdL,PCC_avg,PCCo_avg,m)
@@ -847,9 +853,9 @@ plotBar_MCI = function(MCIl,ylim = NULL,nr=1,nc = NULL,order = NULL, minsize = 3
 #' @description This function reports the 'biomodule', which is the module with
 #'   the maximum Module Critical Index (MCI) scores for each state. Each state
 #'   can have multiple modules (groups of subnetworks derived from the function
-#'   \code{\link{ getCluster_methods}}). This function runs over all states.
+#'   \code{\link{getCluster_methods}}). This function runs over all states.
 #'
-#' @usage getMaxCImember(membersL, MCIl, minsize = 1)
+#' @usage getMaxMCImember(membersL, MCIl, minsize = 1)
 #'
 #' @param membersL A list of integer vectors with unique ids as names. Each
 #'   vector represents the cluster number assign to that unique id. The length
@@ -976,9 +982,9 @@ getMaxStats = function(membersL,idx){
 #'
 #' @description This function generates a line plot over multiple states with the maximum MCI score per state. The module size (i.e., number of nodes) is specified at each state in parentheses.
 #'
-#' @param maxMCIms A list of 2 elements. The 1st element is an integer vector of module ids whose names are the state names. The 2nd element is a list of character vectors per state. The vectors are network nodes (e.g. transcript ids). This parameter can be obtained by running function \code{\link{getMaxCImember}}
+#' @param maxMCIms A list of 2 elements. The 1st element is an integer vector of module ids whose names are the state names. The 2nd element is a list of character vectors per state. The vectors are network nodes (e.g. transcript ids). This parameter can be obtained by running function \code{\link{getMaxMCImember}}
 #' @param MCIl A list of numeric vectors whose names are unique cluster ids. Each vector represents the MCI scores of modules in a state. This can be the second element of the output from the function \code{\link{getMCI}}.
-#' @param las Numeric in {0,1,2,3}; the style of axis labels. Default is 0, meaning labels are parallel. (link to http://127.0.0.1:21580/library/graphics/html/par.html)
+#' @param las Numeric in {0,1,2,3}; the style of axis labels. Default is 0, meaning labels are parallel. See \code{\link{getMCI}} for more detail
 #' @param order A vector of state names in the customized order to be plotted, set to NULL by default.
 #' @param states A character vector of state names that will be shown on the plot, set to NULL by default. Assign this if you want to show all states, including states with no resultind modules. This parameter will overwrite the parameter 'order'
 #' @export
@@ -1002,7 +1008,7 @@ plotMaxMCI = function(maxMCIms, MCIl, las = 0, order = NULL, states = NULL){
     CI = sapply(order, function(x) MCIl[[x]][maxMCIms[[1]][[x]]])
     ln = order
   }
-  if(class(CI) == 'list'){
+  if(any(is(CI) == 'list')){
     warning('changing NA CI score(s) to 0')
     idx = sapply(CI,function(x) length(x)==0)
     CI[idx] = 0
@@ -1014,7 +1020,7 @@ plotMaxMCI = function(maxMCIms, MCIl, las = 0, order = NULL, states = NULL){
     CI[is.na(CI)] = 0
     ln = names(CI) = states
   }
-  matplot(CI,type = 'l',ylab = 'MCI(m|r)',axes=F)
+  matplot(CI,type = 'l',ylab = 'MCI(m|r)',axes=FALSE)
   len = sapply(ln,function(x) length(maxMCIms[[2]][[x]]))
   len[is.na(len)] = 0
   names(len) = ln
@@ -1063,9 +1069,9 @@ getCI_inner = function(members,countsL,adjust.size){
   comple = lapply(names(countsL), function(x) subset(countsL[[x]],!row.names(countsL[[x]]) %in% row.names(randomL[[x]])))
   names(randomL) = names(comple) = names(countsL)
   PCCo = lapply(names(countsL), function(x) abs(cor(t(comple[[x]]),t(randomL[[x]]))))
-  PCCo_avg = sapply(PCCo,function(x) mean(x,na.rm = T))
+  PCCo_avg = sapply(PCCo,function(x) mean(x,na.rm = TRUE))
   PCC = lapply(randomL,function(x) abs(cor(t(x))))
-  PCC_avg = sapply(PCC,function(x) (sum(x,na.rm = T)-nrow(x))/(nrow(x)^2-nrow(x)))
+  PCC_avg = sapply(PCC,function(x) (sum(x,na.rm = TRUE)-nrow(x))/(nrow(x)^2-nrow(x)))
   sdL = lapply(randomL, function(x) apply(x,1,sd))
 
   if(adjust.size){
@@ -1081,11 +1087,10 @@ getCI_inner = function(members,countsL,adjust.size){
 #' @description This function gets the MCI scores for randomly selected features (e.g. transcript ids)
 #'
 #' @param len A integer that is the length of BioTiP.
-#' @param sampelL A list of vectors, whose length is the number of states. Each vector gives the sample names in a state. Note that the vector s (sample names) has to be among the column names of the R object 'df'.
+#' @param samplesL A list of vectors, whose length is the number of states. Each vector gives the sample names in a state. Note that the vector s (sample names) has to be among the column names of the R object 'df'.
 #' @param df A numeric matrix or dataframe of numerics, factor or character. The rows and columns represent unique transcript IDs (geneID) and sample names, respectively
 #' @param adjust.size A boolean value indicating if MCI score should be adjust by module size (the number of transcripts in the module) or not. Default FALSE.
 #' @param B A integer, setting the permutation with \code{B} runs. Default is 1000.
-#' @param order A vector of state names in the customized order to be plotted, setting to NULL by default.
 #' @return A numeric matrix indicating the MCI scores of permutation. The dimemsion (row * column) of this matrix is the length of \code{samplesL} * \code{B}.
 #' @export
 #' @examples
@@ -1134,16 +1139,16 @@ plot_MCI_Simulation = function(MCI,simulation,las = 0,order = NULL,ylim = NULL,m
     if(any(!row.names(simulation) %in% order)) warning('not every state in "simulation" is plotted, make sure "order" is complete')
     simulation = simulation[order,]
   }
-  maxpt = max(simulation,MCI,na.rm = T)
-  tmp = c(min(simulation,MCI,na.rm = T),maxpt)
+  maxpt = max(simulation,MCI,na.rm = TRUE)
+  tmp = c(min(simulation,MCI,na.rm = TRUE),maxpt)
   if(is.null(ylim)){
-    if(min(simulation,na.rm = T)<maxpt){
+    if(min(simulation,na.rm = TRUE)<maxpt){
       ylim = tmp
     }else{
       ylim = rev(tmp)
     }
   }
-  boxplot(t(simulation),col = 'grey',ylab = 'MCI(m|r)',axes=F,ylim=ylim,main = main)
+  boxplot(t(simulation),col = 'grey',ylab = 'MCI(m|r)',axes=FALSE,ylim=ylim,main = main)
 
   x = which.max(MCI)
   maxCI = MCI[x]
@@ -1193,12 +1198,12 @@ getIc = function(counts,sampleL,genes,output = 'Ic'){
   subsetC = lapply(sampleL,function(x) subsetC[,as.character(x)])
 
   PCCg = lapply(subsetC,function(x) abs(cor(t(x))))
-  for(i in 1:length(PCCg)) PCCg[[i]][lower.tri(PCCg[[i]],diag = T)] = NA
-  PCCg = sapply(PCCg,function(x) mean(x,na.rm = T))
+  for(i in 1:length(PCCg)) PCCg[[i]][lower.tri(PCCg[[i]],diag = TRUE)] = NA
+  PCCg = sapply(PCCg,function(x) mean(x,na.rm = TRUE))
 
   PCCs = lapply(subsetC,function(x) cor(x))
-  for(i in 1:length(PCCs)) PCCs[[i]][lower.tri(PCCs[[i]],diag = T)] = NA
-  PCCs = sapply(PCCs,function(x) mean(x,na.rm = T))
+  for(i in 1:length(PCCs)) PCCs[[i]][lower.tri(PCCs[[i]],diag = TRUE)] = NA
+  PCCs = sapply(PCCs,function(x) mean(x,na.rm = TRUE))
 
   toplot = PCCg/PCCs
   names(toplot) = names(PCCg) = names(PCCs) = names(sampleL)
@@ -1230,7 +1235,7 @@ plotIc = function(Ic,las = 0,order = NULL){
     if(any(!names(Ic) %in% order)) warning('not every state in "Ic" is plotted, make sure "order" is complete')
     Ic = Ic[order]
   }
-  matplot(Ic,type = 'l',ylab = 'Ic',axes=F)
+  matplot(Ic,type = 'l',ylab = 'Ic',axes=FALSE)
   axis(2)
   stages = names(Ic)
   axis(side=1,at=1:length(Ic),labels=stages,las = las)
@@ -1272,6 +1277,8 @@ simulation_Ic = function(obs.x,sampleL,counts,B = 1000){
 #'
 #' @inheritParams plotIc
 #' @param simulation A numeric matrix of Ic scores in which rows are states and columns are numbers of simulated times. It can be obtained from \code{\link{simulation_loci}}
+#' @param ylim An integer vector of length 2. Default is NULL.
+#' @param main A character vector. The title of the plot. Defualt is NULL.
 #' @export
 #' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}
 #' @examples
@@ -1290,7 +1297,7 @@ plot_Ic_Simulation = function(Ic,simulation,las = 0,ylim = NULL,order = NULL,mai
     if(any(!order %in% names(Ic))) stop('make sure "Ic" is named using names in "order"')
     toplot = toplot[order,]
   }
-  matplot(toplot,type = 'l',col = c(rep('grey',ncol(toplot)-1),'red'),lty = 1,ylab = 'Ic',axes=F,ylim=ylim,main = main)
+  matplot(toplot,type = 'l',col = c(rep('grey',ncol(toplot)-1),'red'),lty = 1,ylab = 'Ic',axes=FALSE,ylim=ylim,main = main)
   axis(2)
   # customize x-axis
   stages = row.names(toplot)
@@ -1305,7 +1312,8 @@ plot_Ic_Simulation = function(Ic,simulation,las = 0,ylim = NULL,order = NULL,mai
 #' @param sampleNo An integer of sample size of the tipping point
 #' @param Ic A numeric value. Ic score of identified BioTiP
 #' @param genes A character vector of identified BioTiP unique ids
-#' @param B An integer indicating number of times to run this simulation, default 1000
+#' @param B An integer indicating number of times to run this simulation, default 1000.
+#' @param main A character vector. The title of the plot. Defualt is NULL.
 #' @export
 #' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}
 #' @examples
@@ -1316,7 +1324,7 @@ plot_Ic_Simulation = function(Ic,simulation,las = 0,ylim = NULL,order = NULL,mai
 #' plot_simulation_sample(counts,3,3.4,BioTiP,B=3)
 
 plot_simulation_sample = function(counts,sampleNo,Ic,genes,B = 1000,
-title = 'simulation of samples'){
+main = 'simulation of samples'){
   sampleL = lapply(1:B, function(x) sample(colnames(counts),sampleNo))
   tmp= sapply(1:B, function(x) getIc(counts,sampleL[x],genes,output = 'Ic'))
   p_v = length(tmp[tmp>Ic])/B

@@ -9,15 +9,13 @@ simulationMCI(len, samplesL, df, adjust.size = FALSE, B = 1000)
 \arguments{
 \item{len}{A integer that is the length of BioTiP.}
 
+\item{samplesL}{A list of vectors, whose length is the number of states. Each vector gives the sample names in a state. Note that the vector s (sample names) has to be among the column names of the R object 'df'.}
+
 \item{df}{A numeric matrix or dataframe of numerics, factor or character. The rows and columns represent unique transcript IDs (geneID) and sample names, respectively}
 
 \item{adjust.size}{A boolean value indicating if MCI score should be adjust by module size (the number of transcripts in the module) or not. Default FALSE.}
 
 \item{B}{A integer, setting the permutation with \code{B} runs. Default is 1000.}
-
-\item{sampelL}{A list of vectors, whose length is the number of states. Each vector gives the sample names in a state. Note that the vector s (sample names) has to be among the column names of the R object 'df'.}
-
-\item{order}{A vector of state names in the customized order to be plotted, setting to NULL by default.}
 }
 \value{
 A numeric matrix indicating the MCI scores of permutation. The dimemsion (row * column) of this matrix is the length of \code{samplesL} * \code{B}.

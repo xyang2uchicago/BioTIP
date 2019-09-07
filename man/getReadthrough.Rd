@@ -8,7 +8,7 @@ Reference GRCh37 genome \url{https://www.gencodegenes.org/human/release_25lift37
 For details on gtf format visit ensemble \url{https://useast.ensembl.org/info/website/upload/gff.html}.
 }
 \usage{
-getReadthrough = function(gr,cod_gr)
+getReadthrough(gr, cod_gr)
 }
 \arguments{
 \item{gr}{A GRanges object that shows the start and end loci on genome.}

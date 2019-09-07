@@ -10,26 +10,26 @@ getCluster_methods(igraphL, method = "rw", cutoff = NULL)
 \item{igraphL}{A list of numerical matrices or a list of igraph objects. The
 list of igraph objects can be the output from the getNetwork function.}
 
-\item{cutoff}{A numeric value, default is NULL. For each method it means:
-\itemize{
-\item rw: the number of steps needed, see \href{https://igraph.org/r/doc/cluster_walktrap.html}{cluster_walktrap}
-for more detail. If "cutoff" is not assigned, default of 4 will be used.
-\item hcm, km and pam: number of clusters wanted. No default assigned.
-\item natural: does not use this parameter.
-}}
-
-\item{steps}{A mathematical clustering model for analyzing network nodes.
+\item{method}{A mathematical clustering model for analyzing network nodes.
 Default is a random walk ('rw'). A method could be 'rw', 'hcm', 'km',
 'pam', or 'natural', where:
 \itemize{
 \item rw: random walk using cluster_walktrap function in igraph package.
 'igraphL' has to be a list of igraph.
-\item hcm: hierarchical clustering using function \href{http://127.0.0.1:17309/library/stats/html/hclust.html}{hclust}
-and \href{http://127.0.0.1:17309/library/stats/html/dist.html}{dist}, using method
+\item hcm: hierarchical clustering using function \link[stats]{hclust})
+and \link[stats]{dist}, using method
 'complete'.
-\item km and pam: k-medoids or PAM algorithm using \href{http://127.0.0.1:17309/library/TSdist/html/KMedoids.html}{KMedoids}.
+\item km and pam: k-medoids or PAM algorithm using \link[TSdist]{KMedoids}.
 \item natrual: if nodes are disconnected, they may naturally cluster and form
 sub-networks.
+}}
+
+\item{cutoff}{A numeric value, default is NULL. For each method it means:
+\itemize{
+\item rw: the number of steps needed, see \link[igraph]{cluster_walktrap}
+for more detail. If "cutoff" is not assigned, default of 4 will be used.
+\item hcm, km and pam: number of clusters wanted. No default assigned.
+\item natural: does not use this parameter.
 }}
 }
 \value{
@@ -37,10 +37,10 @@ When method=rw: A list of \code{\link[igraph]{communities}} objects of R package
 igraph, whose length is the length of the input object \code{igraphL}.
 These \code{\link[igraph]{communities}} objects can be used for
 visualization when being assigned to the 'mark.groups' parameter of the
-\code{\link[igraph]{plot}} function of the igraph package. Otherwise this
+\code{\link[igraph]{plot.igraph}} function of the igraph package. Otherwise this
 function returns a list of vectors, whose length is the length of the input
 object \code{igraphL}. The names of each vector are the pre-selected
-transcript IDs by th function \code{\link{ sd_selection}}. Each vector,
+transcript IDs by th function \code{\link{sd_selection}}. Each vector,
 whose length is the number of pre-selected transcript in a state, contains
 the module IDs.
 }

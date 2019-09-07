@@ -7,11 +7,11 @@
 plotMaxMCI(maxMCIms, MCIl, las = 0, order = NULL, states = NULL)
 }
 \arguments{
-\item{maxMCIms}{A list of 2 elements. The 1st element is an integer vector of module ids whose names are the state names. The 2nd element is a list of character vectors per state. The vectors are network nodes (e.g. transcript ids). This parameter can be obtained by running function \code{\link{getMaxCImember}}}
+\item{maxMCIms}{A list of 2 elements. The 1st element is an integer vector of module ids whose names are the state names. The 2nd element is a list of character vectors per state. The vectors are network nodes (e.g. transcript ids). This parameter can be obtained by running function \code{\link{getMaxMCImember}}}
 
 \item{MCIl}{A list of numeric vectors whose names are unique cluster ids. Each vector represents the MCI scores of modules in a state. This can be the second element of the output from the function \code{\link{getMCI}}.}
 
-\item{las}{Numeric in {0,1,2,3}; the style of axis labels. Default is 0, meaning labels are parallel. (link to http://127.0.0.1:21580/library/graphics/html/par.html)}
+\item{las}{Numeric in {0,1,2,3}; the style of axis labels. Default is 0, meaning labels are parallel. See \code{\link{getMCI}} for more detail}
 
 \item{order}{A vector of state names in the customized order to be plotted, set to NULL by default.}
 

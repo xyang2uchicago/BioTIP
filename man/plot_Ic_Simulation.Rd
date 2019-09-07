@@ -14,7 +14,11 @@ plot_Ic_Simulation(Ic, simulation, las = 0, ylim = NULL,
 
 \item{las}{Numeric in {0,1,2,3}; the style of axis labels. Default is 0, meaning labels are parallel. (link to http://127.0.0.1:21580/library/graphics/html/par.html)}
 
+\item{ylim}{An integer vector of length 2. Default is NULL.}
+
 \item{order}{A vector of state names in the customized order to be plotted, set to NULL by default.}
+
+\item{main}{A character vector. The title of the plot. Defualt is NULL.}
 }
 \description{
 generate a line plot of Ic score and simulated Ic scores.

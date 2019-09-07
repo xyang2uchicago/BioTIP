@@ -3,12 +3,14 @@
 \docType{data}
 \name{intron}
 \alias{intron}
-\title{one example of intron in chr21}
-\format{A GRanges object with 659327 rows and 5 variables:
+\title{Coding transcriptome in chr21 dataset}
+\format{A data frame with 659327 rows and 5 variables:
 \describe{
-\item{seqnames}{chromosome names ex.chr21}
-\item{ranges}{genomic ranges on the genome}
-\item{strand}{specific strand of the genomic location ex.+,-,*}
+\item{seqnames}{chromosome names (chr1,chrM,chr21)}
+\item{ranges}{chromosome ranges on the genome(167684657--167729508)}
+\item{strand}{specific strand of the genomic location (+,-,*)}
+\item{name}{internal assigned names(uc001aaa.3_intron_0_0_chr1_12228_f)}
+\item{score}{score not used in this data set(0)}
 }}
 \usage{
 intron
