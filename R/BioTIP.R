@@ -1331,7 +1331,7 @@ main = 'simulation of samples'){
   den = density(tmp)
   xmin = min(Ic,den$x)
   xmax = max(Ic,den$x)
-  plot(den,main = title,xlim = c(xmin,xmax))
+  plot(den,main = main,xlim = c(xmin,xmax))
   abline(v = Ic,col = 'red',lty = 2)
   x = max(den$x) - 0.2*diff(range(den$x))
   if(p_v == 0) p_v = paste('<',1/B)
