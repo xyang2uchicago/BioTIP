@@ -534,7 +534,7 @@ getNetwork = function(optimal,fdr = 0.05){
     dim(edges) #[1] 1270    4
     dim(edges) #[1] 583   4
     edges = edges[,c('node1','node2','values')]
-    edges$weight = abs(edges$values) # added in 1/8/2019
+    edges$weight = abs(edges[,'values']) # added in 1/8/2019
     #colnames(edges) = c('node1','node2','weight') # added in 12/18/2018
 
     nodes = data.frame(unique(c(edges$node1,edges$node2)))
