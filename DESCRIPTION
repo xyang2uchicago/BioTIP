@@ -6,7 +6,7 @@ Author: Zhezhen Wang, Biniam Feleke, Qier An, Antonio Feliciano y Pleyto and Xin
 Maintainer: Zhezhen Wang <zhezhen@uchicago.edu>, X Holly Yang < xyang2@uchicago> and  Yuxi (Jennifer) Sun <ysun11@uchicago.edu> 
 Description: Adopting tipping-point theory to transcriptome profiles 
      to unravel disease regulatory trajectory.
-Depends: R (>= 3.5.2)
+Depends: R (>= 3.5)
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
