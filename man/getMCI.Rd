@@ -23,9 +23,6 @@ the number of states.}
 \item{adjust.size}{A boolean value indicating if MCI score should be adjusted
 by module size (the number of transcripts in the module) or not. Default
 FALSE.}
-
-\item{plot}{A boolean to decide whether to plot a bar plot of CI scores or not.
-Default TRUE.}
 }
 \value{
 A list of five elements (members, MCI, Sd, PCC, and PCCo). Each of

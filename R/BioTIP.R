@@ -46,7 +46,6 @@
 #'
 #' @examples
 #' # Input datasets from our package's data folder
-#' library(BioTIP)
 #' library(GenomicRanges)
 #' data("gencode")
 #' data("intron")
@@ -70,7 +69,7 @@
 #' @author Zhezhen Wang and Biniam Feleke
 
 getBiotypes <- function(full_gr, gencode_gr, intron_gr = NULL, minoverlap = 1L) {
-  require(GenomicRanges)
+#  require(GenomicRanges)
   if (all(is(full_gr) != "GRanges"))
     stop("please give full_gr as a \"GRanges\" object")
   if (all(is(gencode_gr) != "GRanges"))
@@ -163,7 +162,6 @@ getBiotypes <- function(full_gr, gencode_gr, intron_gr = NULL, minoverlap = 1L) 
 #' @examples
 #' #First Load datasets and libraries
 #' library(GenomicRanges)
-#' library(BioTIP)
 #' data("gencode")
 #' data("ILEF")
 #' data("cod")
@@ -185,7 +183,7 @@ getBiotypes <- function(full_gr, gencode_gr, intron_gr = NULL, minoverlap = 1L) 
 #' @author Zhezhen Wang and Biniam Feleke
 
 getReadthrough = function(gr,cod_gr){
-  require(GenomicRanges)
+#  require(GenomicRanges)
   full_table = data.frame(gr)
   overlapcount = countOverlaps(gr,cod_gr)
   completeoverlap = unique(subjectHits(findOverlaps(cod_gr,GRanges(full_table$ID),type = 'within')))
@@ -258,12 +256,12 @@ getReadthrough = function(gr,cod_gr){
 #' samplesL <- split(cli[,1],f = cli[,'group'])
 #' test_sd_selection <- sd_selection(counts, samplesL, 0.01)
 #'
-#' @seealso \code{\link{sd_selection.simulation}}
+#' @seealso \code{\link{optimize.sd_selection}}
 #' @import psych
 #' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}
 
 sd_selection = function(df, samplesL, cutoff = 0.01, method = 'other', control_df = NULL,control_samplesL = NULL){
-  require(psych)
+#  require(psych)
   if(is.null(names(samplesL))) stop('please provide name to samplesL')
   if(any(!do.call(c,lapply(samplesL,as.character)) %in% colnames(df))) stop('please check if all sample names provided in "samplesL" are in colnames of "df"')
   if(any(lengths(samplesL)<2)) stop('please make sure there are at least one sample in every state')
@@ -498,9 +496,9 @@ optimize.sd_selection = function(df,samplesL,B=100,percent=0.8,times=0.8,cutoff=
 #' #[1] "state3:2 nodes
 
 getNetwork = function(optimal,fdr = 0.05){
-  require(stringr)
-  require(psych)
-  require(igraph)
+#  require(stringr)
+#  require(psych)
+#  require(igraph)
 
   rL = lapply(optimal,function(x) corr.test(t(x),adjust = 'fdr',ci=FALSE)$r)
   names(rL) = names(optimal)
@@ -547,7 +545,7 @@ getNetwork = function(optimal,fdr = 0.05){
 
 
 getCluster = function(igraphL,steps = 4){
-  require(igraph)
+#  require(igraph)
   if(length(steps) == 1 & steps %% 1 == 0){               ##grepl("^[1-9]{1,}$", step) only works for 1 digit
        steps = rep(steps,length(igraphL))
      }else if(length(steps) != 1 | length(steps) != length(igraphL)){
@@ -632,9 +630,9 @@ getCluster = function(igraphL,steps = 4){
 #' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}
 
 getCluster_methods = function(igraphL, method = 'rw', cutoff = NULL){
-  require(igraph)
-  require(TSdist)
-  require(psych)
+#  require(igraph)
+#  require(TSdist)
+#  require(psych)
   if(method == 'rw'){
     if(all(sapply(igraphL,class) != 'igraph'))
       stop('random walk clustering needs a list of igraph object which can be obtained using getNetwork')
@@ -687,8 +685,6 @@ getCluster_methods = function(igraphL, method = 'rw', cutoff = NULL){
 #'   the function \code{\link{sd_selection}}.
 #' @param countsL A list of x numeric count matrices or x data frame, where x is
 #'   the number of states.
-#' @param plot A boolean to decide whether to plot a bar plot of CI scores or not.
-#'   Default TRUE.
 #' @param adjust.size A boolean value indicating if MCI score should be adjusted
 #'   by module size (the number of transcripts in the module) or not. Default
 #'   FALSE.
@@ -727,7 +723,7 @@ getCluster_methods = function(igraphL, method = 'rw', cutoff = NULL){
 #' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}
 
 getMCI = function(groups,countsL,adjust.size = FALSE){
-   require(psych)
+#   require(psych)
    if(all(is.na(groups))){
        warning('no loci in any of the state in the list given, please rerun getCluster_methods with a larger cutoff or provide a list of loci')
      }else{
@@ -792,6 +788,7 @@ getMCI = function(groups,countsL,adjust.size = FALSE){
 #' @param states State names should be shown on the plot. Default is NULL,
 #' assign this if you want to show all states including states without nodes.
 #' @export
+#' @return Return a barplot of MCI scores across states.
 #' @examples
 #' test = list('state1' = matrix(sample(1:10,6),4,3),'state2' = matrix(sample(1:10,6),4,3),'state3' = matrix(sample(1:10,6),4,3))
 #' # assign colnames and rownames to the matrix
@@ -1124,6 +1121,7 @@ simulationMCI = function(len, samplesL, df, adjust.size = FALSE, B=1000){
 #' @param ylim An integer vector of length 2. Default is NULL.
 #' @param main A character vector. The title of the plot. Defualt is NULL.
 #' @export
+#' @return Return a line plot of MCI(red) and simulated MCI(grey) scores across all states
 #' @examples
 #' MCI = c(1:3); names(MCI) = c('a','b','c')
 #' simMCI = matrix(sample(1:100,9),3,3)
@@ -1224,6 +1222,7 @@ getIc = function(counts,sampleL,genes,output = 'Ic'){
 #' @param las Numeric in {0,1,2,3}; the style of axis labels. Default is 0, meaning labels are parallel. (link to http://127.0.0.1:21580/library/graphics/html/par.html)
 #' @param order A vector of state names in the customized order to be plotted, set to NULL by default.
 #' @export
+#' @return Return a line plot of Ic score across states
 #' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}
 #' @examples
 #' Ic = c('state3' = 3.4,'state1' = 5.6,'state2' = 2)
@@ -1276,10 +1275,11 @@ simulation_Ic = function(obs.x,sampleL,counts,B = 1000){
 #' @description generate a line plot of Ic score and simulated Ic scores.
 #'
 #' @inheritParams plotIc
-#' @param simulation A numeric matrix of Ic scores in which rows are states and columns are numbers of simulated times. It can be obtained from \code{\link{simulation_loci}}
+#' @param simulation A numeric matrix of Ic scores in which rows are states and columns are numbers of simulated times. It can be obtained from \code{\link{simulation_Ic}}
 #' @param ylim An integer vector of length 2. Default is NULL.
 #' @param main A character vector. The title of the plot. Defualt is NULL.
 #' @export
+#' @return Return a line plot of Ic(red) and simulated Ic(grey) scores across all states
 #' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}
 #' @examples
 #' sim = matrix(sample(1:10,9),3,3)
@@ -1315,6 +1315,7 @@ plot_Ic_Simulation = function(Ic,simulation,las = 0,ylim = NULL,order = NULL,mai
 #' @param B An integer indicating number of times to run this simulation, default 1000.
 #' @param main A character vector. The title of the plot. Defualt is NULL.
 #' @export
+#' @return Return a density plot of simulated Ic score with p-value
 #' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}
 #' @examples
 #' counts = matrix(sample(1:100,27),3,9)

@@ -13,6 +13,9 @@ plotIc(Ic, las = 0, order = NULL)
 
 \item{order}{A vector of state names in the customized order to be plotted, set to NULL by default.}
 }
+\value{
+Return a line plot of Ic score across states
+}
 \description{
 plot a line plot with Ic score for each state
 }

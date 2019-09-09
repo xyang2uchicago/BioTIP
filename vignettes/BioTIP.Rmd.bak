@@ -56,7 +56,7 @@ knitr::include_graphics("Fig1.pdf")
  __Data Preprocessing__
 
 An existing dataset, GSE6136, is used to demonstrate how our functions are applied. Samples were collected from transgenic mouse lymphomas and divided into five groups based on clinical presentation, pathology and flow cytometry (Lenburg 2007), thus belonging to cross-sectional profiles. Noticing these five group represent a control stage similar to non-transgenic B cells and four major periods of B-cell lymphomagenesis, Dr. Chen and coauthors used the DNB method to identify the pre-disease state exists around the normal activated period (P2), i.e., the system transitions to the disease state around the transitional lymphoma period (Figure S12 in publication (Chen 2012)). 
-Start by loading packages stringr, psych, and igraph. If these packages are not installed, use the `source('https //bioconductor.org/bioclite.r')`, and `biocLite("packages")` function to install them. Then load them using `library("package")`. Below are some examples.
+Start by loading packages stringr, psych, and igraph. If these packages are not installed, use the `source('https //bioconductor.org/bioclite.r')`, and biocLite("packages") function to install them. Then load them using library("package"). Below are some examples.
 
 ```{r}
 # load package
@@ -165,7 +165,7 @@ Here, ‘module’ refers to a cluster of network nodes (e.g. transcripts) highl
   `plotMaxMCI` function to view the line plot of highest MCI score at each stage.
 
 ```{r,echo=TRUE, warning=FALSE}
-membersL_noweight <- getMCI(cluster,test,adjust.size = FALSE)
+membersL_noweight <- getMCI(cluster,test,adjust.size = F)
 plotBar_MCI(membersL_noweight,ylim = c(0,6))
 ```
 ```{r,echo=TRUE, warning=FALSE}

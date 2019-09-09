@@ -10,7 +10,7 @@ plot_Ic_Simulation(Ic, simulation, las = 0, ylim = NULL,
 \arguments{
 \item{Ic}{A vector with names of states. If order is not assigned, then plot by the order of this vector.}
 
-\item{simulation}{A numeric matrix of Ic scores in which rows are states and columns are numbers of simulated times. It can be obtained from \code{\link{simulation_loci}}}
+\item{simulation}{A numeric matrix of Ic scores in which rows are states and columns are numbers of simulated times. It can be obtained from \code{\link{simulation_Ic}}}
 
 \item{las}{Numeric in {0,1,2,3}; the style of axis labels. Default is 0, meaning labels are parallel. (link to http://127.0.0.1:21580/library/graphics/html/par.html)}
 
@@ -19,6 +19,9 @@ plot_Ic_Simulation(Ic, simulation, las = 0, ylim = NULL,
 \item{order}{A vector of state names in the customized order to be plotted, set to NULL by default.}
 
 \item{main}{A character vector. The title of the plot. Defualt is NULL.}
+}
+\value{
+Return a line plot of Ic(red) and simulated Ic(grey) scores across all states
 }
 \description{
 generate a line plot of Ic score and simulated Ic scores.

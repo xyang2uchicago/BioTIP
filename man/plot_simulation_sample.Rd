@@ -20,6 +20,9 @@ plot_simulation_sample(counts, sampleNo, Ic, genes, B = 1000,
 
 \item{main}{A character vector. The title of the plot. Defualt is NULL.}
 }
+\value{
+Return a density plot of simulated Ic score with p-value
+}
 \description{
 simulate \code{x} samples \code{B} times to calculate the Ic score, where x should be the same as the length of identified BioTiP and B is self-defined.
 }

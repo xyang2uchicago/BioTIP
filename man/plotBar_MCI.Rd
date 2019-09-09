@@ -23,6 +23,9 @@ plotBar_MCI(MCIl, ylim = NULL, nr = 1, nc = NULL, order = NULL,
 \item{states}{State names should be shown on the plot. Default is NULL,
 assign this if you want to show all states including states without nodes.}
 }
+\value{
+Return a barplot of MCI scores across states.
+}
 \description{
 A barplot of MCI for all clusters in all states
 }

@@ -20,6 +20,9 @@ plot_MCI_Simulation(MCI, simulation, las = 0, order = NULL,
 
 \item{main}{A character vector. The title of the plot. Defualt is NULL.}
 }
+\value{
+Return a line plot of MCI(red) and simulated MCI(grey) scores across all states
+}
 \description{
 simulation of loci to calculate the Ic score.
 }

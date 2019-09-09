@@ -61,7 +61,7 @@ test_sd_selection <- sd_selection(counts, samplesL, 0.01)
 
 }
 \seealso{
-\code{\link{sd_selection.simulation}}
+\code{\link{optimize.sd_selection}}
 }
 \author{
 Zhezhen Wang \email{zhezhen@uchicago.edu}
