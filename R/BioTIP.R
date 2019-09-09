@@ -65,7 +65,7 @@
 #' @note
 #' Replace the PATH_FILE when loading your data locally.
 #'
-#' @importFrom GenomicRanges findOverlaps pintersect mcols width
+#' @importFrom GenomicRanges findOverlaps pintersect mcols width countOverlaps GRanges
 #' @export
 #' @author Zhezhen Wang and Biniam Feleke
 
