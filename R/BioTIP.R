@@ -6,15 +6,11 @@
 
 #' Assigning Transcript Biotypes
 #'
-#' @aliases getBiotypes
-#'
 #' @description
 #' The purpose of the \code{getBiotypes}() function is to class both coding and noncoding
 #' transcripts into biotypes using the most recent GENCODE annotations. This
 #' tool can also be used to define potential lncRNAs, given an available genome
 #' transcriptome assembly (a gtf file) or any genomic loci of interest.
-#'
-#' @usage getBiotypes <- function(full_gr, gencode_gr, intron_gr = NULL, minoverlap = 1L)
 #'
 #' @param full_gr A GRanges object which contains either coding or noncoding
 #'   transcripts. Each GRanges objects' columns requires a unique
@@ -519,7 +515,7 @@ getNetwork = function(optimal,fdr = 0.05){
     }
     names(tmp) = row.names(test)
     edges = stack(do.call(c,tmp))
-    edges = subset(edges, !is.na(values))
+    edges = subset(edges, !is.na(edges$values))
     tmp2 = subset(edges,grepl('\\.[1-9,A-z]\\.',ind))
     if(nrow(tmp2)!=0){
       tmp2$node1 = paste0(str_split_fixed(tmp2$ind,'\\.',3)[,1],'.',str_split_fixed(tmp2$ind,'\\.',3)[,2])
@@ -532,7 +528,7 @@ getNetwork = function(optimal,fdr = 0.05){
     dim(edges) #[1] 1270    4
     dim(edges) #[1] 583   4
     edges = edges[,c('node1','node2','values')]
-    edges$weight = abs(edges[,'values']) # added in 1/8/2019
+    edges$weight = abs(edges$values) # added in 1/8/2019
     #colnames(edges) = c('node1','node2','weight') # added in 12/18/2018
 
     nodes = data.frame(unique(c(edges$node1,edges$node2)))
@@ -653,7 +649,7 @@ getCluster_methods = function(igraphL, method = 'rw', cutoff = NULL){
       stop('k-mediods or PAM clustering needs a list of matrix or data.frame as the 1st argument')
     if(is.null(cutoff)) stop('hierarchical clustering needs "cutoff" to be assigned as the number of clusters wanted')
     testL = lapply(igraphL, function(x) corr.test(t(x),adjust = 'fdr',ci=FALSE)$r)
-    groups = lapply(1:length(testL), function(x) KMedoids(testL[[x]],cutoff,distance = 'euclidean'))
+    groups = lapply(1:length(testL), function(x) TSdist::KMedoids(testL[[x]],cutoff,distance = 'euclidean'))
   }else if(method == 'natrual'){
     warning('selecting "natural" which will not use "cutoff" parameter')
     if(all(sapply(igraphL,class) != 'igraph'))

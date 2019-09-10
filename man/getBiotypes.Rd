@@ -8,7 +8,7 @@ Reference GRCh37 genome \url{https://www.gencodegenes.org/human/release_25lift37
 for details on gtf format visit ensemble \url{https://useast.ensembl.org/info/website/upload/gff.html}
 }
 \usage{
-getBiotypes <- function(full_gr, gencode_gr, intron_gr = NULL, minoverlap = 1L)
+getBiotypes(full_gr, gencode_gr, intron_gr = NULL, minoverlap = 1L)
 }
 \arguments{
 \item{full_gr}{A GRanges object which contains either coding or noncoding
