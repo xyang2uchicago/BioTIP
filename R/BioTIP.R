@@ -649,7 +649,7 @@ getCluster_methods = function(igraphL, method = 'rw', cutoff = NULL){
       stop('k-mediods or PAM clustering needs a list of matrix or data.frame as the 1st argument')
     if(is.null(cutoff)) stop('hierarchical clustering needs "cutoff" to be assigned as the number of clusters wanted')
     testL = lapply(igraphL, function(x) corr.test(t(x),adjust = 'fdr',ci=FALSE)$r)
-    groups = lapply(1:length(testL), function(x) pam(testL[[x]],cutoff,metric = 'euclidean'))
+    groups = lapply(1:length(testL), function(x) pam(testL[[x]],cutoff,metric = 'euclidean')$clustering)
   }else if(method == 'natrual'){
     warning('selecting "natural" which will not use "cutoff" parameter')
     if(all(sapply(igraphL,class) != 'igraph'))
@@ -885,34 +885,25 @@ plotBar_MCI = function(MCIl,ylim = NULL,nr=1,nc = NULL,order = NULL, minsize = 3
 #' #The same as
 #' maxMCIms <- getMaxMCImember(cluster, membersL_noweight[[2]], min =2)
 #'
-#' #2nd option: get the input directly from function "getCluster_methods"
-#' test = list('state1' = matrix(sample(1:10,6),3,3),'state2' = matrix(sample(1:10,6),3,3),'state3' = matrix(sample(1:10,6),3,3))
-#' # assign colnames and rownames to the matrix
-#' for(i in names(test)){
-#'   colnames(test[[i]]) = 1:3
-#'   row.names(test[[i]]) = 1:3}
+#'## case1: using 'rw' method by default
+#'cl <- getCluster_methods(igraphL)
+#'## make sure every element in list cl is a \\code{communities} object
+#'sapply(cl,class)
+#'##       state1        state2        state3
+#'##"communities" "communities" "communities"
 #'
-#' igraphL <- getNetwork(test, fdr=1)
-#' #[1] "state1:3 nodes"
-#' #[1] "state2:3 nodes"
-#' #[1] "state3:3 nodes"
+#'## if there is(are) state(s) that is(are) empty which will not be a communities object(s),
+#'## please manually remove that state(s) and then run
+#'library(igraph)
+#'cluster = lapply(cl, membership)
+#'maxCIms <- getMaxMCImember(cluster, membersL_noweight[[2]], min =2)
 #'
-#' #case1: using 'rw' method by default
-#' cl <- getCluster_methods(igraphL)
-#' #make sure every element in list cl is a \code{communities} object
-#' sapply(cl,class)
-#' #       state1        state2        state3
-#' #\code{communities} \code{communities} \code{communities}
-#' # if not, manually remove that state and then run
-#' cluster = lapply(cl, membership)
-#' maxCIms <- getMaxMCImember(cluster, membersL_noweight[[2]], min =2)
+#'## or run function 'getMCI' and use the 1st option
+#'membersL_noweight <- getMCI(cl,test)
 #'
-#' #or run function 'getMCI' and use the 1st option
-#' membersL_noweight <- getMCI(cl,test)
-#'
-#' # case2: using methods other than the default
-#' cl <- getCluster_methods(test,method = "pam",cutoff = 2)
-#' maxCIms <- getMaxMCImember(cl, membersL_noweight[[2]], min =2)
+#'## case2: using methods other than the default
+#'cl <- getCluster_methods(test,method = "pam",cutoff = 2)
+#'maxCIms <- getMaxMCImember(cl, membersL_noweight[[2]], min =2)
 #'
 #' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}
 
