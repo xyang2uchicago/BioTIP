@@ -622,7 +622,7 @@ getCluster = function(igraphL,steps = 4){
 #' cl <- getCluster_methods(test, method = 'pam', cutoff=2)
 #'
 #' @export
-#' @import igraph
+#' @import igraph cluster
 #' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}
 
 getCluster_methods = function(igraphL, method = 'rw', cutoff = NULL){

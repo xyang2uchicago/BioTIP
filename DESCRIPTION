@@ -23,6 +23,7 @@ biocViews: Sequencing, RNASeq, GeneExpression, Transcription, Software
 URL: https://github.com/xyang2uchicago/BioTIP
 Imports: 
     igraph,
+    cluster,
     psych,
     stringr,
     GenomicRanges
