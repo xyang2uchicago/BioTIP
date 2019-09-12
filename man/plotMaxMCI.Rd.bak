@@ -17,9 +17,6 @@ plotMaxMCI(maxMCIms, MCIl, las = 0, order = NULL, states = NULL)
 
 \item{states}{A character vector of state names that will be shown on the plot, set to NULL by default. Assign this if you want to show all states, including states with no resultind modules. This parameter will overwrite the parameter 'order'}
 }
-\value{
-Returns a line plot of maximum MCI scores across the states
-}
 \description{
 This function generates a line plot over multiple states with the maximum MCI score per state. The module size (i.e., number of nodes) is specified at each state in parentheses.
 }
