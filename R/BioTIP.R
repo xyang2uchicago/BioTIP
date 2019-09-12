@@ -622,7 +622,7 @@ getCluster = function(igraphL,steps = 4){
 #' cl <- getCluster_methods(test, method = 'pam', cutoff=2)
 #'
 #' @export
-#' @import igraph TSdist
+#' @import igraph
 #' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}
 
 getCluster_methods = function(igraphL, method = 'rw', cutoff = NULL){
@@ -649,7 +649,7 @@ getCluster_methods = function(igraphL, method = 'rw', cutoff = NULL){
       stop('k-mediods or PAM clustering needs a list of matrix or data.frame as the 1st argument')
     if(is.null(cutoff)) stop('hierarchical clustering needs "cutoff" to be assigned as the number of clusters wanted')
     testL = lapply(igraphL, function(x) corr.test(t(x),adjust = 'fdr',ci=FALSE)$r)
-    groups = lapply(1:length(testL), function(x) TSdist::KMedoids(testL[[x]],cutoff,distance = 'euclidean'))
+    groups = lapply(1:length(testL), function(x) pam(testL[[x]],cutoff,metric = 'euclidean'))
   }else if(method == 'natrual'){
     warning('selecting "natural" which will not use "cutoff" parameter')
     if(all(sapply(igraphL,class) != 'igraph'))
@@ -980,6 +980,7 @@ getMaxStats = function(membersL,idx){
 #' @param las Numeric in {0,1,2,3}; the style of axis labels. Default is 0, meaning labels are parallel. See \code{\link{getMCI}} for more detail
 #' @param order A vector of state names in the customized order to be plotted, set to NULL by default.
 #' @param states A character vector of state names that will be shown on the plot, set to NULL by default. Assign this if you want to show all states, including states with no resultind modules. This parameter will overwrite the parameter 'order'
+#' @return Returns a line plot of maximum MCI scores across the states
 #' @export
 #' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}
 #' @examples
