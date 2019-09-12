@@ -56,9 +56,13 @@ knitr::include_graphics("Fig1.pdf")
  __Data Preprocessing__
 
 An existing dataset, GSE6136, is used to demonstrate how our functions are applied. Samples were collected from transgenic mouse lymphomas and divided into five groups based on clinical presentation, pathology and flow cytometry (Lenburg 2007), thus belonging to cross-sectional profiles. Noticing these five group represent a control stage similar to non-transgenic B cells and four major periods of B-cell lymphomagenesis, Dr. Chen and coauthors used the DNB method to identify the pre-disease state exists around the normal activated period (P2), i.e., the system transitions to the disease state around the transitional lymphoma period (Figure S12 in publication (Chen 2012)). 
-Start by installing necessary packages such as stringr, psych, and igraph. If these packages are not installed, use the `source('https //bioconductor.org/bioclite.r')`, and `biocLite(packages)` function to install them. Below are some examples.
+Start by installing the package 'BioTIP' and other dependent packages such as stringr, psych, and igraph if necessary. Below are some examples.
 
 ```{r}
+# install package
+source('https //bioconductor.org/bioclite.r')
+biocLite(BioTIP)
+
 # load package
 library(BioTIP)
 ```

@@ -59,10 +59,6 @@ An existing dataset, GSE6136, is used to demonstrate how our functions are appli
 Start by installing the package 'BioTIP' and other dependent packages such as stringr, psych, and igraph if necessary. Below are some examples.
 
 ```{r}
-# install package
-source('https //bioconductor.org/bioclite.r')
-biocLite(BioTIP)
-
 # load package
 library(BioTIP)
 ```
