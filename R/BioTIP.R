@@ -222,7 +222,7 @@ getReadthrough = function(gr,cod_gr){
 #'   method (which is either the \code{reference}, \code{other} stages or \code{previous}
 #'   stage), e.g. by default it will select top 1\% of the transcripts.
 #'
-#' @param method Selection of methods from \code{reference}, \code{other}, \code{previous}, default uses \code{other}
+#' @param method Selection of methods from \code{reference}, \code{other}, \code{previous}, default uses \code{other}. Partial match enabled.
 #' * \code{itself}, or \code{longitudinal reference}. Some specific requirements for each
 #'   option:
 #' * \code{reference}, the reference has to be the first.
@@ -256,8 +256,9 @@ getReadthrough = function(gr,cod_gr){
 #' @import psych
 #' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}
 
-sd_selection = function(df, samplesL, cutoff = 0.01, method = 'other', control_df = NULL,control_samplesL = NULL){
+sd_selection = function(df, samplesL, cutoff = 0.01, method = c('other','reference','previous','itself','longitudinal reference'), control_df = NULL,control_samplesL = NULL){
 #  require(psych)
+  method = match.arg(method)
   if(is.null(names(samplesL))) stop('please provide name to samplesL')
   if(any(!do.call(c,lapply(samplesL,as.character)) %in% colnames(df))) stop('please check if all sample names provided in "samplesL" are in colnames of "df"')
   if(any(lengths(samplesL)<2)) stop('please make sure there are at least one sample in every state')
@@ -335,7 +336,7 @@ sd_selection = function(df, samplesL, cutoff = 0.01, method = 'other', control_d
 #'   goes to select top x# transcripts using the a selecting method (which is
 #'   either the \code{reference}, \code{other} or \code{previous} stage), e.g. by
 #'   default it will select top 1\% of the transcripts.
-#' @param method Selection of methods from \code{reference}, \code{other}, \code{previous}, default uses \code{other}
+#' @param method Selection of methods from \code{reference}, \code{other}, \code{previous}, default uses \code{other}. Partial match enabled.
 #' * \code{itself}, or \code{longitudinal reference}. Some specific requirements for each
 #'   option:
 #' * \code{reference}, the reference has to be the first.
@@ -363,12 +364,13 @@ sd_selection = function(df, samplesL, cutoff = 0.01, method = 'other', control_d
 #' samplesL <- split(cli[,1],f = cli[,'group'])
 #' test_sd_selection <- optimize.sd_selection(counts, samplesL, B = 3, cutoff =0.01)
 
-optimize.sd_selection = function(df,samplesL,B=100,percent=0.8,times=0.8,cutoff=0.01,method = 'other',control_df = NULL,control_samplesL = NULL){
+optimize.sd_selection = function(df,samplesL,B=100,percent=0.8,times=0.8,cutoff=0.01,method = c('other','reference','previous','itself','longitudinal reference'),control_df = NULL,control_samplesL = NULL){
+   method = match.arg(method)
    if(is.null(names(samplesL))) stop('please provide name to samplesL')
    if(any(!do.call(c,lapply(samplesL,as.character)) %in% colnames(df))) stop('please check if all sample names provided in "samplesL" are in colnames of "df"')
    if(any(lengths(samplesL)<2)) stop('please make sure there are at least one sample in every state')
-   N.random = lapply(1:length(samplesL), function(x) matrix(0, nrow = nrow(df),ncol=B))
-   for(i in 1:length(N.random)){
+   N.random = lapply(seq_along(samplesL), function(x) matrix(0, nrow = nrow(df),ncol=B))
+   for(i in seq_along(N.random)){
      row.names(N.random[[i]]) = row.names(df)
    }
 
@@ -378,7 +380,7 @@ optimize.sd_selection = function(df,samplesL,B=100,percent=0.8,times=0.8,cutoff=
 #  Y <- sapply(lociL,nrow)
 
   for(i in c(1:B)) {
-    random_sample = lapply(1:length(k),function(x) sample(1:n[[x]],k[[x]]))  # replace=FALSE by default
+    random_sample = lapply(seq_along(k),function(x) sample(1:n[[x]],k[[x]]))  # replace=FALSE by default
     names(random_sample) = names(samplesL)
     selected_counts = lapply(names(samplesL), function(x) df[,random_sample[[x]]])
     test2 = sapply(selected_counts, function(x) apply(x,1,sd,na.rm = TRUE))
@@ -393,7 +395,7 @@ optimize.sd_selection = function(df,samplesL,B=100,percent=0.8,times=0.8,cutoff=
 
   }else if(method == 'other'){
     samplesL = lapply(samplesL,as.character)
-    othersample = lapply(1:length(tmp), function(x) do.call(c,samplesL[-x]))
+    othersample = lapply(seq_along(tmp), function(x) do.call(c,samplesL[-x]))
     names(othersample) = tmp
     selecteddf = do.call(cbind,selected_counts)
     #selecteds = lapply(tmp, function(x) othersample[[x]][othersample[[x]] %in% colnames(selecteddf)])
@@ -532,7 +534,7 @@ getNetwork = function(optimal,fdr = 0.05){
     #colnames(edges) = c('node1','node2','weight') # added in 12/18/2018
 
     nodes = data.frame(unique(c(edges$node1,edges$node2)))
-    print(paste0(i,':',nrow(nodes),' nodes')) #[1] 48    1
+    message(paste0(i,':',nrow(nodes),' nodes')) #[1] 48    1
     routes_igraph <- graph_from_data_frame(d = edges, vertices = nodes, directed = FALSE)
     igraphL[[i]] = routes_igraph
   }
@@ -548,14 +550,14 @@ getCluster = function(igraphL,steps = 4){
        stop('check step: must be postive integer(s) of length 1 or length of igraphL')
      }
   groups = list()
-  for(i in 1:length(igraphL)){
+  for(i in seq_along(igraphL)){
     if(nrow(as_data_frame(igraphL[[i]])) != 0){
       groups[[i]] = cluster_walktrap(igraphL[[i]],weight = abs(E(igraphL[[i]])$weight),steps = steps[i])
     }else{
       groups[[i]] = NA
     }
   }
-  #groups = lapply(1:length(igraphL), function(x) cluster_walktrap(igraphL[[x]],weight = abs(E(igraphL[[x]])$weight),steps = steps[x])) # changed weight to abs(PCC) 12/18/2018
+  #groups = lapply(seq_along(igraphL), function(x) cluster_walktrap(igraphL[[x]],weight = abs(E(igraphL[[x]])$weight),steps = steps[x])) # changed weight to abs(PCC) 12/18/2018
   names(groups) = names(igraphL)
   return(groups)
 }
@@ -625,10 +627,11 @@ getCluster = function(igraphL,steps = 4){
 #' @import igraph cluster
 #' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}
 
-getCluster_methods = function(igraphL, method = 'rw', cutoff = NULL){
+getCluster_methods = function(igraphL, method = c('rw','hcm','km','pam','natural'), cutoff = NULL){
 #  require(igraph)
 #  require(TSdist)
 #  require(psych)
+  method <- match.arg(method)
   if(method == 'rw'){
     if(all(sapply(igraphL,class) != 'igraph'))
       stop('random walk clustering needs a list of igraph object which can be obtained using getNetwork')
@@ -640,7 +643,7 @@ getCluster_methods = function(igraphL, method = 'rw', cutoff = NULL){
       stop('hierarchical clustering needs a list of matrix or data.frame as the 1st argument')
     if(is.null(cutoff)) stop('hierarchical clustering needs "cutoff" to be assigned as the number of clusters wanted')
     testL = lapply(igraphL, function(x) corr.test(t(x),adjust = 'fdr',ci=FALSE)$r)
-    groupsL = lapply(1:length(testL), function(x) hclust(dist(testL[[x]]), method = "complete"))
+    groupsL = lapply(seq_along(testL), function(x) hclust(dist(testL[[x]]), method = "complete"))
     par(mfrow = c(1,length(groupsL)))
     sapply(groupsL, function(x) plot(x))
     groups = lapply(groupsL, function(x) cutree(x,cutoff))
@@ -649,12 +652,12 @@ getCluster_methods = function(igraphL, method = 'rw', cutoff = NULL){
       stop('k-mediods or PAM clustering needs a list of matrix or data.frame as the 1st argument')
     if(is.null(cutoff)) stop('hierarchical clustering needs "cutoff" to be assigned as the number of clusters wanted')
     testL = lapply(igraphL, function(x) corr.test(t(x),adjust = 'fdr',ci=FALSE)$r)
-    groups = lapply(1:length(testL), function(x) pam(testL[[x]],cutoff,metric = 'euclidean')$clustering)
+    groups = lapply(seq_along(testL), function(x) pam(testL[[x]],cutoff,metric = 'euclidean')$clustering)
   }else if(method == 'natrual'){
     warning('selecting "natural" which will not use "cutoff" parameter')
     if(all(sapply(igraphL,class) != 'igraph'))
       stop('selecting "natural" which needs a list of igraph object as the 1st argument which can be obtained using getNetwork')
-    groups = lapply(1:length(igraphL), function(x) components(igraphL[[x]])$membership)
+    groups = lapply(seq_along(igraphL), function(x) components(igraphL[[x]])$membership)
 
   }else(stop('please select from "rw", "hcm","km", "pam", "natrual" as method'))
   return(groups)
@@ -911,13 +914,13 @@ getMaxMCImember = function(membersL,MCIl,minsize = 1){
   listn = names(membersL)
   if(!minsize <1){
     minsize = minsize-1
-    CIl = lapply(1:length(membersL),function(x) ifelse(table(membersL[[x]])>minsize,MCIl[[x]],NA))
-    module_keep = lapply(1:length(membersL), function(x) names(table(membersL[[x]])[table(membersL[[x]])>(minsize-1)]))
-    membersL = lapply(1:length(membersL),function(x) membersL[[x]][membersL[[x]] %in% module_keep[[x]]])
+    CIl = lapply(seq_along(membersL),function(x) ifelse(table(membersL[[x]])>minsize,MCIl[[x]],NA))
+    module_keep = lapply(seq_along(membersL), function(x) names(table(membersL[[x]])[table(membersL[[x]])>(minsize-1)]))
+    membersL = lapply(seq_along(membersL),function(x) membersL[[x]][membersL[[x]] %in% module_keep[[x]]])
   }else(stop('please provide a minimum size for the cluster, which should be integer that is larger than 0'))
 
   idx = sapply(CIl,which.max)
-  maxCI =lapply(1:length(idx),function(x) names(membersL[[x]][membersL[[x]] == idx[x]]))
+  maxCI =lapply(seq_along(idx),function(x) names(membersL[[x]][membersL[[x]] == idx[x]]))
   names(maxCI) = listn
   names(idx) = listn
   return(list(idx = idx,members = maxCI))
@@ -1009,10 +1012,10 @@ plotMaxMCI = function(maxMCIms, MCIl, las = 0, order = NULL, states = NULL){
   len = sapply(ln,function(x) length(maxMCIms[[2]][[x]]))
   len[is.na(len)] = 0
   names(len) = ln
-  text(1:length(CI),CI+0.01,paste0('(',len,')'))
+  text(seq_along(CI),CI+0.01,paste0('(',len,')'))
 
   axis(2)
-  axis(side=1,at=1:length(CI),labels=ln,las = las)
+  axis(side=1,at=seq_along(CI),labels=ln,las = las)
 }
 
 #' Obtain the identified BioTiP and its length
@@ -1042,7 +1045,7 @@ getCTS <- function(maxMCI, maxMCIms) {
     stop("Names of maxMCI has to be in maxMCIms.")
   }
   y <- maxMCIms[[names(maxMCI)[which.max(maxMCI)]]]
-  print(paste0("Length: ", length(y)))
+  message(paste0("Length: ", length(y)))
   return(y)
 }
 
@@ -1179,16 +1182,17 @@ plot_MCI_Simulation = function(MCI,simulation,las = 0,order = NULL,ylim = NULL,m
 #'
 #' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}
 
-getIc = function(counts,sampleL,genes,output = 'Ic'){
+getIc = function(counts,sampleL,genes,output = c('Ic','PCCg','PCCs') ){
+  output <- match.arg(output)
   subsetC = subset(counts, row.names(counts) %in% genes)
   subsetC = lapply(sampleL,function(x) subsetC[,as.character(x)])
 
   PCCg = lapply(subsetC,function(x) abs(cor(t(x))))
-  for(i in 1:length(PCCg)) PCCg[[i]][lower.tri(PCCg[[i]],diag = TRUE)] = NA
+  for(i in seq_along(PCCg)) PCCg[[i]][lower.tri(PCCg[[i]],diag = TRUE)] = NA
   PCCg = sapply(PCCg,function(x) mean(x,na.rm = TRUE))
 
   PCCs = lapply(subsetC,function(x) cor(x))
-  for(i in 1:length(PCCs)) PCCs[[i]][lower.tri(PCCs[[i]],diag = TRUE)] = NA
+  for(i in seq_along(PCCs)) PCCs[[i]][lower.tri(PCCs[[i]],diag = TRUE)] = NA
   PCCs = sapply(PCCs,function(x) mean(x,na.rm = TRUE))
 
   toplot = PCCg/PCCs
@@ -1225,7 +1229,7 @@ plotIc = function(Ic,las = 0,order = NULL){
   matplot(Ic,type = 'l',ylab = 'Ic',axes=FALSE)
   axis(2)
   stages = names(Ic)
-  axis(side=1,at=1:length(Ic),labels=stages,las = las)
+  axis(side=1,at=seq_along(Ic),labels=stages,las = las)
 }
 
 #' calculating Ic scores based on simulated loci
@@ -1289,7 +1293,7 @@ plot_Ic_Simulation = function(Ic,simulation,las = 0,ylim = NULL,order = NULL,mai
   axis(2)
   # customize x-axis
   stages = row.names(toplot)
-  axis(side=1,at=1:length(stages),labels=stages,las = las)
+  axis(side=1,at=seq_along(stages),labels=stages,las = las)
 }
 
 #' calculating Ic scores based on simulated samples
