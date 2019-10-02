@@ -4,7 +4,8 @@
 \alias{getCluster_methods}
 \title{Clustering Network Nodes}
 \usage{
-getCluster_methods(igraphL, method = "rw", cutoff = NULL)
+getCluster_methods(igraphL, method = c("rw", "hcm", "km", "pam",
+  "natural"), cutoff = NULL)
 }
 \arguments{
 \item{igraphL}{A list of numerical matrices or a list of igraph objects. The

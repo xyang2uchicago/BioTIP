@@ -52,14 +52,18 @@ maxMCIms <- getMaxMCImember(membersL_noweight[[1]], membersL_noweight[[2]], min 
 maxMCIms <- getMaxMCImember(cluster, membersL_noweight[[2]], min =2)
 
 ## case1: using 'rw' method by default
+igraphL <- getNetwork(test, fdr=1)
 cl <- getCluster_methods(igraphL)
 ## make sure every element in list cl is a \\\\code{communities} object
 sapply(cl,class)
 ##       state1        state2        state3
 ##"communities" "communities" "communities"
 
-## if there is(are) state(s) that is(are) empty which will not be a communities object(s),
-## please manually remove that state(s) and then run
+## if there is(are) state(s) that is(are) empty which will not be a communities object(s), please manually remove that state(s)
+
+cl = cl[-which(class(cl) != 'communities')]
+
+## and then run
 library(igraph)
 cluster = lapply(cl, membership)
 maxCIms <- getMaxMCImember(cluster, membersL_noweight[[2]], min =2)
