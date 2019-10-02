@@ -891,7 +891,7 @@ plotBar_MCI = function(MCIl,ylim = NULL,nr=1,nc = NULL,order = NULL, minsize = 3
 #'
 #'## if there is(are) state(s) that is(are) empty which will not be a communities object(s), please manually remove that state(s)
 #'
-#'cl = cl[-which(class(cl) != 'communities')]
+#'cl = cl[which(sapply(cl,class) == 'communities')]
 #'
 #'## and then run
 #'library(igraph)
@@ -903,6 +903,7 @@ plotBar_MCI = function(MCIl,ylim = NULL,nr=1,nc = NULL,order = NULL, minsize = 3
 #'
 #'## case2: using methods other than the default
 #'cl <- getCluster_methods(test,method = "pam",cutoff = 2)
+#'## check to make sure membersL_noweight[[2]] has values and run
 #'maxCIms <- getMaxMCImember(cl, membersL_noweight[[2]], min =2)
 #'
 #' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}
