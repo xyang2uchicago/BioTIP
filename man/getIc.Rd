@@ -4,7 +4,7 @@
 \alias{getIc}
 \title{get Ic score}
 \usage{
-getIc(counts, sampleL, genes, output = "Ic")
+getIc(counts, sampleL, genes, output = c("Ic", "PCCg", "PCCs"))
 }
 \arguments{
 \item{counts}{A  numeric matrix or data frame. The rows and columns represent unique transcript IDs (geneID) and sample names, respectively.}

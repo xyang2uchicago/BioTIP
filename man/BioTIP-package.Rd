@@ -12,7 +12,7 @@ Adopting tipping-point theory to transcriptome profiles
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/xyang2uchicago/NPS}
+  \item \url{https://github.com/xyang2uchicago/BioTIP}
 }
 
 }

@@ -4,7 +4,8 @@
 \alias{sd_selection}
 \title{Selecting Highly Oscillating Transcripts}
 \usage{
-sd_selection(df, samplesL, cutoff = 0.01, method = "other",
+sd_selection(df, samplesL, cutoff = 0.01, method = c("other",
+  "reference", "previous", "itself", "longitudinal reference"),
   control_df = NULL, control_samplesL = NULL)
 }
 \arguments{
@@ -20,7 +21,7 @@ automatically selects top x  transcripts using the a selecting
 method (which is either the \code{reference}, \code{other} stages or \code{previous}
 stage), e.g. by default it will select top 1\% of the transcripts.}
 
-\item{method}{Selection of methods from \code{reference}, \code{other}, \code{previous}, default uses \code{other}
+\item{method}{Selection of methods from \code{reference}, \code{other}, \code{previous}, default uses \code{other}. Partial match enabled.
 \itemize{
 \item \code{itself}, or \code{longitudinal reference}. Some specific requirements for each
 option:

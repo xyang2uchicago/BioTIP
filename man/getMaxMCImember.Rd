@@ -51,21 +51,9 @@ maxMCIms <- getMaxMCImember(membersL_noweight[[1]], membersL_noweight[[2]], min 
 #The same as
 maxMCIms <- getMaxMCImember(cluster, membersL_noweight[[2]], min =2)
 
-#2nd option: get the input directly from function "getCluster_methods"
-test = list('state1' = matrix(sample(1:10,6),3,3),'state2' = matrix(sample(1:10,6),3,3),'state3' = matrix(sample(1:10,6),3,3))
-# assign colnames and rownames to the matrix
-for(i in names(test)){
-  colnames(test[[i]]) = 1:3
-  row.names(test[[i]]) = 1:3}
-
-igraphL <- getNetwork(test, fdr=1)
-#[1] "state1:3 nodes"
-#[1] "state2:3 nodes"
-#[1] "state3:3 nodes"
-
 ## case1: using 'rw' method by default
 cl <- getCluster_methods(igraphL)
-## make sure every element in list cl is a \\code{communities} object
+## make sure every element in list cl is a \\\\code{communities} object
 sapply(cl,class)
 ##       state1        state2        state3
 ##"communities" "communities" "communities"
