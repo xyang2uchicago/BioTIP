@@ -180,7 +180,7 @@ head(maxMCIms[['members']][['lymphoma_aggressive']])
 ```
 
 
-  To get the selected statistics of biomodules of each state, please run the following 
+  To get the selected statistics of biomodules (the module that has the highest MCI score) of each state, please run the following 
 
 ```{r}
 biomodules = getMaxStats(membersL_noweight[['members']],maxMCIms[[1]])
@@ -192,7 +192,7 @@ maxSD = getMaxStats(membersL_noweight[['sd']],maxMCIms[[1]])
 head(maxSD)
 ```
 
-  To get the selected transcript IDs, please run getBioTIP to get them.
+  To get the biomodule with the highest MCI score among all states, as we call it CTS (Critical Transition Signals), please run the following.
   
 ```{r}
 CTS = getCTS(maxMCI, maxMCIms[[2]])
