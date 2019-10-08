@@ -1120,7 +1120,7 @@ simulationMCI = function(len, samplesL, df, adjust.size = FALSE, B=1000){
 #' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}
 
 plot_MCI_Simulation = function(MCI,simulation,las = 0,order = NULL,ylim = NULL,main = NULL){
-  if(is.null(names(MCI))) stop('make sure elements in "CI" have names')
+  if(is.null(names(MCI))) stop('make sure elements in "MCI" have names')
   if(!is.null(order)){
     if(any(!order %in% row.names(simulation))) stop('make sure "simulation" has row.names which are in "order"')
     if(any(!row.names(simulation) %in% order)) warning('not every state in "simulation" is plotted, make sure "order" is complete')

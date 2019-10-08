@@ -142,7 +142,7 @@ head(test[["activated"]])
 library(BioTIP)
 #library(igraph)
 library(cluster)
-igraphL <- getNetwork(test, fdr = 0.05)
+igraphL <- getNetwork(test, fdr = 1)
 
 cluster <- getCluster_methods(igraphL)
 ```
