@@ -21,7 +21,7 @@ states. Each vector gives the sample names in a state. Note that the vectors
 
 \item{percent}{A numeric value indicating the percentage of samples will be selected in each round of simulation.}
 
-\item{times}{A numeric value indicating the percentage ofnumber of time a transcript.}
+\item{times}{A numeric value indicating the percentage of \code{B} times a transcript need to be selected in order to be considered a stable signature.}
 
 \item{cutoff}{A positive numeric value. Default is 0.01. If < 1, automatically
 goes to select top x# transcripts using the a selecting method (which is

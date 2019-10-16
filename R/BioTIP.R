@@ -331,7 +331,7 @@ sd_selection = function(df, samplesL, cutoff = 0.01, method = c('other','referen
 #'   (sample names) has to be among the column names of the R object 'df'.
 #' @param B An integer indicating number of times to run this optimization, default 1000.
 #' @param percent A numeric value indicating the percentage of samples will be selected in each round of simulation.
-#' @param times A numeric value indicating the percentage ofnumber of time a transcript.
+#' @param times A numeric value indicating the percentage of \code{B} times a transcript need to be selected in order to be considered a stable signature.
 #' @param cutoff A positive numeric value. Default is 0.01. If < 1, automatically
 #'   goes to select top x# transcripts using the a selecting method (which is
 #'   either the \code{reference}, \code{other} or \code{previous} stage), e.g. by
@@ -749,7 +749,7 @@ getMCI = function(groups,countsL,adjust.size = FALSE){
            #if(length(m)>26) names(m) = names(comple) = paste0(letters[1:max(test)],1:max(test))
 
            PCCo = lapply(names(m), function(x) abs(cor(t(comple[[x]]),t(m[[x]]))))
-           PCCo_avg = sapply(PCCo,mean)
+           PCCo_avg = sapply(PCCo,function(x) mean(x,na.rm = TRUE))
 
            PCC = lapply(m,function(x) abs(cor(t(x))))
            PCC_avg = sapply(PCC,function(x) (sum(x,na.rm = TRUE)-nrow(x))/(nrow(x)^2-nrow(x)))
