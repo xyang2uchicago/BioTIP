@@ -505,6 +505,8 @@ getNetwork = function(optimal,fdr = 0.05){
   for(i in names(rL)){
     test = rL[[i]]
     test.p = pL[[i]]
+    row.names(test) = gsub('[.]','[+]',row.names(test))   # added in 10/27/2019
+    row.names(test.p )= gsub('[.]','[+]',row.names(test.p))  # added in 10/27/2019
     test[lower.tri(test,diag = TRUE)] = NA
     #test.p[lower.tri(test,diag = TRUE)] = 1
     tmp = lapply(1:nrow(test),function(x) test[x,test.p[x,]<fdr])
@@ -516,17 +518,17 @@ getNetwork = function(optimal,fdr = 0.05){
     names(tmp) = row.names(test)
     edges = stack(do.call(c,tmp))
     edges = subset(edges, !is.na(edges$values))
-    tmp2 = subset(edges,grepl('\\.[1-9,A-z]\\.',ind))
-    if(nrow(tmp2)!=0){
-      tmp2$node1 = paste0(str_split_fixed(tmp2$ind,'\\.',3)[,1],'.',str_split_fixed(tmp2$ind,'\\.',3)[,2])
-      tmp2$node2 = str_split_fixed(tmp2$ind,'\\.',3)[,3]
-    }
-    edges = subset(edges,!grepl('\\.[1-9,A-z]\\.',ind))
+    #tmp2 = subset(edges,grepl('[.][1-9,A-z][.]',ind))
+    #if(nrow(tmp2)!=0){
+    #  tmp2$node1 = paste0(str_split_fixed(tmp2$ind,'\\.',3)[,1],'.',str_split_fixed(tmp2$ind,'\\.',3)[,2])
+    #  tmp2$node2 = str_split_fixed(tmp2$ind,'\\.',3)[,3]
+    #}
+    #edges = subset(edges,!grepl('\\.[1-9,A-z]\\.',ind))
     edges$node1 = str_split_fixed(edges$ind,'\\.',2)[,1]
     edges$node2 = str_split_fixed(edges$ind,'\\.',2)[,2]
-    edges = rbind(edges,tmp2)
-    dim(edges) #[1] 1270    4
-    dim(edges) #[1] 583   4
+    #edges = rbind(edges,tmp2)
+    edges$node1 = gsub('[+]','[.]',edges$node1)  # added in 10/27/2019
+    edges$node2 = gsub('[+]','[.]',edges$node2)  # added in 10/27/2019
     edges = edges[,c('node1','node2','values')]
     edges$weight = abs(edges$values) # added in 1/8/2019
     #colnames(edges) = c('node1','node2','weight') # added in 12/18/2018
@@ -820,9 +822,12 @@ plotBar_MCI = function(MCIl,ylim = NULL,nr=1,nc = NULL,order = NULL, minsize = 3
     }else{
      mci = MCI[[i]]
      m = membersL[[i]]
-     nmembers = sapply(1:max(m),function(x) length(m[m == x]))
+     tmp = names(mci[is.na(mci)])
+     if(length(tmp) != 0) m = m[!m %in% tmp]  # added in 10/27/2019
+     nmembers = sapply(names(table(m)),function(x) length(m[m == x]))
      #cex = ifelse(length(m)>20,0.7,1)
      mci = mci[!is.na(mci)]
+  
      if(!minsize<0 & minsize != 1){
        mci = mci[!nmembers<minsize]
        nmembers = nmembers[!nmembers<minsize]
