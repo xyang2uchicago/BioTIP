@@ -889,7 +889,7 @@ plotBar_MCI = function(MCIl,ylim = NULL,nr=1,nc = NULL,order = NULL, minsize = 3
 #'## case1: using 'rw' method by default
 #'igraphL <- getNetwork(test, fdr=1)
 #'cl <- getCluster_methods(igraphL)
-#'## make sure every element in list cl is a \\code{communities} object
+#'## make sure every element in list cl is a \code{communities} object
 #'sapply(cl,class)
 #'##       state1        state2        state3
 #'##"communities" "communities" "communities"
@@ -1165,12 +1165,15 @@ plot_MCI_Simulation = function(MCI,simulation,las = 0,order = NULL,ylim = NULL,m
 #' get Ic score
 #'
 #' @description retreive Ic scores (Pearson correlation of genes / Pearson correlation of samples) for the identified BioTiP
-#'
+#' @import Hmisc
 #' @param counts A  numeric matrix or data frame. The rows and columns represent unique transcript IDs (geneID) and sample names, respectively.
 #' @param sampleL A list of vectors, whose length is the number of states. Each vector gives the sample names in a state. Note that the vector s (sample names) has to be among the column names of the R object 'df'.
 #' @param genes A character vector consisting of unique BioTiP ids. This can be obtained from \code{\link{getMaxMCImember}}
 #' @param output A string. Please select from 'Ic', 'PCCg', or 'PCCs'. Uses 'Ic' by default.
 #' 'PCCg' is the PCC between genes (numerator) and 'PCCs' is PCC between samples (denominator)
+#' @param fun An optional character string indicating the R funciton to calcualte correlations for all possible pairs of columns of a matrix. When using "rcorr", missing values are deleted in pairs rather than deleting all rows of x having any missing variables.  See package Hmisc for detailes.
+#' @param use An optional character string, when fun=="cor", it gives a method for computing covariances in the presence of missing values. This must be (an abbreviation of) one of the strings "everything", "all.obs", "complete.obs", "na.or.complete", or "pairwise.complete.obs". 
+#' @param p.cut  a numeric value to set the cutoff for rcorr calculation where a lower P-value for a correlation coefficient will be discarded to summary the reported average gene-gene correlation \code{PCCg}.
 #' @return A list of numeric values, whose length and names are inherited from \code{sampleL}
 #' @export
 #' @examples
@@ -1185,26 +1188,53 @@ plot_MCI_Simulation = function(MCI,simulation,las = 0,order = NULL,ylim = NULL,m
 #'
 #' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}
 
-getIc = function(counts,sampleL,genes,output = c('Ic','PCCg','PCCs') ){
+getIc = function(counts,sampleL,genes,output = c('Ic','PCCg','PCCs'),
+                 method=c("pearson", "spearman"),fun=c("cor","rcorr"),
+                 use=c("everything", "all.obs", "complete.obs", "na.or.complete", "pairwise.complete.obs"),p.cut= NULL){
+  
   output <- match.arg(output)
+  method <- match.arg(method)
+  fun <- match.arg(fun)
+  use <- match.arg(use)
   subsetC = subset(counts, row.names(counts) %in% genes)
   subsetC = lapply(sampleL,function(x) subsetC[,as.character(x)])
 
-  PCCg = lapply(subsetC,function(x) abs(cor(t(x))))
-  for(i in seq_along(PCCg)) PCCg[[i]][lower.tri(PCCg[[i]],diag = TRUE)] = NA
-  PCCg = sapply(PCCg,function(x) mean(x,na.rm = TRUE))
-
-  PCCs = lapply(subsetC,function(x) cor(x))
-  for(i in seq_along(PCCs)) PCCs[[i]][lower.tri(PCCs[[i]],diag = TRUE)] = NA
-  PCCs = sapply(PCCs,function(x) mean(x,na.rm = TRUE))
-
+  # for "pairwise.complete.obs", remove those results of tow or less pairs
+  
+  if (fun =="cor") {
+    PCCg = lapply(subsetC, function(x) abs(cor(t(x), method=method, use=use))) 
+  } else {
+    tmp = lapply(subsetC, function(x) rcorr(t(x), type=method))
+    PCCg = lapply(tmp, function(x) abs(x$r)) 
+    if(!is.null(p.cut)) {
+      # only consider significant PGGg with P<p.cut
+      p.PCCg = lapply(tmp, function(x) x$P)
+      for(x in 1:length(PCCg)) 
+      {
+        PCCg[[x]][which(p.PCCg[[x]] >= p.cut)] <- NA 
+      }
+    }  
+  }
+  for (i in seq_along(PCCg)) PCCg[[i]][lower.tri(PCCg[[i]], 
+                                                 diag = TRUE)] = NA
+  PCCg = sapply(PCCg, function(x) mean(x, na.rm = TRUE))
+  
+  if (fun =="cor") {
+    PCCs = lapply(subsetC, function(x) cor(x, method=method))
+  } else PCCs = lapply(subsetC, function(x) rcorr(x, type=method)$r)
+  for (i in seq_along(PCCs)) PCCs[[i]][lower.tri(PCCs[[i]], 
+                                                 diag = TRUE)] = NA
+  PCCs = sapply(PCCs, function(x) mean(x, na.rm = TRUE))
+  
   toplot = PCCg/PCCs
   names(toplot) = names(PCCg) = names(PCCs) = names(sampleL)
-  if(output == 'Ic'){
+  if (output == "Ic") {
     return(toplot)
-  }else if(output == 'PCCg'){
+  }
+  else if (output == "PCCg") {
     return(PCCg)
-  }else if(output == 'PCCs'){
+  }
+  else if (output == "PCCs") {
     return(PCCs)
   }
 }
@@ -1216,6 +1246,12 @@ getIc = function(counts,sampleL,genes,output = c('Ic','PCCg','PCCs') ){
 #' @param Ic A vector with names of states. If order is not assigned, then plot by the order of this vector.
 #' @param las Numeric in {0,1,2,3}; the style of axis labels. Default is 0, meaning labels are parallel. (link to http://127.0.0.1:21580/library/graphics/html/par.html)
 #' @param order A vector of state names in the customized order to be plotted, set to NULL by default.
+#' @param ylab titles y axes, as in plot.
+#' @param col vector of colors. Colors are used cyclically.
+#' @param main the main title for the plot. Default is NULL.
+#' @param add logical. If TRUE, plots are added to current one. This is inherited from \link[graphics]{matplot}
+#' @param ylim An integer vector of length 2. Default is NULL.
+#' @param lty,lwd vector of line types, widths. This is also inherited from \link[graphics]{matplot}
 #' @export
 #' @return Return a line plot of Ic score across states
 #' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}
@@ -1223,13 +1259,13 @@ getIc = function(counts,sampleL,genes,output = c('Ic','PCCg','PCCs') ){
 #' Ic = c('state3' = 3.4,'state1' = 5.6,'state2' = 2)
 #' plotIc(Ic,order = c('state1','state2','state3'))
 
-plotIc = function(Ic,las = 0,order = NULL){
+plotIc = function(Ic,las = 0,order = NULL,ylab = "Ic",col="black", main=NULL, add=FALSE, ylim=NULL,lty = 1:5, lwd = 1){
   if(!is.null(order)){
     if(any(!order %in% names(Ic))) stop('make sure "Ic" is named using names in "order"')
     if(any(!names(Ic) %in% order)) warning('not every state in "Ic" is plotted, make sure "order" is complete')
     Ic = Ic[order]
   }
-  matplot(Ic,type = 'l',ylab = 'Ic',axes=FALSE)
+  matplot(Ic, type = "l", ylab = ylab, axes = FALSE, col=col, main=main, add=add, ylim=ylim,lty = lty,lwd =lwd)
   axis(2)
   stages = names(Ic)
   axis(side=1,at=seq_along(Ic),labels=stages,las = las)
