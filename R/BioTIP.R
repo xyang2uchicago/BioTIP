@@ -1248,7 +1248,7 @@ getIc = function(counts,sampleL,genes,output = c('Ic','PCCg','PCCs'),
 #' @param order A vector of state names in the customized order to be plotted, set to NULL by default.
 #' @param ylab titles y axes, as in plot.
 #' @param col vector of colors. Colors are used cyclically.
-#' @param main the main title for the plot. Default is NULL.
+#' @param main A character vector. The title of the plot. Defualt is NULL.
 #' @param add logical. If TRUE, plots are added to current one. This is inherited from \link[graphics]{matplot}
 #' @param ylim An integer vector of length 2. Default is NULL.
 #' @param lty,lwd vector of line types, widths. This is also inherited from \link[graphics]{matplot}
@@ -1307,8 +1307,6 @@ simulation_Ic = function(obs.x,sampleL,counts,B = 1000){
 #'
 #' @inheritParams plotIc
 #' @param simulation A numeric matrix of Ic scores in which rows are states and columns are numbers of simulated times. It can be obtained from \code{\link{simulation_Ic}}
-#' @param ylim An integer vector of length 2. Default is NULL.
-#' @param main A character vector. The title of the plot. Defualt is NULL.
 #' @export
 #' @return Return a line plot of Ic(red) and simulated Ic(grey) scores across all states
 #' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}
@@ -1318,7 +1316,8 @@ simulation_Ic = function(obs.x,sampleL,counts,B = 1000){
 #' Ic = c('state1' = 3.4,'state2' = 5.6,'state3' = 2)
 #' plot_Ic_Simulation(Ic,sim)
 
-plot_Ic_Simulation = function(Ic,simulation,las = 0,ylim = NULL,order = NULL,main = NULL){
+plot_Ic_Simulation = function(Ic,simulation,las = 0,order = NULL,ylab = 'Ic',col="black", main=NULL, add=FALSE,
+                              ylim = NULL,main = NULL,,lty = 1:5, lwd = 1){
   if(any(is.null(names(Ic)))) stop('Please provide name for vector "Ic" ')
 
   if(!identical(names(Ic),row.names(simulation))) Ic = Ic[match(row.names(simulation),names(Ic))]
@@ -1328,7 +1327,7 @@ plot_Ic_Simulation = function(Ic,simulation,las = 0,ylim = NULL,order = NULL,mai
     if(any(!order %in% names(Ic))) stop('make sure "Ic" is named using names in "order"')
     toplot = toplot[order,]
   }
-  matplot(toplot,type = 'l',col = c(rep('grey',ncol(toplot)-1),'red'),lty = 1,ylab = 'Ic',axes=FALSE,ylim=ylim,main = main)
+  matplot(toplot,type = 'l',col = c(rep('grey',ncol(toplot)-1),'red'),lty = 1,ylab = 'Ic',axes=FALSE,col=col, main=main, add=add, ylim=ylim,lty = lty,lwd =lwd)
   axis(2)
   # customize x-axis
   stages = row.names(toplot)
