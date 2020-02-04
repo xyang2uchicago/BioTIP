@@ -68,10 +68,10 @@ Once all the required packages are installed, load using `“read.table()”` fu
 ```{r}
 data(GSE6136_matrix)
 
-dim(GSE6136_matrix)               #[1] 22690rows and 27 columns
+dim(GSE6136_matrix)               #[1] 22690 genes and 27 samples (cells) 
 row.names(GSE6136_matrix) = GSE6136_matrix$ID_REF
 GSE6136 = GSE6136_matrix[,-1]
-dim(GSE6136)               #[1] 22690 rows and 26 columns
+dim(GSE6136)               #[1] 22690 genes and 26 samples (cells) 
 ```
 
   The summary of GSE6136_matrix is GSE6136_cli shown below. These two kind of data files can be downloaded from GSE database
@@ -121,9 +121,8 @@ head(df)
   instance, head(test["activated"]) shows contents of the activated state.
 
 ```{r, warning=FALSE}
-tmp <- names(table(cli$group))
-samplesL <- split(cli[,1],f = cli$group)
-#head(samplesL)
+samplesL <- split(cli[,"geo_accession"],f = cli$group)
+lapply(samplesL, length)
 test <- sd_selection(df, samplesL,0.01)
 head(test[["activated"]])
 ```

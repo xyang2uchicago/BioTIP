@@ -1317,7 +1317,7 @@ simulation_Ic = function(obs.x,sampleL,counts,B = 1000){
 #' plot_Ic_Simulation(Ic,sim)
 
 plot_Ic_Simulation = function(Ic,simulation,las = 0,order = NULL,ylab = 'Ic',col="black", main=NULL, add=FALSE,
-                              ylim = NULL,main = NULL,,lty = 1:5, lwd = 1){
+                              ylim = NULL,lty = 1:5, lwd = 1){
   if(any(is.null(names(Ic)))) stop('Please provide name for vector "Ic" ')
 
   if(!identical(names(Ic),row.names(simulation))) Ic = Ic[match(row.names(simulation),names(Ic))]
@@ -1327,7 +1327,9 @@ plot_Ic_Simulation = function(Ic,simulation,las = 0,order = NULL,ylab = 'Ic',col
     if(any(!order %in% names(Ic))) stop('make sure "Ic" is named using names in "order"')
     toplot = toplot[order,]
   }
-  matplot(toplot,type = 'l',col = c(rep('grey',ncol(toplot)-1),'red'),lty = 1,ylab = 'Ic',axes=FALSE,col=col, main=main, add=add, ylim=ylim,lty = lty,lwd =lwd)
+  mtext(unlist(lapply(samplesL, length)), side=1, line=-1, at=1:4)
+  matplot(toplot,type = 'l',col = c(rep('grey',ncol(toplot)-1),'red'),lty = lty,ylab = 'Ic',
+          axes=FALSE,col=col, main=main, add=add, ylim=ylim,lwd =lwd)
   axis(2)
   # customize x-axis
   stages = row.names(toplot)
