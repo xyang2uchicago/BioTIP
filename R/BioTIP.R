@@ -991,6 +991,7 @@ plotMaxMCI = function(maxMCIms, MCIl, las = 0, order = NULL, states = NULL){
   if(is.null(order)){
     CI = sapply(names(maxMCIms[[1]]), function(x) MCIl[[x]][maxMCIms[[1]][[x]]])
     ln = names(maxMCIms[[1]])
+    names(CI) = ln
   }else{
     if(any(!order %in% names(maxMCIms[[2]])))
     stop('make sure all names in "order" are in names of the 2nd element of "maxMCIms"')
@@ -1221,7 +1222,17 @@ getIc = function(counts,sampleL,genes,output = c('Ic','PCCg','PCCs'),
   
   if (fun =="cor") {
     PCCs = lapply(subsetC, function(x) cor(x, method=method))
-  } else PCCs = lapply(subsetC, function(x) rcorr(x, type=method)$r)
+  } else{
+    PCCs = lapply(subsetC, function(x) rcorr(x, type=method)$r)
+    if(!is.null(p.cut)) {
+      # only consider significant PGGg with P<p.cut
+      p.PCCs = lapply(tmp, function(x) x$P)
+      for(x in 1:length(PCCs)) 
+      {
+        PCCs[[x]][which(p.PCCs[[x]] >= p.cut)] <- NA 
+      }
+    }  
+  } 
   for (i in seq_along(PCCs)) PCCs[[i]][lower.tri(PCCs[[i]], 
                                                  diag = TRUE)] = NA
   PCCs = sapply(PCCs, function(x) mean(x, na.rm = TRUE))
@@ -1345,6 +1356,7 @@ plot_Ic_Simulation = function(Ic,simulation,las = 0,order = NULL,ylab = 'Ic',col
 #' @param Ic A numeric value. Ic score of identified BioTiP
 #' @param genes A character vector of identified BioTiP unique ids
 #' @param B An integer indicating number of times to run this simulation, default 1000.
+#' @param ylim An integer vector of length 2. Default is NULL.
 #' @param main A character vector. The title of the plot. Defualt is NULL.
 #' @export
 #' @return Return a density plot of simulated Ic score with p-value
@@ -1356,7 +1368,7 @@ plot_Ic_Simulation = function(Ic,simulation,las = 0,order = NULL,ylab = 'Ic',col
 #' BioTiP = c('loci1','loci2')
 #' plot_simulation_sample(counts,3,3.4,BioTiP,B=3)
 
-plot_simulation_sample = function(counts,sampleNo,Ic,genes,B = 1000,
+plot_simulation_sample = function(counts,sampleNo,Ic,genes,B = 1000,ylim=NULL,
 main = 'simulation of samples'){
   sampleL = lapply(1:B, function(x) sample(colnames(counts),sampleNo))
   tmp= sapply(1:B, function(x) getIc(counts,sampleL[x],genes,output = 'Ic'))
@@ -1364,7 +1376,7 @@ main = 'simulation of samples'){
   den = density(tmp)
   xmin = min(Ic,den$x)
   xmax = max(Ic,den$x)
-  plot(den,main = main,xlim = c(xmin,xmax))
+  plot(den,main = main,xlim = c(xmin,xmax),ylim=ylim)
   abline(v = Ic,col = 'red',lty = 2)
   x = max(den$x) - 0.2*diff(range(den$x))
   if(p_v == 0) p_v = paste('<',1/B)

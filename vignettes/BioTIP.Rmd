@@ -120,7 +120,9 @@ head(df)
   clinical state's content can be viewed using `head(test["stage_name"])`. For
   instance, head(test["activated"]) shows contents of the activated state.
 
-```{r, warning=FALSE}
+```{r warning=FALSE}
+cli$group = factor(cli$group,
+                   levels = c('resting','activated','lymphoma_marginal','lymphoma_transitional','lymphoma_aggressive'))
 samplesL <- split(cli[,"geo_accession"],f = cli$group)
 lapply(samplesL, length)
 test <- sd_selection(df, samplesL,0.01)
@@ -138,9 +140,6 @@ head(test[["activated"]])
   using the `getCluster_methods` function classify nodes.
 
 ```{r,echo=TRUE, warning=FALSE}
-library(BioTIP)
-#library(igraph)
-library(cluster)
 igraphL <- getNetwork(test, fdr = 1)
 
 cluster <- getCluster_methods(igraphL)
@@ -210,7 +209,7 @@ plotMaxMCI(maxMCIms,membersL_noweight[[2]],states = names(samplesL),las = 2)
   
 ```{r,echo=TRUE, warning=FALSE}
 simuMCI <- simulationMCI(3,samplesL,df)
-plot_MCI_Simulation(maxMCI,simuMCI)
+plot_MCI_Simulation(maxMCI,simuMCI,las=2)
 ```
 <a name="">[Go to Top](#)</a> 
 

@@ -26,4 +26,5 @@ Imports:
     cluster,
     psych,
     stringr,
-    GenomicRanges
+    GenomicRanges,
+    Hmisc
