@@ -4,11 +4,13 @@
 \name{GSE6136_cli}
 \alias{GSE6136_cli}
 \title{GSE6136 cli dataset}
-\format{A dataframe with 22690 columns and 27 rows column.
+\format{
+A dataframe with 22690 columns and 27 rows column.
 \describe{
 \item{GSM142398-GSM142423}{Names of gene interest}
 \item{Rows}{Summary of GSM genes}
-}}
+}
+}
 \source{
 \url{https://www.gencodegenes.org/human/}
 }

@@ -1,0 +1,43 @@
+if (!requireNamespace("BiocManager", quietly = TRUE))#
+    install.packages("BiocManager")#
+BiocManager::install("seq2pathway", version = "3.9")
+if (!requireNamespace("BiocManager", quietly = TRUE))#
++     install.packages("BiocManager")#
+> BiocManager::install("seq2pathway", version = "3.8")
+if (!requireNamespace("BiocManager", quietly = TRUE))#
+    install.packages("BiocManager")#
+BiocManager::install("seq2pathway", version = "3.8")
+$ git clone https://github.com/clang-omp/llvm#
+$ git clone https://github.com/clang-omp/compiler-rt llvm/projects/compiler-rt#
+$ git clone -b clang-omp https://github.com/clang-omp/clang llvm/tools/clang
+brew install --with-clang llvm
+install gcc --without-multilib
+git clone --recursive https://github.com/dmlc/xgboost#
+cd xgboost; cp make/config.mk ./config.mk; make -j4
+if (!requireNamespace("BiocManager", quietly = TRUE))#
+    install.packages("BiocManager")#
+BiocManager::install("seq2pathway", version = "3.9")
+if (!requireNamespace("BiocManager", quietly = TRUE))#
+    install.packages("BiocManager")#
+BiocManager::install("seq2pathway", version = "3.8")
+/home/biocbuild/bbs-3.9-bioc/R/bin/R CMD INSTALL seq2pathway
+CMD INSTALL seq2pathway
+cmd install seq2pathway
+if (!requireNamespace("BiocManager", quietly = TRUE))#
+    install.packages("BiocManager")#
+BiocManager::install("seq2pathway", version = "3.8")
+/Library/Frameworks/R.framework/Versions/Current/Resources/bin/R CMD INSTALL seq2pathway
+Library/Frameworks/R.framework/Versions/Current/Resources/bin/R CMD INSTALL seq2pathway
+CMD INSTALL seq2pathway
+if (!requireNamespace("BiocManager", quietly = TRUE))#
+     install.packages("BiocManager")#
+BiocManager::install("seq2pathway", version = "3.8")
+if (!requireNamespace("BiocManager", quietly = TRUE))#
+     install.packages("BiocManager")#
+ BiocManager::install("seq2pathway", version = "3.8")
+if (!requireNamespace("BiocManager", quietly = TRUE))#
+    install.packages("BiocManager")#
+BiocManager::install("seq2pathway", version = "3.8")
+setwd("~/Desktop/BioTIP")
+devtools::documents()
+devtools::document()

@@ -4,12 +4,14 @@
 \name{cod}
 \alias{cod}
 \title{cod dataset}
-\format{A dataframe with 3 data columns and 1 metadata column.
+\format{
+A dataframe with 3 data columns and 1 metadata column.
 \describe{
 \item{seqnames}{chromosome names (chr21)}
 \item{ranges}{ranges}{chromosome ranges on the genome (10906201-11029719)}
 \item{strand}{specific strand of the genomic location (+,-,*)}
-}}
+}
+}
 \usage{
 cod
 }

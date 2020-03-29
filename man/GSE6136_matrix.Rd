@@ -4,11 +4,13 @@
 \name{GSE6136_matrix}
 \alias{GSE6136_matrix}
 \title{GSE6136 matrix dataset}
-\format{A dataframe with 22690 columns and 27 rows column.
+\format{
+A dataframe with 22690 columns and 27 rows column.
 \describe{
 \item{GSM142398-GSM142423}{Names of gene interest}
 \item{ID_REF}{Reference ID of the target genes}
-}}
+}
+}
 \source{
 \url{https://www.gencodegenes.org/human/}
 }

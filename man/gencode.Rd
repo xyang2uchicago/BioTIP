@@ -4,19 +4,19 @@
 \name{gencode}
 \alias{gencode}
 \title{A chr21 data from GENCODE GRCh37}
-\format{A data frame of chr21 with 2619444 rows and 9 variables:
+\format{
+A data frame of chr21 with 2619444 rows and 9 variables:
 \describe{
 \item{Rows}{Rows, include chromosome numbers}
 \item{Columns}{Columns include seqname, source, feature, start , end,
 score, strand, frame and attribute}
 \item{cod_gr}{cod_gr is a subset of sample data 'gencode_gr'}
-}}
+}
+}
 \usage{
 gencode
 }
 \description{
-A reference human GRCh37 genome dataset from GENCODE.
-\url{https://www.gencodegenes.org/human/release_25lift37.html}. Included
-variables are as follows:
+
 }
 \keyword{datasets}

@@ -4,7 +4,8 @@
 \name{ILEF}
 \alias{ILEF}
 \title{Chromosome ranges of chr21 dataset}
-\format{A data frame of chr21 with 137 rows and 4 variables:
+\format{
+A data frame of chr21 with 137 rows and 4 variables:
 \describe{
 \item{seqnames}{chromosome names (chr1,chr6,chr21)}
 \item{start}{gene read start position (167684657,167729508)}
@@ -12,7 +13,8 @@
 \item{width}{width of gene}
 \item{strand}{specific strand of the genomic location (+,-,*}
 \item{Row.names}{name of the data rows(A1BG,vawser)}
-}}
+}
+}
 \usage{
 ILEF
 }
