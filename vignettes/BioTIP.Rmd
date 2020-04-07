@@ -242,8 +242,7 @@ samples and visualizes the results. Showing in the plot is observed Ic-score
 tipping point identified.
 
 ```{r}
-sample_Ic = simulation_Ic_sample(df, sampleNo=3, genes=CTS)
-plot_Ic_Simulation(IC, sample_Ic, las=2)
+sample_Ic = simulation_Ic_sample(df, sampleNo=3, genes=CTS, plot=TRUE)
 #simulated_Ic = plot_simulation_sample(df,length(samplesL[['lymphoma_aggressive']]),IC[['lym#phoma_aggressive']],CTS) 
 ```
 
