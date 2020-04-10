@@ -2102,6 +2102,8 @@ getIc.new = function(X,  method = c("BioTIP",  "Ic"),
 #' @examples
 #' ## Generating a data X as coming from a multivariate normal distribution 
 #' ## with 10 highly correlated variables, roughly simulating correlated genes.
+#' M = matrix(.9, nrow = 10, ncol = 10)
+#' diag(M) = 1
 #' mu = rnorm(10)
 #' X = MASS::mvrnorm(1000, mu, M)
 #' dim(X)  #1000 10  
