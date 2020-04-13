@@ -1477,9 +1477,6 @@ simulation_Ic <- function(obs.x,  sampleL,  counts,  B = 1000,  fun=c("cor", "Bi
 #' 
 #' @param fun A character choose between ('matplot', 'boxplot'), indicating plot type.
 #' 
-#' @param which2point A character (or integer) which state's values were used to set up the three horizontal lines. 
-#' by default is NULL,  indicating the values of all states will be used.
-#' 
 #' @export
 #' 
 #' @return Return a plot of the observed Ic (red) and simulated Ic (grey) scores per states.
@@ -1636,7 +1633,7 @@ plot_Ic_Simulation <- function (Ic,  simulation,  las = 0,  ylim = NULL,
 #'
 #' membersL_noweight <- getMCI(cluster, test, fun='cor')
 #' names(membersL_noweight)
-#' [1] "members" "MCI"     "sd"      "PCC"     "PCCo"  
+#' ## [1] "members" "MCI"     "sd"      "PCC"     "PCCo"  
 #'
 #' @import psych
 #' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}; Xinan H Yang \email{xyang2@@uchicago.edu}
@@ -1919,6 +1916,8 @@ getMCI_inner = function(members, countsL,  adjust.size,
 #' 
 #' @param which2point A character (or integer) which state's values were used to set up the three horizontal lines. 
 #' by default is NULL,  indicating the values of all states will be used.
+#' 
+#' @param ... Other parameters passed to this function
 #' 
 #' @export
 #' @return Return a box plot of MCI(red) and simulated MCI(grey) scores per state.

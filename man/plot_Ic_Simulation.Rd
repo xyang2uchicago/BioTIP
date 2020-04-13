@@ -36,9 +36,6 @@ Default is 0,  meaning labels are parallel.
 \item{ylab}{titles y axes, as in plot.}
 
 \item{fun}{A character choose between ('matplot', 'boxplot'), indicating plot type.}
-
-\item{which2point}{A character (or integer) which state's values were used to set up the three horizontal lines.
-by default is NULL,  indicating the values of all states will be used.}
 }
 \value{
 Return a plot of the observed Ic (red) and simulated Ic (grey) scores per states.

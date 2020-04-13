@@ -31,6 +31,8 @@ plot_MCI_Simulation(
 
 \item{which2point}{A character (or integer) which state's values were used to set up the three horizontal lines.
 by default is NULL,  indicating the values of all states will be used.}
+
+\item{...}{Other parameters passed to this function}
 }
 \value{
 Return a box plot of MCI(red) and simulated MCI(grey) scores per state.

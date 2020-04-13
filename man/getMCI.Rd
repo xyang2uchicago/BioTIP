@@ -78,7 +78,7 @@ for(i in names(cluster)){
 
 membersL_noweight <- getMCI(cluster, test, fun='cor')
 names(membersL_noweight)
-[1] "members" "MCI"     "sd"      "PCC"     "PCCo"  
+## [1] "members" "MCI"     "sd"      "PCC"     "PCCo"  
 
 }
 \author{
