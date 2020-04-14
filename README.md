@@ -3,7 +3,7 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-An R package for characterization of Biological Tipping-Point
+An R package for biological tipping-point identification and characterization
 
 ## Installation
 
