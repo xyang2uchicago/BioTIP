@@ -1,7 +1,7 @@
 
 ## Author:  Zhezhen Wang; Andrew Goldstein; Xinan H Yang; 
 ## Email: zhezhen@uchicago.edu;andrewgoldstein@uchicago.edu; xyang2@uchicago.edu
-## Last update:  02/28/2020
+## Last update:  06/19/2020
 ## Acknowledgement: National Institutes of Health  R21LM012619  
 ## Add new functions to estimate pairwise-correlation matric which is the key statistics for tipping-point identificaion.
 ## Simplified the parameter using for the function getIc(); correct typo in exampling codes.
@@ -905,6 +905,57 @@ getMaxStats = function(membersL, idx)
   return(member_max)
 }
 
+#' @title Get the top x MCI scores member and statistics
+#' 
+#' @description This function generates the top x lists of MCI scores based on the two provided cutoffs.
+#' 
+#' @param min A numerical value of the minimum module size (the number of transcripts in a cluster)
+#' 
+#' @param num A numerical value of how many modules desired. 
+#' 
+#' @param membersL1 A list of integer vectors with unique ids as names. Each vector represents the cluster 
+#' number assign to that unique id. The length of this list is equal to the number of states in the study.
+#' This can be the first element of the output from function getMCI or the output from getCluster_methods, 
+#' see Examples for more detail.
+#' 
+#' @param membersL2 A two-layer nested list of character or numeric values, any one out of the five elements 
+#' output by the function getMCI.
+#' 
+#' @param MCI1 A list of numeric vectors with unique cluster numbers as names. Each vector represents the 
+#' MCI scores of that module. This can be the second element of the output from function getMCI.
+#' 
+#' @return Returns x lists of MCI scores
+#' 
+#' @export
+#' @author Yuxi Sun \email{ysun11@@uchicago.edu}
+#' 
+#' @examples
+#' #' test = list('state1' = matrix(sample(1:10, 6), 4, 3),  
+#'      'state2' = matrix(sample(1:10, 6), 4, 3), 
+#'      'state3' = matrix(sample(1:10, 6), 4, 3))
+#'
+#' # assign colnames and rownames to the matrix
+#' for(i in names(test)){
+#'   colnames(test[[i]]) = 1:3
+#'     row.names(test[[i]]) = c('g1', 'g2', 'g3', 'g4')}
+#'
+#' cluster = list(c(1, 2, 2, 1), c(1, 2, 3, 1), c(2, 2, 1, 1))
+#' names(cluster) = names(test)
+#' for(i in names(cluster)){
+#'   names(cluster[[i]]) = c('g1', 'g2', 'g3', 'g4')}
+#'
+#' membersL_noweight <- getMCI(cluster, test)
+#' topMCI <- getTopMCI(membersL_noweight[[1]],  membersL_noweight[[2]],  membersL_noweight[[2]],
+#' min =3, num=1)
+
+getTopMCI = function(membersL1, MCI1, membersL2, min, num)
+{
+  maxMCIms <- getMaxMCImember(membersL1, MCI1, min) 
+  topMCI = getMaxStats(membersL2,maxMCIms[[1]])
+  topMCI = topMCI[order(topMCI,decreasing=TRUE)]
+  topMCI = topMCI[1:num] 
+  return(topMCI)
+}
 
 #' @title Plot the Maximized MCI per State
 #'
