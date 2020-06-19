@@ -1477,6 +1477,9 @@ simulation_Ic <- function(obs.x,  sampleL,  counts,  B = 1000,  fun=c("cor", "Bi
 #' 
 #' @param fun A character choose between ('matplot', 'boxplot'), indicating plot type.
 #' 
+#' @param which2point A character (or integer) which state's values were used to set up the three horizontal lines. 
+#' by default is NULL,  indicating the values of all states will be used.
+#' 
 #' @export
 #' 
 #' @return Return a plot of the observed Ic (red) and simulated Ic (grey) scores per states.
@@ -1633,7 +1636,7 @@ plot_Ic_Simulation <- function (Ic,  simulation,  las = 0,  ylim = NULL,
 #'
 #' membersL_noweight <- getMCI(cluster, test, fun='cor')
 #' names(membersL_noweight)
-#' ## [1] "members" "MCI"     "sd"      "PCC"     "PCCo"  
+#' [1] "members" "MCI"     "sd"      "PCC"     "PCCo"  
 #'
 #' @import psych
 #' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}; Xinan H Yang \email{xyang2@@uchicago.edu}
@@ -1766,6 +1769,9 @@ getMCI <- function (groups,  countsL,  adjust.size = FALSE,
 #' 
 #' @param fun A character chosen between ("cor", "BioTIP"), indicating where an adjusted 
 #'   correlation matrix will be used to calculated the MCI score.   
+#' 
+#' @param M a pre-calculated global shrunk matrix, can save calculation if working on the same data
+#'   for multiple CTS evaluations.
 #'
 #' @return A numeric matrix indicating the MCI scores of permutation. 
 #' The dimension (row X column) of this matrix is the length of \code{samplesL} * \code{B}.
@@ -1789,7 +1795,7 @@ getMCI <- function (groups,  countsL,  adjust.size = FALSE,
 #' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}; Xinan H Yang \email{xyang2@@uchicago.edu}
 
 simulationMCI  <- function (len,  samplesL,  df,  adjust.size = FALSE,  B = 1000, 
-                            fun=c("cor", "BioTIP") ) 
+                            fun=c("cor", "BioTIP"), M=NULL ) 
 {
   fun <- match.arg(fun)
   PCC_gene.target = 'zero'
@@ -1798,31 +1804,22 @@ simulationMCI  <- function (len,  samplesL,  df,  adjust.size = FALSE,  B = 1000
   countsL = lapply(samplesL,  function(x) df[,  as.character(x)])
   if (is.null(names(countsL))) 
     names(countsL) = names(samplesL)
-
-#  m = sapply(1:B,  function(x) 
-#    getCI_inner(len,  countsL,  adjust.size, 
-#                fun=fun,  PCC_gene.target=PCC_gene.target ))
-
   # create progress bar
   pb <- txtProgressBar(min = 0,  max = B,  style = 3)
-  
- if(fun=='BioTIP'){
-   M <- cor.shrink(df,  Y=NULL, 
-                  MARGIN = 1,  shrink = TRUE,
-                  target = PCC_gene.target)
-  } else M=NULL
-  m <- matrix(nrow=length(samplesL),  ncol=B)
-
-  for(i in 1:B)
- {
-   setTxtProgressBar(pb,  i)
-   m[, i] <- getMCI_inner(len,  countsL,  adjust.size, 
-                        fun=fun,  PCC_gene.target=PCC_gene.target, M=M)
-   Sys.sleep(0.01)
-   if(i == B) cat("Done!\n")
+  if (fun == "BioTIP") {
+    if(is.null(M)) M <- cor.shrink(df, Y = NULL, MARGIN = 1, shrink = TRUE, 
+                                   target = PCC_gene.target)
   }
-  
-  
+  else M = NULL
+  m <- matrix(nrow = length(samplesL), ncol = B)
+  for (i in 1:B) {
+    setTxtProgressBar(pb, i)
+    m[, i] <- getMCI_inner(len, countsL, adjust.size, fun = fun, 
+                           PCC_gene.target = PCC_gene.target, M = M)
+    Sys.sleep(0.01)
+    if (i == B) 
+      cat("Done!\n")
+  }
   row.names(m) = names(countsL)
   return(m)
 }
@@ -1916,8 +1913,6 @@ getMCI_inner = function(members, countsL,  adjust.size,
 #' 
 #' @param which2point A character (or integer) which state's values were used to set up the three horizontal lines. 
 #' by default is NULL,  indicating the values of all states will be used.
-#' 
-#' @param ... Other parameters passed to this function
 #' 
 #' @export
 #' @return Return a box plot of MCI(red) and simulated MCI(grey) scores per state.
@@ -2101,8 +2096,6 @@ getIc.new = function(X,  method = c("BioTIP",  "Ic"),
 #' @examples
 #' ## Generating a data X as coming from a multivariate normal distribution 
 #' ## with 10 highly correlated variables, roughly simulating correlated genes.
-#' M = matrix(.9, nrow = 10, ncol = 10)
-#' diag(M) = 1
 #' mu = rnorm(10)
 #' X = MASS::mvrnorm(1000, mu, M)
 #' dim(X)  #1000 10  
