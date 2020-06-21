@@ -182,7 +182,10 @@ head(maxMCIms[['members']][['lymphoma_aggressive']])
 ```{r}
 biomodules = getMaxStats(membersL_noweight[['members']],maxMCIms[[1]])
 maxMCI = getMaxStats(membersL_noweight[['MCI']],maxMCIms[[1]])
+maxMCI = maxMCI[order(maxMCI,decreasing=TRUE)]
 head(maxMCI)
+topMCI = getTopMCI(membersL_noweight[[1]],membersL_noweight[[2]],membersL_noweight[['MCI']],min =10)
+head(topMCI)
 ```
 ```{r}
 maxSD = getMaxStats(membersL_noweight[['sd']],maxMCIms[[1]])
@@ -192,7 +195,7 @@ head(maxSD)
   To get the biomodule with the highest MCI score among all states, as we call it CTS (Critical Transition Signals), please run the following.
   
 ```{r}
-CTS = getCTS(maxMCI, maxMCIms[[2]])
+CTS = getCTS(topMCI, maxMCIms[[2]])
 ```
 
  Run the following to visualize the trendence of every state represented by the cluster with the highest MCI scores.
@@ -208,7 +211,7 @@ plotMaxMCI(maxMCIms,membersL_noweight[[2]],states = names(samplesL),las = 2)
   
 ```{r,echo=TRUE, warning=FALSE}
 simuMCI <- simulationMCI(3,samplesL,df)
-plot_MCI_Simulation(maxMCI,simuMCI,las=2)
+plot_MCI_Simulation(topMCI[1],simuMCI,las=2)
 ```
 <a name="">[Go to Top](#)</a> 
 
@@ -219,7 +222,7 @@ plot_MCI_Simulation(maxMCI,simuMCI,las=2)
 The next step is to calculate an Index of Critical transition (Ic score) of the dataset. First, use the getIc function to calculate the Ic score based on the biomodule previously identified. We use the plotIc function to draw a line plot of the Ic score. 
   
 ```{r}
-IC <- getIc(df,samplesL,CTS)
+IC <- getIc(df,samplesL,CTS[[1]])
 par(mar = c(10,5,0,2))
 plotIc(IC,las = 2)
 ```
@@ -231,7 +234,7 @@ identification (red) against its corresponding size-controlled random scores
 (grey).
 
 ```{r,warning=FALSE}
-simuIC <- simulation_Ic(length(CTS),samplesL,df)
+simuIC <- simulation_Ic(length(CTS[[1]]),samplesL,df)
 par(mar = c(10,5,0,2))
 plot_Ic_Simulation(IC,simuIC,las = 2)
 ```
@@ -242,7 +245,7 @@ samples and visualizes the results. Showing in the plot is observed Ic-score
 tipping point identified.
 
 ```{r}
-sample_Ic = simulation_Ic_sample(df, sampleNo=3, genes=CTS, plot=TRUE)
+sample_Ic = simulation_Ic_sample(df, sampleNo=3, genes=CTS[[1]], plot=TRUE)
 #simulated_Ic = plot_simulation_sample(df,length(samplesL[['lymphoma_aggressive']]),IC[['lym#phoma_aggressive']],CTS) 
 ```
 

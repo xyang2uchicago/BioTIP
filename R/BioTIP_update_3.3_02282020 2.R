@@ -1,6 +1,6 @@
 
-## Author:  Zhezhen Wang; Andrew Goldstein; Xinan H Yang; Yuxi Sun
-## Email: zhezhen@uchicago.edu;andrewgoldstein@uchicago.edu; xyang2@uchicago.edu; ysun11@uchicago.edu
+## Author:  Zhezhen Wang; Andrew Goldstein; Xinan H Yang; 
+## Email: zhezhen@uchicago.edu;andrewgoldstein@uchicago.edu; xyang2@uchicago.edu
 ## Last update:  06/19/2020
 ## Acknowledgement: National Institutes of Health  R21LM012619  
 ## Add new functions to estimate pairwise-correlation matric which is the key statistics for tipping-point identificaion.
@@ -905,15 +905,13 @@ getMaxStats = function(membersL, idx)
   return(member_max)
 }
 
-#' @title Get the transcript ID and statistics for the top n MCI scores
+#' @title Get the top x MCI scores member and statistics
 #' 
-#' @description This function generates the top n lists of MCI scores based on the five parameters.
+#' @description This function generates the top x lists of MCI scores based on the two provided cutoffs.
 #' 
-#' @param min A numerical value of the minimum number of transcripts in a cluster. A cutoff that determines
-#' the smallest cluster in transcripts numbers in downstream analysis. 
+#' @param min A numerical value of the minimum module size (the number of transcripts in a cluster)
 #' 
-#' @param n An integer determines how many modules are evaluated (the top n MCI scores would be evaluated
-#' for downstream analysis). 
+#' @param num A numerical value of how many modules desired. 
 #' 
 #' @param membersL1 A list of integer vectors with unique ids as names. Each vector represents the cluster 
 #' number assign to that unique id. The length of this list is equal to the number of states in the study.
@@ -926,7 +924,7 @@ getMaxStats = function(membersL, idx)
 #' @param MCI1 A list of numeric vectors with unique cluster numbers as names. Each vector represents the 
 #' MCI scores of that module. This can be the second element of the output from function getMCI.
 #' 
-#' @return Returns n lists of MCI scores
+#' @return Returns x lists of MCI scores
 #' 
 #' @export
 #' @author Yuxi Sun \email{ysun11@@uchicago.edu}
@@ -948,14 +946,14 @@ getMaxStats = function(membersL, idx)
 #'
 #' membersL_noweight <- getMCI(cluster, test)
 #' topMCI <- getTopMCI(membersL_noweight[[1]],  membersL_noweight[[2]],  membersL_noweight[[2]],
-#' min =3, n=1)
+#' min =3, num=1)
 
-getTopMCI = function(membersL1, MCI1, membersL2, min, n=1)
+getTopMCI = function(membersL1, MCI1, membersL2, min, num=1)
 {
   maxMCIms <- getMaxMCImember(membersL1, MCI1, min) 
   topMCI = getMaxStats(membersL2,maxMCIms[[1]])
   topMCI = topMCI[order(topMCI,decreasing=TRUE)]
-  topMCI = topMCI[1:n] 
+  topMCI = topMCI[1:num] 
   return(topMCI)
 }
 
@@ -1040,14 +1038,14 @@ plotMaxMCI = function(maxMCIms,  MCIl,  las = 0,  order = NULL,  states = NULL)
 #' Obtain the identified BioTiP and its length
 #' @description getCTS obtains the identified BioTiP and its length based off of MCI scores.
 #' 
-#' @param maxMCI A list of numeric vectors,  whose lengths are the numbers of states. 
+#' @param maxMCI A numeric vector,  whose length is the number of states. 
 #' This parameter is the maximum MCI score of each state,  and it can be obtained from the output of \code{\link{getMaxStats}}. 
 #' Names need to be included in names of \code{maxMCIms}.
 #' 
 #' @param maxMCIms A list of character vectors per state. The vectors are network nodes (e.g. transcript ids). 
 #' This parameter is the second element of the output of the function \code{\link{getMaxMCImember}}.
 #' 
-#' @return A list of character vectors, in which the elements are the unique IDs of the network nodes of the BioTiP.
+#' @return A character vector, in which the elements are the unique IDs of the network nodes of the BioTiP.
 #' 
 #' @export
 #' 
@@ -1064,8 +1062,7 @@ plotMaxMCI = function(maxMCIms,  MCIl,  las = 0,  order = NULL,  states = NULL)
 #' # "Length: 3"
 #' # "B853" "D826" "A406"
 #' 
-#' @author Antonio Feliciano y Pleyto, Zhezhen Wang \email{zhezhen@@uchicago.edu},
-#' Yuxi Sun \email{ysun11@@uchicago.edu}
+#' @author Antonio Feliciano y Pleyto and Zhezhen Wang \email{zhezhen@@uchicago.edu}
 
 getCTS <- function(maxMCI,  maxMCIms) 
 {
@@ -1078,12 +1075,9 @@ getCTS <- function(maxMCI,  maxMCIms)
   if (!all(names(maxMCI) %in% names(maxMCIms))) {
     stop("Names of maxMCI has to be in maxMCIms.")
   }
-  CTS_list = vector(mode = "list", length = length(maxMCI))
-  for (i in 1:length(maxMCI)) {
-    CTS_list[[i]] <- maxMCIms[[names(maxMCI)[i]]]
-    message(paste0("Length: ",  length(CTS_list[[i]])))
-  }
-  return(CTS_list)
+  y <- maxMCIms[[names(maxMCI)[which.max(maxMCI)]]]
+  message(paste0("Length: ",  length(y)))
+  return(y)
 }
 
 #' @title plot a line plot of Ic scores for each state.
