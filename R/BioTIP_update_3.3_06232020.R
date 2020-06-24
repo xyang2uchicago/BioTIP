@@ -1,6 +1,6 @@
 
-## Author:  Zhezhen Wang; Andrew Goldstein; Xinan H Yang; 
-## Email: zhezhen@uchicago.edu;andrewgoldstein@uchicago.edu; xyang2@uchicago.edu
+## Author:  Zhezhen Wang; Andrew Goldstein; Xinan H Yang; Yuxi Sun
+## Email: zhezhen@uchicago.edu;andrewgoldstein@uchicago.edu; xyang2@uchicago.edu; ysun11@uchicago.edu
 ## Last update:  06/19/2020
 ## Acknowledgement: National Institutes of Health  R21LM012619  
 ## Add new functions to estimate pairwise-correlation matric which is the key statistics for tipping-point identificaion.
@@ -696,8 +696,8 @@ getCluster_methods = function(igraphL,  method = c('rw', 'hcm', 'km', 'pam', 'na
 #' for(i in names(cluster)){
 #'  names(cluster[[i]]) = c('g1', 'g2', 'g3', 'g4')
 #' }
-#' membersL_noweight <- getMCI(cluster, test)
-#' plotBar_MCI(membersL_noweight)
+#' membersL <- getMCI(cluster, test)
+#' plotBar_MCI(membersL)
 #'
 #' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}
 
@@ -795,10 +795,10 @@ plotBar_MCI = function(MCIl, ylim = NULL, nr=1, nc = NULL,
 #' for(i in names(cluster)){
 #'   names(cluster[[i]]) = c('g1', 'g2', 'g3', 'g4')}
 #'
-#' membersL_noweight <- getMCI(cluster, test)
-#' maxMCIms <- getMaxMCImember(membersL_noweight[[1]],  membersL_noweight[[2]],  min =3)
+#' membersL <- getMCI(cluster, test)
+#' maxMCIms <- getMaxMCImember(membersL[[1]],  membersL[[2]],  min =3)
 #' #The same as
-#' maxMCIms <- getMaxMCImember(cluster,  membersL_noweight[[2]],  min =2)
+#' maxMCIms <- getMaxMCImember(cluster,  membersL[[2]],  min =2)
 #'
 #'## case1: using 'rw' method by default
 #'igraphL <- getNetwork(test,  fdr=1)
@@ -816,15 +816,15 @@ plotBar_MCI = function(MCIl, ylim = NULL, nr=1, nc = NULL,
 #'## and then run
 #'library(igraph)
 #'cluster = lapply(cl,  membership)
-#'maxCIms <- getMaxMCImember(cluster,  membersL_noweight[[2]],  min =2)
+#'maxCIms <- getMaxMCImember(cluster,  membersL[[2]],  min =2)
 #'
 #'## or run function 'getMCI' and use the 1st option
-#'membersL_noweight <- getMCI(cl, test)
+#'membersL <- getMCI(cl, test)
 #'
 #'## case2: using methods other than the default
 #'cl <- getCluster_methods(test, method = "pam", cutoff = 2)
-#'## check to make sure membersL_noweight[[2]] has values and run
-#'maxCIms <- getMaxMCImember(cl,  membersL_noweight[[2]],  min =2)
+#'## check to make sure membersL[[2]] has values and run
+#'maxCIms <- getMaxMCImember(cl,  membersL[[2]],  min =2)
 #'
 #' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}
 
@@ -889,10 +889,10 @@ getMaxMCImember = function(membersL, MCIl, minsize = 1)
 #'  names(cluster[[i]]) = c('g1', 'g2', 'g3', 'g4')
 #' }
 #' 
-#' membersL_noweight <- getMCI(cluster, test)
+#' membersL <- getMCI(cluster, test)
 #' idx = c(1, 2, 1)
-#' names(idx) = names(membersL_noweight[['sd']])
-#' selectedSD = getMaxStats(membersL_noweight[['sd']], idx)
+#' names(idx) = names(membersL[['sd']])
+#' selectedSD = getMaxStats(membersL[['sd']], idx)
 
 getMaxStats = function(membersL, idx)
 {
@@ -905,26 +905,32 @@ getMaxStats = function(membersL, idx)
   return(member_max)
 }
 
-#' @title Get the top x MCI scores member and statistics
+
+
+#' @title Get the transcript ID and statistics for the n topest MCI scores
 #' 
-#' @description This function generates the top x lists of MCI scores based on the two provided cutoffs.
+#' @description This function generates a list of the n topest MCI scores.
 #' 
-#' @param min A numerical value of the minimum module size (the number of transcripts in a cluster)
+#' @param min A numerical value of the minimum number of transcripts in a cluster. A cutoff that determines
+#' the smallest cluster in transcripts numbers in downstream analysis. 
 #' 
-#' @param num A numerical value of how many modules desired. 
+#' @param n An integer determines how many modules are evaluated (the top n MCI scores would be evaluated
+#' for downstream analysis). 
 #' 
-#' @param membersL1 A list of integer vectors with unique ids as names. Each vector represents the cluster 
-#' number assign to that unique id. The length of this list is equal to the number of states in the study.
-#' This can be the first element of the output from function getMCI or the output from getCluster_methods, 
+#' @param modulesL A list of integer named vectors. 
+#' The length of this list is equal to the number of states in the study.
+#' The names of a vector are the ids of modules (gene clusters) per state. 
+#' This can be the first element of the output from the functions getMCI() or getCluster_methods(), 
 #' see Examples for more detail.
 #' 
-#' @param membersL2 A two-layer nested list of character or numeric values, any one out of the five elements 
-#' output by the function getMCI.
+#' @param membersL A two-layer nested list of characters or numbers, being any one out of the five outputing elements 
+#' by the function getMCI(). This parameter is used to extract the stats (MCI, standard deviation, etc.), 
+#' which is used to calculate the top MCI's. 
 #' 
 #' @param MCI1 A list of numeric vectors with unique cluster numbers as names. Each vector represents the 
-#' MCI scores of that module. This can be the second element of the output from function getMCI.
+#' MCI scores of that module. This can be the second element of the outputing of the function getMCI().
 #' 
-#' @return Returns x lists of MCI scores
+#' @return Returns a numeric vector of the n topest MCI scores
 #' 
 #' @export
 #' @author Yuxi Sun \email{ysun11@@uchicago.edu}
@@ -944,16 +950,16 @@ getMaxStats = function(membersL, idx)
 #' for(i in names(cluster)){
 #'   names(cluster[[i]]) = c('g1', 'g2', 'g3', 'g4')}
 #'
-#' membersL_noweight <- getMCI(cluster, test)
-#' topMCI <- getTopMCI(membersL_noweight[[1]],  membersL_noweight[[2]],  membersL_noweight[[2]],
-#' min =3, num=1)
+#' membersL <- getMCI(cluster, test)
+#' topMCI <- getTopMCI(membersL[[1]],  membersL[[2]],  membersL[[2]],
+#' min =3, n=1)
 
-getTopMCI = function(membersL1, MCI1, membersL2, min, num=1)
+getTopMCI = function(modulesL, MCI1, membersL, min, n=1)
 {
-  maxMCIms <- getMaxMCImember(membersL1, MCI1, min) 
-  topMCI = getMaxStats(membersL2,maxMCIms[[1]])
-  topMCI = topMCI[order(topMCI,decreasing=TRUE)]
-  topMCI = topMCI[1:num] 
+  maxMCIms <- getMaxMCImember(modulesL, MCI1, min) 
+  topMCI = getMaxStats(membersL,maxMCIms[[1]])
+  topMCI = topMCI[order(topMCI, decreasing=TRUE)]
+  topMCI = topMCI[1:n] 
   return(topMCI)
 }
 
@@ -1036,16 +1042,17 @@ plotMaxMCI = function(maxMCIms,  MCIl,  las = 0,  order = NULL,  states = NULL)
 }
 
 #' Obtain the identified BioTiP and its length
-#' @description getCTS obtains the identified BioTiP and its length based off of MCI scores.
+#' @description Obtain the identified CTS transcripts.
 #' 
-#' @param maxMCI A numeric vector,  whose length is the number of states. 
-#' This parameter is the maximum MCI score of each state,  and it can be obtained from the output of \code{\link{getMaxStats}}. 
-#' Names need to be included in names of \code{maxMCIms}.
+#' @param maxMCI A list of numeric vectors,  whose lengths are the numbers of system's states. 
+#' This gives the maximum MCI score of each state,  and it can be obtained from the output of \code{\link{getMaxStats}}. 
+#' Names of the list need to be included in names of \code{maxMCIms}.
 #' 
-#' @param maxMCIms A list of character vectors per state. The vectors are network nodes (e.g. transcript ids). 
+#' @param maxMCIms A list of character vectors whose length is the system's states studied. 
+#' The vectors records constructed gene-gene coexpression network nodes (e.g. transcript ids). 
 #' This parameter is the second element of the output of the function \code{\link{getMaxMCImember}}.
 #' 
-#' @return A character vector, in which the elements are the unique IDs of the network nodes of the BioTiP.
+#' @return A list of character vectors, in which the elements are the unique IDs of the network nodes of the BioTiP.
 #' 
 #' @export
 #' 
@@ -1062,7 +1069,8 @@ plotMaxMCI = function(maxMCIms,  MCIl,  las = 0,  order = NULL,  states = NULL)
 #' # "Length: 3"
 #' # "B853" "D826" "A406"
 #' 
-#' @author Antonio Feliciano y Pleyto and Zhezhen Wang \email{zhezhen@@uchicago.edu}
+#' @author Antonio Feliciano y Pleyto, Zhezhen Wang \email{zhezhen@@uchicago.edu},
+#' Yuxi Sun \email{ysun11@@uchicago.edu}
 
 getCTS <- function(maxMCI,  maxMCIms) 
 {
@@ -1075,9 +1083,13 @@ getCTS <- function(maxMCI,  maxMCIms)
   if (!all(names(maxMCI) %in% names(maxMCIms))) {
     stop("Names of maxMCI has to be in maxMCIms.")
   }
-  y <- maxMCIms[[names(maxMCI)[which.max(maxMCI)]]]
-  message(paste0("Length: ",  length(y)))
-  return(y)
+  CTS_list = vector(mode = "list", length = length(maxMCI))
+  for (i in 1:length(maxMCI)) {
+    CTS_list[[i]] <- maxMCIms[[names(maxMCI)[i]]]
+    message(paste0("Length: ",  length(CTS_list[[i]])))
+  }
+  names(CTS_list) <- names(maxMCI)   ## added by Holly 06232020
+  return(CTS_list)  
 }
 
 #' @title plot a line plot of Ic scores for each state.
@@ -1521,7 +1533,7 @@ simulation_Ic <- function(obs.x,  sampleL,  counts,  B = 1000,  fun=c("cor", "Bi
 #'
 #' @inheritParams plotIc 
 #' 
-#' @param simulation A numeric matrix of Ic scores in which rows are states and columns are numbers of simulated times. 
+#' @param simulation A numeric matrix of Ic scores in which rows are states and columns are simulation runs. 
 #' It can be obtained from \code{\link{simulation_Ic}}
 #' 
 #' @param order Characters of names of Ic to be plotted in a desired \code{order}. Default is NULL.
@@ -1685,8 +1697,8 @@ plot_Ic_Simulation <- function (Ic,  simulation,  las = 0,  ylim = NULL,
 #' for(i in names(cluster)){
 #'    names(cluster[[i]]) = c('g1', 'g2', 'g3', 'g4')}
 #'
-#' membersL_noweight <- getMCI(cluster, test, fun='cor')
-#' names(membersL_noweight)
+#' membersL <- getMCI(cluster, test, fun='cor')
+#' names(membersL)
 #' [1] "members" "MCI"     "sd"      "PCC"     "PCCo"  
 #'
 #' @import psych
@@ -2350,7 +2362,7 @@ cor.shrink = function(X,  Y=NULL,  MARGIN = c(1,  2),  shrink = TRUE,
 #' 
 #' @export
 #' 
-#' @return Return a plot of the observed Ic (red) and simulated Ic (grey) scores per state.
+#' @return Return a P value and a plot of the observed Ic (red) and simulated Ic (grey) scores per state.
 #' 
 #' @author Xinan H Yang \email{xyang2@@uchicago.edu}
 #' 
@@ -2405,12 +2417,14 @@ plot_SS_Simulation <- function(Ic,  simulation,  las = 0,
   v <- diff(sort(Ic,  decreasing = TRUE)[2:1])
 
   abline(v=v,  col = 'red',  lwd = 2,  lty=2)
+  P.value <- round(mean(diff_Ic >= v), 3)
   legend("topright",  
          legend = paste0("p = ",   
-                         round(mean(diff_Ic >= v), 3) 
+                         P.value 
          ), 
          text.col="red",  bty = 'n',  cex = 1.5)
   
+  return(P.value)  ## add by xy on 6/23/2020
 }
 
 
