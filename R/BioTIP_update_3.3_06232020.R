@@ -826,29 +826,55 @@ plotBar_MCI = function(MCIl, ylim = NULL, nr=1, nc = NULL,
 #'## check to make sure membersL[[2]] has values and run
 #'maxCIms <- getMaxMCImember(cl,  membersL[[2]],  min =2)
 #'
-#' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}
+#' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}, Xinan Yang \email{xyang2@@uchicago.edu}
 
-getMaxMCImember = function(membersL, MCIl, minsize = 1)
+getMaxMCImember = function(membersL, MCIl, minsize = 1, n=1)
 {
+  if(n<1 | class(n) != "numeric") stop('please provide a >=1 numeric for n')
+  if(is.null(names(membersL))) names(membersL) <- 1:length(membersL)
+  n <- round(n)
   listn = names(membersL)
+  
   if(!minsize <1){
     minsize = minsize-1
-    CIl = lapply(seq_along(membersL), function(x) 
+    CIl = lapply(seq_along(membersL), function(x)
       ifelse(table(membersL[[x]])>minsize, MCIl[[x]], NA))
-    module_keep = lapply(seq_along(membersL),  function(x) 
-      names(table(membersL[[x]])[table(membersL[[x]])>(minsize-1)]))
-    membersL = lapply(seq_along(membersL), function(x) 
+    module_keep = lapply(seq_along(membersL),  function(x)
+      names(table(membersL[[x]])[table(membersL[[x]])>(minsize)]))  # corrected by xy from minsize-1 on 6/25/2020!
+    membersL = lapply(seq_along(membersL), function(x)
       membersL[[x]][membersL[[x]] %in% module_keep[[x]]])
-  }else {
+  } else {
     stop('please provide a minimum size for the cluster,  
          which should be integer that is larger than 0')
   }
   
-  idx = sapply(CIl, which.max)
-  maxCI =lapply(seq_along(idx), function(x) names(membersL[[x]][membersL[[x]] == idx[x]]))
-  names(maxCI) = listn
-  names(idx) = listn
-  return(list(idx = idx, members = maxCI))
+  if(n>=1) {
+    idx = sapply(CIl, which.max)
+    maxCI =lapply(seq_along(idx), function(x) names(membersL[[x]][membersL[[x]] == idx[x]]))
+    names(maxCI) = listn
+    names(idx) = listn
+    results <- list(idx = idx, members = maxCI)
+  } 
+  names(CIl) = listn
+  if(n>1){
+    for(j in 2:n){
+      x <- unlist(lapply(idx, length))
+      x <- names(x)[x>0]
+      if(length(x)>0){
+        for (i in x){
+          CIl[[i]][idx[[i]]] <- NA  # mask the topest MCI score
+          idx[[i]] = c(idx[[i]], which.max( CIl[[i]]))  # looking for the next maximum
+        }
+      }
+      results[[j+1]] <- lapply(seq_along(idx), function(x) unlist(names(membersL[[x]][membersL[[x]] == idx[[x]][j]]))) 
+      names(results[[j+1]]) = listn
+      names(results)[j+1] <- paste0(j,'topest.members')
+    }
+  }
+  
+  results[['idx']] <- idx
+  
+  return(results)
 }
 
 
