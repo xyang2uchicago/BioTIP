@@ -37,7 +37,7 @@ knitr::include_graphics("FigS1_BioTIP_pipeline_detailed_v7.png")
      *  ##### [Identifying Dynamic Network Biomodule](#Identifying Dynamic Network Biomodule)
      *  ##### [Finding Tipping Point](#Finding Tipping Point)
    * [An Application to scRNA-seq Data](#An Application to scRNA-seq Data)
-     *  ##### [Coming soom ...](#Coming soon)  
+     *  ##### [Coming soon ...](#Coming soon)  
    * [Transcript Annotation and Biotype](#Transcript Annotation and Biotype)
      *  ##### [Quick Start](#Quick Start)
      *  ##### [Genomic Data Source](#Genomic Data Source)
@@ -61,8 +61,12 @@ An existing dataset, GSE6136, is used to demonstrate how our functions are appli
 Start by installing the package 'BioTIP' and other dependent packages such as stringr, psych, and igraph if necessary. Below are some examples.
 
 ```{r}
-# load package
+# load 
+source("/Users/jennifersun98/Desktop/BioTIP/R/BioTIP_update_3.4_07012020.R")
+library(psych)
+library(stringr)
 library(BioTIP)
+library(igraph)
 ```
 
 Once all the required packages are installed, load using `“read.table()”` function as follows. Note to change the read.table(“PATH”) when running your datasets. To check the dimension of your data set use “dim(dataset)” function. Here we show a use of dim function “dim(GSE6136)”. Notice that after editing the column and row, the dimension of our dataset changes from (22690,27) to (22690, 26) because we removed the downloaded first row after assigning it to be column-name of the final numeric data matrix.
@@ -261,6 +265,7 @@ sample_Ic = simulation_Ic_sample(df, sampleNo=3, genes=CTS[[1]], plot=TRUE)
 
 <a name=">[Go to top](#)</a>
 <a name="Coming soon"></a>
+
 Coming soon ...
                      
 
