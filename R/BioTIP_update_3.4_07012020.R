@@ -1,6 +1,6 @@
 
-## Author:  Zhezhen Wang; Andrew Goldstein; Xinan H Yang; Yuxi Sun
-## Email: zhezhen@uchicago.edu;andrewgoldstein@uchicago.edu; xyang2@uchicago.edu; ysun11@uchicago.edu
+## Author:  Zhezhen Wang; Andrew Goldstein; Yuxi Sun; Xinan H Yang
+## Email: zhezhen@uchicago.edu;andrewgoldstein@uchicago.edu; ysun11@uchicago.edu; xyang2@uchicago.edu
 ## Last update:  07/01/2020
 ## Acknowledgement: National Institutes of Health  R21LM012619 
 ## Add function getNextMaxStats()
