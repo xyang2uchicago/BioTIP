@@ -105,7 +105,7 @@ head(cli[,1:3])
 ```{r}
 dat <- GSE6136
 df <- log2(dat+1)
-head(df)
+head(df[,1:6])
 ```
 
 <a name=>[Go to Top](#)</a> 
@@ -212,7 +212,7 @@ plotMaxMCI(maxMCIms,membersL_noweight[[2]],states = names(samplesL),las = 2)
   to save the time, we picked a small number 3 as the length of the CTS.
   
 ```{r,echo=TRUE, warning=FALSE}
-simuMCI <- simulationMCI(3,samplesL,df)
+simuMCI <- simulationMCI(3,samplesL,df, B=100)
 plot_MCI_Simulation(topMCI[1],simuMCI,las=2)
 ```
 <a name="">[Go to Top](#)</a> 
@@ -236,7 +236,7 @@ identification (red) against its corresponding size-controlled random scores
 (grey).
 
 ```{r,warning=FALSE}
-simuIC <- simulation_Ic(length(CTS[[1]]),samplesL,df)
+simuIC <- simulation_Ic(length(CTS[[1]]),samplesL,df,B=100)
 par(mar = c(10,5,0,2))
 plot_Ic_Simulation(IC,simuIC,las = 2)
 ```
