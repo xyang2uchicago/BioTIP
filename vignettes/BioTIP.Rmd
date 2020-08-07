@@ -26,7 +26,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r, echo=FALSE, fig.cap="Fig 1. BioTIP workflow with five key analytic steps. RTF: relative transcript fluctuation; PCC: Pearson correlation coefficient; MCI: Module-Criticality Index; Ic: index of critical transition.", fig.align='center', out.width = '60%'}
-knitr::include_graphics("FigS1_BioTIP_pipeline_detailed_v7.png")
+knitr::include_graphics("FigS1_BioTIP_pipeline_detailed_v7.jpg")
 ```
 
 #### [Standard workflow](#Standard workflow)
