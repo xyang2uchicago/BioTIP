@@ -1,16 +1,19 @@
 
 ## Author:  Zhezhen Wang; Andrew Goldstein; Yuxi Sun; Xinan H Yang
 ## Email: zhezhen@uchicago.edu;andrewgoldstein@uchicago.edu; ysun11@uchicago.edu; xyang2@uchicago.edu
-## Last update:  07/01/2020
+## Last update:  08/28/2020
 ## Acknowledgement: National Institutes of Health  R21LM012619 
 ## Add function getNextMaxStats()
 ## Revise the example code for the function getMaxStats()
 ## 06/19/2020 updated the following:
-## Add teh parameter for the function getMaxMCImember()
+## Add the parameter for the function getMaxMCImember()
 ## Add new functions to estimate pairwise-correlation matric which is the key statistics for tipping-point identificaion.
 ## Simplified the parameter using for the function getIc(); correct typo in exampling codes.
 ## Correct error in the function getNetwork().
 ## Allowing getMCI to do locally estimation of correlation matrix, which runs faster than global estimation.
+## 8/28/2020 updated the following:
+## Clean the bugs when calling optimize.sd_selection() with parameters method='previous',method='reference' or cuttoff=1
+## Customalize the font size of title in the function plotBar_MCI() 
 
 #' @import utils
 #' @import MASS
@@ -245,10 +248,10 @@ getReadthrough = function(gr, cod_gr)
 #'   vector gives the sample names in a state. Note that the vectors (sample names) has
 #'   to be among the column names of the R object 'df'.
 #'
-#' @param cutoff A positive numeric value. Default is 0.01. If < 1, 
+#' @param cutoff A positive numeric value. Default is 0.01. If <= 1, 
 #'   automatically selects top x  transcripts using the a selecting
 #'   method (which is either the \code{reference},  \code{other} stages or \code{previous}
-#'   stage),  e.g. by default it will select top 1\% of the transcripts.
+#'   stage),  e.g. by default it will select top 1 percentage of the transcripts.
 #'
 #' @param method Selection of methods from \code{reference},\code{other}, \code{previous},  
 #' default uses \code{other}. Partial match enabled.
@@ -305,7 +308,8 @@ sd_selection = function(df,  samplesL,  cutoff = 0.01,
   if(method == 'reference'){
     ref = as.character(samplesL[[1]])
     sdref = apply(df[, ref], 1, sd, na.rm = TRUE)
-    sds = lapply(tmp, function(x) test2[, x]/sdref)
+    #sds = lapply(tmp, function(x) test2[, x]/sdref)
+    sds = sapply(tmp, function(x) test2[, x]/sdref)  # corrected on 8/28/2020
     names(sds) = tmp
     
   }else if(method == 'other'){
@@ -346,7 +350,7 @@ sd_selection = function(df,  samplesL,  cutoff = 0.01,
          or 'longitudinal reference' ")
   }
   
-  if(cutoff<1){
+  if(cutoff<=1){  # add = 8/28/2020
     topdf = nrow(df)*cutoff
     sdtop = lapply(tmp, function(x) names(sds[[x]][order(sds[[x]], decreasing = TRUE)[1:topdf]]))
   }else{
@@ -358,6 +362,16 @@ sd_selection = function(df,  samplesL,  cutoff = 0.01,
   names(subdf) = tmp
   subm = lapply(names(subdf),  function(x) subset(subdf[[x]], row.names(subdf[[x]]) %in% sdtop[[x]]))
   names(subm)  = tmp
+  
+  if(any(is.na(subm))) {  ## added on 2/28/2020
+    a <- apply(subm[[i]], 1, function(x) sum(x,na.rm=TRUE))
+    tmp <- which(is.na(a))
+    if(length(tmp)>0) subm[[i]] <- subm[[i]][-a,]
+    b <- apply(subm[[i]], 2, function(x) sum(x,na.rm=TRUE))
+    tmp <- which(is.na(b))
+    if(length(tmp)>0) subm[[i]] <- subm[[i]][,-b]
+  }
+  
   return(subm)
 }
 
@@ -382,10 +396,10 @@ sd_selection = function(df,  samplesL,  cutoff = 0.01,
 #' @param times A numeric value indicating the percentage of \code{B} times a transcript 
 #' need to be selected in order to be considered a stable signature.
 #' 
-#' @param cutoff A positive numeric value. Default is 0.01. If < 1, automatically
+#' @param cutoff A positive numeric value. Default is 0.01. If <= 1, automatically
 #'   goes to select top x# transcripts using the a selecting method (which is
 #'   either the \code{reference}, \code{other} or \code{previous} stage), e.g. by
-#'   default it will select top 1\% of the transcripts.
+#'   default it will select top 1 percentage of the transcripts.
 #'   
 #' @param method Selection of methods from \code{reference}, \code{other}, \code{previous},  
 #' default uses \code{other}. Partial match enabled.
@@ -448,14 +462,16 @@ optimize.sd_selection = function(df,  samplesL,  B=100,  percent=0.8,
     selected_counts = lapply(names(samplesL),  
                              function(x) df[, random_sample[[x]]])
     test2 = sapply(selected_counts,  
-                   function(x) apply(x, 1, sd, na.rm = TRUE))
+                   function(x) apply(x, 1, sd, na.rm = TRUE)) # a matrix of gene_sd in row and class in column
     tmp = names(samplesL)
     colnames(test2) = tmp
     
     if(method == 'reference'){
-      ref = selected_counts[[1]]
-      sdref = apply(ref, 1, sd, na.rm = TRUE)
-      sds = lapply(tmp, function(x) test2[, x]/sdref[, x])
+      #ref = selected_counts[[1]]
+      #sdref = apply(ref, 1, sd, na.rm = TRUE)
+      sdref = test2[,1]  ## simplified on 8/28/2020
+      #sds = lapply(tmp, function(x) test2[, x]/sdref[, x])
+      sds = sapply(tmp, function(x) test2[, x]/sdref) ## correct on 8/28/2020
       names(sds) = tmp
       
     }else if(method == 'other'){
@@ -473,9 +489,10 @@ optimize.sd_selection = function(df,  samplesL,  B=100,  percent=0.8,
       names(sds) = tmp
       
     }else if(method == 'previous'){
-      warning('Using method "previous",  make sure sampleL is in the right order')
+      cat('Using method "previous",  make sure sampleL is in the right order')
       sds = lapply(2:ncol(test2), function(x) test2[, x]/test2[, x-1])
-      names(sds) = tmp
+      tmp <- tmp[-1]  ## corrected 08/28/2020 
+      names(sds) = tmp  
       
     }else if(method == 'itself'){
       if(cutoff>1) stop('Using method "itself",  cutoff must be smaller or equal to 1')
@@ -499,8 +516,9 @@ optimize.sd_selection = function(df,  samplesL,  B=100,  percent=0.8,
            'other', 'previous', 'itself', 'longitudinal reference'")
     }
     
-    if(cutoff<1){
-      topdf = nrow(selected_counts[[1]])*cutoff
+    if(cutoff<=1){
+      ## topdf = nrow(selected_counts[[1]])*cutoff
+      topdf = nrow(selected_counts[[i]])*cutoff  # same results, better written 08/28/2020
       sdtop = lapply(tmp,  
                      function(x) names(sds[[x]][order(sds[[x]], decreasing = TRUE)[1:topdf]]))
     }else{
@@ -520,6 +538,7 @@ optimize.sd_selection = function(df,  samplesL,  B=100,  percent=0.8,
   subm = lapply(names(subdf),  
                 function(x) subset(subdf[[x]], row.names(subdf[[x]]) %in% stable[[x]]))
   names(subm)  = tmp
+  
   return(subm)
 }
 
@@ -612,7 +631,7 @@ getCluster = function(igraphL, steps = 4)
 #' cl <- getCluster_methods(test,  method = 'pam',  cutoff=2)
 #'
 #' @export
-#' @import igraph cluster
+#' @import igraph cluster TSdist
 #' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}
 
 getCluster_methods = function(igraphL,  method = c('rw', 'hcm', 'km', 'pam', 'natural'),  cutoff = NULL)
@@ -678,6 +697,11 @@ getCluster_methods = function(igraphL,  method = c('rw', 'hcm', 'km', 'pam', 'na
 #' @param states A character of the state names to be shown on the plot. Default is NULL, 
 #' assign this if you want to show all states including states without nodes.
 #' 
+#' @param title.size  Integer; the point size of the title. 
+#'  This paramter is past to the graphical parameter \code{ps} to graphical function \code{title}. 
+#'  What is meant by 'point size' is device-specific, but most devices mean a multiple of 1bp, that is 1/72 of an inch.  
+#' 
+#' 
 #' @export
 #' @return Return a barplot of MCI scores across states.
 #' 
@@ -706,7 +730,8 @@ getCluster_methods = function(igraphL,  method = c('rw', 'hcm', 'km', 'pam', 'na
 #' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}
 
 plotBar_MCI = function(MCIl, ylim = NULL, nr=1, nc = NULL, 
-                       order = NULL,  minsize = 3, states = NULL)
+                       order = NULL,  minsize = 3, states = NULL,
+                      title.size=30) ## update 08/28/2020 
 {
   membersL = MCIl[[1]]
   MCI = MCIl[[2]]
@@ -744,7 +769,8 @@ plotBar_MCI = function(MCIl, ylim = NULL, nr=1, nc = NULL,
     mci[is.na(mci)] = 0
     bar = barplot(mci, col = rainbow(length(mci),  alpha = 0.3), 
                   #legend = paste0('#', names(m), '=', sapply(m, nrow)), 
-                  main = paste0(i, ' (n=',  max(m), ')'),  
+                  #main = paste0(i, ' (n=',  max(m), ')'),  
+                  main='',  ## update 08/28/2020
                   ylab = 'MCI', 
                   xlab='modules', #args.legend = list(cex = cex)
                   ylim =ylim, 
@@ -752,6 +778,7 @@ plotBar_MCI = function(MCIl, ylim = NULL, nr=1, nc = NULL,
                   cex.names = 1.5, 
                   cex.main = 1.5,  
                   cex.lab = 1.5)
+    title(main= paste0(i, '\n',  max(m), ' modules'), ps=title.size) ## update 08/28/2020
     if(all(mci != 0)) text(bar, mci, nmembers, cex = 1.5)
   }
 }
@@ -839,7 +866,7 @@ getMaxMCImember = function(membersL, MCIl, minsize = 1, n=1)
   n <- round(n)
   listn = names(membersL)
   
-  if(!minsize <1){
+  if(minsize >= 1){
     minsize = minsize-1
     CIl = lapply(seq_along(membersL), function(x)
       ifelse(table(membersL[[x]])>minsize, MCIl[[x]], NA))
@@ -848,12 +875,12 @@ getMaxMCImember = function(membersL, MCIl, minsize = 1, n=1)
     membersL = lapply(seq_along(membersL), function(x)
       membersL[[x]][membersL[[x]] %in% module_keep[[x]]])
   } else {
-    stop('please provide a minimum size for the cluster,  
-         which should be integer that is larger than 0')
+    stop('please provide a minimum number of the cluster of interest,  
+         which should be an integer that is larger than 0')
   }
   
   if(n>=1) {
-    idx = sapply(CIl, which.max)
+    idx = lapply(CIl, which.max)  # corrected on 8/28/2020
     maxCI =lapply(seq_along(idx), function(x) names(membersL[[x]][membersL[[x]] == idx[x]]))
     names(maxCI) = listn
     names(idx) = listn
@@ -2484,7 +2511,7 @@ plot_SS_Simulation <- function(Ic,  simulation,  las = 0,
 #' @param idL A list of numeric vectors with unique cluster numbers as names.
 #'   This can be the first element of the output from function \code{getMaxMCImember}.
 #'   
-#' @param whoisnext A vector of who is the next of the \code{MCI} element 
+#' @param whoisnext A vector of who is the next state
 #' in the list given by the \code{memebersL} to exract.
 #'   
 #' @param which.next A integer indicate how many modules with toppest MCI scores to output. 
