@@ -33,9 +33,9 @@ be selected in each round of simulation.}
 need to be selected in order to be considered a stable signature.}
 
 \item{cutoff}{A positive numeric value. Default is 0.01. If < 1, automatically
-goes to select top x# transcripts using the a selecting method (which is
+goes to select top x percentage transcripts using the a selecting method (which is
 either the \code{reference}, \code{other} or \code{previous} stage), e.g. by
-default it will select top 1\\% of the transcripts.}
+default it will select top 1 percentage of the transcripts.}
 
 \item{method}{Selection of methods from \code{reference}, \code{other}, \code{previous},
 default uses \code{other}. Partial match enabled.
