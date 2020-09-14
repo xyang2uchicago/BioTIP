@@ -319,7 +319,6 @@ library(GenomicRanges)
 library(Hmisc)
 library(MASS)
 library(igraph)
-library(RCurl)
 ```
 
 Once the required packages are installed we want to become familiar with the data using `read.delim` function. The `dim` function will show you the dimensions of your data. 

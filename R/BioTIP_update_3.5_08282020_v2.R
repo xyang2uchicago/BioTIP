@@ -239,7 +239,7 @@ getReadthrough = function(gr, cod_gr)
 #' from the input dataset \code{df}. The dataset must contain multiple sample
 #' groups (or 'states'). For each state,  the function filters the dataset using
 #' a cutoff value for standard deviation. The default cutoff value is 0.01
-#' (i.e., higher than the top 1\% standard deviation).
+#' (i.e., higher than the top 1 percentage standard deviation).
 #'
 #' @param df A numeric matrix or data frame. The rows and columns represent
 #'   unique transcript IDs (geneID) and sample names, respectively.

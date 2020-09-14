@@ -24,7 +24,7 @@ to be among the column names of the R object 'df'.}
 \item{cutoff}{A positive numeric value. Default is 0.01. If < 1,
 automatically selects top x  transcripts using the a selecting
 method (which is either the \code{reference},  \code{other} stages or \code{previous}
-stage),  e.g. by default it will select top 1\\% of the transcripts.}
+stage),  e.g. by default it will select top 1 percentage of the transcripts.}
 
 \item{method}{Selection of methods from \code{reference},\code{other}, \code{previous},
 default uses \code{other}. Partial match enabled.
@@ -56,7 +56,7 @@ input \code{df},  with the sample ID of the same state in the column.
 from the input dataset \code{df}. The dataset must contain multiple sample
 groups (or 'states'). For each state,  the function filters the dataset using
 a cutoff value for standard deviation. The default cutoff value is 0.01
-(i.e., higher than the top 1\\% standard deviation).
+(i.e., higher than the top 1 percentage standard deviation).
 }
 \examples{
 counts = matrix(sample(1:100, 18), 2, 9)
