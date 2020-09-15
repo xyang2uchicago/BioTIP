@@ -319,6 +319,7 @@ library(GenomicRanges)
 library(Hmisc)
 library(MASS)
 library(igraph)
+library(RCurl)
 ```
 
 Once the required packages are installed we want to become familiar with the data using `read.delim` function. The `dim` function will show you the dimensions of your data. 
@@ -352,7 +353,9 @@ lengths(samplesL)
 
 ## when analyzing SingleCellExperiment object SCE, translate to matrix using the following code
 # counts <- logcounts(SCE)
-counts = read.table("/Users/jennifersun98/Desktop/BioTIP_application/scApplicationData/data_Nestorowa.tsv", sep="\t", row.names=1)
+## data matrix imported from our github repository due to large size
+githuburl = "https://raw.githubusercontent.com/xyang2uchicago/BioTIP_application/master/scApplicationData/data_Nestorowa.tsv"
+counts = read.table(url(githuburl), sep="\t", row.names=1)
 dim(counts) 
 if (class(counts)=="data.frame") counts = as.matrix(counts)
 
@@ -526,38 +529,32 @@ all(names(CTS) == names(maxMCI))
 #if (class(counts)=="data.frame") counts = as.matrix(counts)
 #M <- cor.shrink(counts, Y = NULL, MARGIN = 1, shrink = TRUE)
 #save(M, file="cor.shrink_M.RData", compress=TRUE) 
-#load("cor.shrink_M.RData")
-#dim(M)
+githuburl = "https://github.com/xyang2uchicago/BioTIP_application/blob/master/scApplicationData/cor.shrink_M.RData?raw=true"
+load(url(githuburl))
+dim(M)
 
 ## C is the runs of permutations to estimate random scores
-#C = 10 # for real data analysis C = at least 200
-#RandomMCI = list()
-#n <- length(CTS)  # number of CTS candidates
-#set.seed(2020)
-# for (i in 1:n) #
-#  i=1; par(mfrow=c(1,1))
-#  x <- length(CTS[[i]])
-#  RandomMCI[[i]] <- simulationMCI(x, samplesL, counts,  B=C, fun="BioTIP", M=M)
-#  dim(RandomMCI)  
+C = 10 # for real data analysis C = at least 200
+RandomMCI = list()
+n <- length(CTS)  # number of CTS candidates
+set.seed(2020)
+for (i in 1:n) #
+  i=1; par(mfrow=c(1,1))
+  x <- length(CTS[[i]])
+  RandomMCI[[i]] <- simulationMCI(x, samplesL, counts,  B=C, fun="BioTIP", M=M)
+  dim(RandomMCI)  
 
-#  plot_MCI_Simulation(maxMCI[i], RandomMCI[[i]], las=2, 
-#                      ylim=c(0, max(maxMCI[i], 2*RandomMCI[[i]])),  
-#                      main=paste(names(maxMCI)[i], length(CTS[[i]]), "genes",
-#                                 "\n","vs. ",C, "times of gene-permutation"),
-#                      which2point=names(maxMCI)[i])
+  plot_MCI_Simulation(maxMCI[i], RandomMCI[[i]], las=2, 
+                      ylim=c(0, max(maxMCI[i], 2*RandomMCI[[i]])),  
+                      main=paste(names(maxMCI)[i], length(CTS[[i]]), "genes",
+                                 "\n","vs. ",C, "times of gene-permutation"),
+                      which2point=names(maxMCI)[i])
 
   
 ######## Finding Tipping Point #################
   
   newIc_score = lapply(CTS, function(x) getIc(counts, samplesL, x, fun="BioTIP"))
   names(newIc_score) <- names(CTS)
-```
-
-We omitted executing MCI simulation plot because the size of the M matrix exceeds BioConductor file size limit. Below are the results obtained by running the command with downscaled C=10 and i=1. 
-
-
-```{r, echo=FALSE, fig.align='center', out.width = '60%'}
-knitr::include_graphics("MCI_simulation_10.jpg")
 ```
 
 
