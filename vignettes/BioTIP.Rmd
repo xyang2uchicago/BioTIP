@@ -300,10 +300,7 @@ We will be focusing on the path S1-S0-S3-S4 in our analysis.
 We begin by installing the ‘BioTIP’ package and other dependent packages, using Bioconductor.To avoid errors, it is recommended to use the latest version of R. 
 
 ```{r, warning=FALSE, message=FALSE, results=FALSE}
-#To install package, use R (version 4.0) and enter:
-if (!requireNamespace("BiocManager", quietly = TRUE))
-  install.packages("BiocManager")
-BiocManager::install("BioTIP")
+library(BioTIP)
 ```
 
 Once BioTIP is installed we must load dependent R packages:
@@ -355,14 +352,13 @@ lengths(samplesL)
 # counts <- logcounts(SCE)
 ## data matrix imported from our github repository due to large size
 githuburl = "https://raw.githubusercontent.com/xyang2uchicago/BioTIP_application/master/scApplicationData/data_Nestorowa.tsv"
-counts = read.table(url(githuburl), sep="\t", row.names=1)
+counts = read.table(url(githuburl), head=T, sep="\t", row.names=1)
 dim(counts) 
 if (class(counts)=="data.frame") counts = as.matrix(counts)
 
 all(colnames(counts) %in% as.character(rownames(cell_info)))
-
 ## log2 transformation example
-if(max(counts>20)) counts = log2(counts)
+if(max(counts)>20) counts = log2(counts)
 ## Check the overall distribution using histogram
 # hist (counts, 100)  
 ```
