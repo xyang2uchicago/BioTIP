@@ -7,6 +7,13 @@ An R package for biological tipping-point identification and characterization
 
 ## Installation
 
+You can install the newest version of BioTIP with:
+
+```r
+library("devtools")
+devtools::install_github("xyang2uchicago/BioTIP")
+```
+
 You can install the released version of BioTIP from [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
