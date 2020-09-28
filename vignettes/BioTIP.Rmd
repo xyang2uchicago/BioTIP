@@ -351,7 +351,7 @@ lengths(samplesL)
 ## when analyzing SingleCellExperiment object SCE, translate to matrix using the following code
 # counts <- logcounts(SCE)
 ## data matrix imported from our github repository due to large size
-githuburl = "https://raw.githubusercontent.com/xyang2uchicago/BioTIP_application/master/scApplicationData/data_Nestorowa.tsv"
+githuburl = "https://github.com/ysun98/BioTIPBigData/blob/master/data_Nestorowa.tsv?raw=true"
 counts = read.table(url(githuburl), head=T, sep="\t", row.names=1)
 dim(counts) 
 if (class(counts)=="data.frame") counts = as.matrix(counts)
@@ -525,7 +525,7 @@ all(names(CTS) == names(maxMCI))
 #if (class(counts)=="data.frame") counts = as.matrix(counts)
 #M <- cor.shrink(counts, Y = NULL, MARGIN = 1, shrink = TRUE)
 #save(M, file="cor.shrink_M.RData", compress=TRUE) 
-githuburl = "https://github.com/xyang2uchicago/BioTIP_application/blob/master/scApplicationData/cor.shrink_M.RData?raw=true"
+githuburl = "https://github.com/ysun98/BioTIPBigData/blob/master/cor.shrink_M.RData?raw=true"
 load(url(githuburl))
 dim(M)
 
