@@ -384,7 +384,7 @@ opt.per = 0.8
 ## set.seed(100)
 ## subcounts = optimize.sd_selection(counts, samplesL, cutoff = opt.cutoff, percent=opt.per, B)
 ## save( subcounts, file='BioTIP_Output_xy/subcounts.optimize_80per.rData')
-load("subcounts.optimize_80per.rData")
+data("subcounts.optimize_80per")
 ```
 
 
@@ -441,7 +441,7 @@ fun = 'BioTIP'
 ##  Commented out because of calculation expense, recommend to save the calculated data file after one calculation for future use
 ## membersL = getMCI(cluster, subcounts, adjust.size = F, fun)
 ## save(membersL, file="membersL.RData", compress=TRUE)
-load("membersL.RData")
+data("membersL")
 
 par(mar=c(1,1,2,1))
 plotBar_MCI(membersL, ylim=c(0,30), min=50)
@@ -525,26 +525,24 @@ all(names(CTS) == names(maxMCI))
 #if (class(counts)=="data.frame") counts = as.matrix(counts)
 #M <- cor.shrink(counts, Y = NULL, MARGIN = 1, shrink = TRUE)
 #save(M, file="cor.shrink_M.RData", compress=TRUE) 
-githuburl = "https://github.com/ysun98/BioTIPBigData/blob/master/cor.shrink_M.RData?raw=true"
-load(url(githuburl))
-dim(M)
+#dim(M)
 
 ## C is the runs of permutations to estimate random scores
-C = 10 # for real data analysis C = at least 200
-RandomMCI = list()
-n <- length(CTS)  # number of CTS candidates
-set.seed(2020)
-for (i in 1:n) #
-  i=1; par(mfrow=c(1,1))
-  x <- length(CTS[[i]])
-  RandomMCI[[i]] <- simulationMCI(x, samplesL, counts,  B=C, fun="BioTIP", M=M)
-  dim(RandomMCI)  
+#C = 10 # for real data analysis C = at least 200
+#RandomMCI = list()
+#n <- length(CTS)  # number of CTS candidates
+#set.seed(2020)
+#for (i in 1:n) #
+#  i=1; par(mfrow=c(1,1))
+#  x <- length(CTS[[i]])
+#  RandomMCI[[i]] <- simulationMCI(x, samplesL, counts,  B=C, fun="BioTIP", M=M)
+#  dim(RandomMCI)  
 
-  plot_MCI_Simulation(maxMCI[i], RandomMCI[[i]], las=2, 
-                      ylim=c(0, max(maxMCI[i], 2*RandomMCI[[i]])),  
-                      main=paste(names(maxMCI)[i], length(CTS[[i]]), "genes",
-                                 "\n","vs. ",C, "times of gene-permutation"),
-                      which2point=names(maxMCI)[i])
+#  plot_MCI_Simulation(maxMCI[i], RandomMCI[[i]], las=2, 
+#                      ylim=c(0, max(maxMCI[i], 2*RandomMCI[[i]])),  
+#                      main=paste(names(maxMCI)[i], length(CTS[[i]]), "genes",
+#                                 "\n","vs. ",C, "times of gene-permutation"),
+#                      which2point=names(maxMCI)[i])
 
   
 ######## Finding Tipping Point #################
@@ -553,6 +551,11 @@ for (i in 1:n) #
   names(newIc_score) <- names(CTS)
 ```
 
+We provided the detail step for calculating the M matrix and plotting MCI simulation but skipped the calculation of M matrix for size and run time concerns. The result of the simulation is described in the plot below:
+
+```{r, echo=FALSE, fig.align='center', out.width = '60%'}
+knitr::include_graphics("MCI_Sim_M.jpg")
+```
 
 ```{r, results=FALSE}
 ######## verify using IC score #################
