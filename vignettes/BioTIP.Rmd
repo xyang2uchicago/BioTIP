@@ -384,7 +384,7 @@ opt.per = 0.8
 ## set.seed(100)
 ## subcounts = optimize.sd_selection(counts, samplesL, cutoff = opt.cutoff, percent=opt.per, B)
 ## save( subcounts, file='BioTIP_Output_xy/subcounts.optimize_80per.rData')
-data("subcounts.optimize_80per")
+load("subcounts.optimize_80per.rData")
 ```
 
 
