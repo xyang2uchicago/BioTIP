@@ -2384,7 +2384,8 @@ cor.shrink = function(X,  Y=NULL,  MARGIN = c(1,  2),  shrink = TRUE,
   # center and scale X by mean and SD (using wither column or row means/SDs)
   X_means = apply(X,  MARGIN = MARGIN,  mean,  na.rm = TRUE)
   X_sds = apply(X,  MARGIN = MARGIN,  sd,  na.rm = TRUE)
-  X_sds[X_sds == 0] = min(X_sds[X_sds > 0] ) /2 # in case where variable doesn't vary, update on 10/29/2020
+#  X_sds[X_sds == 0] = min(X_sds[X_sds > 0] ) /2 # in case where variable doesn't vary, and When we next try to divide by the standard deviation
+   X_sds[X_sds == 0] = 1 # in case where variable doesn't vary, and When we next try to divide by the standard deviation
   
   X_std = sweep(sweep(X,  MARGIN = MARGIN,  STATS = X_means,  FUN = '-'), 
                 MARGIN = MARGIN,  STATS = X_sds,  FUN = '/')
