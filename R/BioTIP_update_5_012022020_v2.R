@@ -1,8 +1,9 @@
 
 ## Author:  Zhezhen Wang; Andrew Goldstein; Yuxi Sun; Xinan H Yang
 ## Email: zhezhen@uchicago.edu;andrewgoldstein@uchicago.edu; ysun11@uchicago.edu; xyang2@uchicago.edu
-## Last update:  12/03/2020
+## Last update:  1/04/2021
 ## Acknowledgement: National Institutes of Health  R21LM012619 
+## 1/04/2021 updated getIc:  allowing NA values in the countC matrix to be calculated for PCCs
 ## 12/02/2020 updated the following:
 ## Allow direct calculation of the average of PCCs which equals to an average of PCCs matrix shrunk toward 'average', 
 ## thus saving the computation time,
@@ -1538,7 +1539,8 @@ getIc <- function(counts,  sampleL,  genes,  output = c('Ic', 'PCCg', 'PCCs'),
                                                    diag = FALSE)]   ## updated 02/17/20
     PCCg = sapply(PCCg, function(x) mean(x, na.rm = TRUE))
   }
-  if (fun ==  "BioTIP" & PCC_sample.target!= 'none') {
+  #if (fun ==  "BioTIP" & PCC_sample.target!= 'none') {# 1/4/2021
+  if (fun ==  "BioTIP" ) { # 1/4/2021, allowing NA values to be included in subsetC when fun='BioTIP'
     PCCs = lapply(subsetC, function(x) avg.cor.shrink(x, 
                                                       MARGIN = 2, 
                                                       shrink = shrink,
