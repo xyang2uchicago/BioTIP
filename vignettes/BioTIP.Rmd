@@ -221,7 +221,7 @@ plot_MCI_Simulation(topMCI[1],simuMCI,las=2)
 The next step is to calculate an Index of Critical transition (Ic score) of the dataset. First, use the `getIc` function to calculate the Ic score based on the biomodule previously identified. We use the `plotIc` function to draw a line plot of the Ic score. 
 
 ```{r}
-IC <- getIc(df,samplesL,CTS[[1]])
+IC <- getIc(df,samplesL,CTS[[1]],PCC_sample.target = 'average')
 par(mar = c(10,5,0,2))
 plotIc(IC,las = 2)
 ```
@@ -547,7 +547,7 @@ all(names(CTS) == names(maxMCI))
   
 ######## Finding Tipping Point #################
   
-  newIc_score = lapply(CTS, function(x) getIc(counts, samplesL, x, fun="BioTIP"))
+  newIc_score = lapply(CTS, function(x) getIc(counts, samplesL, x, fun="BioTIP", PCC_sample.target = 'average'))
   names(newIc_score) <- names(CTS)
 ```
 
