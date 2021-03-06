@@ -1500,7 +1500,8 @@ getIc <- function(counts,  sampleL,  genes,  output = c('Ic', 'PCCg', 'PCCs'),
                   use = c("everything",  "all.obs",  "complete.obs",  "na.or.complete",  "pairwise.complete.obs"),
                   PCC_sample.target = 1)    ## 12/02/2020
 {
-  
+  if (class(genes)!='character') stop("genes have to be a character of gene symbols, i.e. 
+                                      genes have to be a subset of row.names(counts)")
   output <- match.arg(output)
   fun <- match.arg(fun)
   use <- match.arg(use)
