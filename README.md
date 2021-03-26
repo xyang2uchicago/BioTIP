@@ -1,13 +1,14 @@
-# BioTIP
+### Introduction
+BioTIP is an R-package for characterization of biological tipping-points. Abrupt and irreversible changes (or tipping points) are decisive in the progression of biological processes. BioTIP addresses two computational impediments: detection of tipping-points accurately, and identification of non-chaotic critical transition signals (CTSs). BioTIP is tested with disease and normal developmental systems, covering bulk-cell and single-cell transcriptomes. BioTIP has successfully identified temporal features of gene-regulatory-network dynamics for phenotypically-defined tipping points, which can be exploited to infer the role of key transcription factors. 
 
-<!-- badges: start -->
-<!-- badges: end -->
+![](imgs/Fig1_scRNARNAseq_pipeline_2021_xy.jpg)
 
-An R package for biological tipping-point identification and characterization
+Overview of BioTIP.
 
-## Installation
+![](imgs/FigS1_BioTIP_pipeline_detailed_v7.jpg)
 
-You can install the newest version of BioTIP with:
+### Installation
+To use the newest BioTIP package, either clone/download this repository, or you can install BioTIP with:
 
 ```r
 library("devtools")
@@ -25,8 +26,7 @@ source('http://bioconductor.org/biocLite.R')
 biocLite("BioTIP")
 ```
 
-## Example
-
+### Example
 This is a basic example which shows you how to solve a common problem:
 
 ```{r example}
