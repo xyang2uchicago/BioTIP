@@ -59,8 +59,8 @@ membersL_noweight <- getMCI(cluster,test,adjust.size = F)
 plotBar_MCI(membersL_noweight,ylim = c(0,6))
 ```
 
-Here are example analysis with bulk and single-cell data sets
-[BioTIP Applications](https://github.com/xyang2uchicago/BioTIP_application)
+Here are example analysis with bulk and single-cell data sets:
+[BioTIP Applications](https://github.com/xyang2uchicago/BioTIP_application).
 
 ## Enjoy!
 
