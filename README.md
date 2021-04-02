@@ -4,7 +4,7 @@ BioTIP is an R-package for characterization of biological tipping-points.  Abrup
 Compared to existing tipping-point methods, BioTIP addresses three analytical challenges below:  
 
 1. Large variability often exists in the sizes of statistical ensembles (populations);  
-2. Mot only multiple tipping points may coexist during an observed progression but also multiple CTSs may coexist in the same critical transition state; and  
+2. Not only multiple tipping points may coexist during an observed progression but also multiple CTSs may coexist in the same critical transition state; and  
 3. There are multiple trajectories when cells are exposed to stimulus.
 
 To adopt tipping-point theory to transcriptomic analysis, there are two common premises:  
