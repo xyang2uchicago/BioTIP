@@ -1,4 +1,4 @@
-# BioTIP: an R-package for Characterization of Biological Tipping-Points
+# BioTIP: an R-package for Characterization of Biological Tipping Points
 ### What is BioTIP?
 Abrupt and often irreversible changes (or tipping points) are decisive in the progression of biological processes. We, therefore, developed this R-package for the characterization of biological tipping points using gene expression profiles. BioTIP is the first toolset that amalgamates two computational impediments in multivariate expression-data analysis: (1) detection of tipping points accurately, and (2) identification of significant critical transition signals (CTSs). 
 
