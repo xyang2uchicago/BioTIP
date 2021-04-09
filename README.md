@@ -9,7 +9,7 @@ Compared to the existing tipping-point methods, BioTIP addresses three analytica
 2. Not only multiple tipping points may coexist during an observed progression but also multiple CTSs may coexist in the same critical transition state; and  
 3. There are multiple trajectories when cells are exposed to stimulus.
 
-### Where can one apply BioTIP?
+### Where to apply BioTIP?
 To adopt tipping-point theory to transcriptomic analysis, there are two common premises:  
 
 1. The system of the individual cell has a dissipative structure (e.g., having discrete states 
