@@ -40,7 +40,7 @@ You can install the released version of BioTIP from [CRAN](https://CRAN.R-projec
 ``` r
 install.packages("BioTIP")
 ```
-or even better
+or even better:
 ``` r
 source('http://bioconductor.org/biocLite.R')
 biocLite("BioTIP")
