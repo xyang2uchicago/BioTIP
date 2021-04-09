@@ -15,9 +15,9 @@ To adopt tipping-point theory to transcriptomic analysis, there are two commonly
 1. The system of the individual cell has a dissipative structure (e.g., having discrete states, including the one showing multi-stability).
 2. Each state has a characteristic gene expression profile and thus presents a distinct molecular phenotype.  
 
-BioTIP apply to data meeting these premises, including both single-cell and bulk-cell transcriptomes. The impending-transition states are called ‘critical transition states’ or ‘tipping points.’
+BioTIP applies to data meeting these premises, including both single-cell and bulk-cell transcriptomes. The impending-transition states are called ‘critical transition states’ or ‘tipping points.’
 
-We have applied BioTIP to identify temporal features of molecular-network dynamics from gene expression profiles successfully. Importantly, the CTS identifications helped infer the underlying gene-regulatory network and the involving key transcription factors.
+We have successfully applied BioTIP to identify temporal features of molecular-network dynamics from gene expression profiles. Importantly, the CTS identifications helped infer the underlying gene-regulatory network and the involving key transcription factors.
 
 
 ![](imgs/Fig1_scRNARNAseq_pipeline_2021_xy.jpg)
