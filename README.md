@@ -18,7 +18,7 @@ each state has a characteristic gene expression profile and thus presents a dist
 
 BioTIP apply to data meeting these premises, including both single-cell and bulk-cell transcriptomes. The impending-transition states are called ‘critical transition states’ or ‘tipping points.’
 
-We have applied BioTIP to identified temporal features of molecular-network dynamics from gene expression profiles successfully. Importantly, the CTS identifications have helped infer the underlying gene-regulatory network and the involving key transcription factors.
+We have applied BioTIP to identify temporal features of molecular-network dynamics from gene expression profiles successfully. Importantly, the CTS identifications helped infer the underlying gene-regulatory network and the involving key transcription factors.
 
 
 ![](imgs/Fig1_scRNARNAseq_pipeline_2021_xy.jpg)
