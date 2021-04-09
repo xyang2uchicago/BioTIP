@@ -19,12 +19,10 @@ BioTIP applies to data meeting these premises, including both single-cell and bu
 
 We have successfully applied BioTIP to identify temporal features of molecular-network dynamics from gene expression profiles. Importantly, the CTS identifications helped infer the underlying gene-regulatory network and the involving key transcription factors.
 
+### How does BioTIP work? 
 
-![](imgs/Fig1_scRNARNAseq_pipeline_2021_xy.jpg)
+Please refer to [BioTIP Applications](https://github.com/xyang2uchicago/BioTIP_application) for (1) example case analysis on bulk and single-cell datasets, and (2) the detailed workflow of BioTIP.
 
-Overview of BioTIP.
-
-![](imgs/FigS1_BioTIP_pipeline_detailed_v7.jpg)
 
 ### How to install?
 To use the newest BioTIP package, either clone/download this repository, or you can install BioTIP with:
@@ -45,9 +43,5 @@ source('http://bioconductor.org/biocLite.R')
 biocLite("BioTIP")
 ```
 
-### Example
-Here are example case analysis applied to bulk and single-cell datasets:
-[BioTIP Applications](https://github.com/xyang2uchicago/BioTIP_application).
-
-## Enjoy!
-
+### Acknowledgements
+BioTIP is made possible by the following authors: Zhezhen Wang, Andrew Goldstein, Yuxi Sun, Biniam Feleke, Qier An, Antonio Feliciano, Ieva Tolkaciovaite, and Xinan H Yang. 
