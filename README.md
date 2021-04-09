@@ -5,9 +5,9 @@ Abrupt and irreversible changes (or tipping points) are decisive in the progress
 ### Why BioTIP?
 BioTIP addresses and shows robust performance when facing 3 technical challenges in the existing tipping-point methods:
 
-1. Large variability often exists in the sizes of statistical ensembles (populations);  
-2. Not only multiple tipping points may coexist during an observed progression but also multiple CTSs may coexist in the same critical transition state; and  
-3. There are multiple trajectories when cells are exposed to stimulus.
+1. The sizes of the statistical ensembles / populations vary significantly.
+2. Multiple tipping points may coexist during an observed progression. Similarly, multiple CTSs may coexist in the same critical transition state. 
+3. Exposure of cells to stimulus can lead to multiple trajectories.
 
 ### Where to apply BioTIP?
 To adopt tipping-point theory to transcriptomic analysis, there are two common premises:  
