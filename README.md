@@ -44,4 +44,4 @@ biocLite("BioTIP")
 ```
 
 ### Acknowledgements
-BioTIP is made possible by contributions from the following authors: Zhezhen Wang, Andrew Goldstein, Yuxi Sun, Dannie Griggs, Antonio Feliciano, Yanqiu Wang, John M Cunningham, Biniam Feleke, Qier An, Ieva Tolkaciovaite, and Xinan H Yang. 
+BioTIP is made possible by contributions from the following authors: Xinan H Yang, Zhezhen Wang, Andrew Goldstein, Yuxi Sun, Dannie Griggs, Antonio Feliciano, Yanqiu Wang, Biniam Feleke, Qier An, Ieva Tolkaciovaite, and John M Cunningham. 
