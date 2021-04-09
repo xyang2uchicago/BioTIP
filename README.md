@@ -10,11 +10,10 @@ BioTIP addresses and shows robust performance when facing 3 technical challenges
 3. Exposure of cells to stimulus can lead to multiple trajectories.
 
 ### Where to apply BioTIP?
-To adopt tipping-point theory to transcriptomic analysis, there are two common premises:  
+To adopt tipping-point theory to transcriptomic analysis, there are two commonly accepted premises:  
 
-1. The system of the individual cell has a dissipative structure (e.g., having discrete states 
-2. Including the one showing multi-stability);  
-each state has a characteristic gene expression profile and thus presents a distinct molecular phenotype.  
+1. The system of the individual cell has a dissipative structure (e.g., having discrete states, including the one showing multi-stability).
+2. Each state has a characteristic gene expression profile and thus presents a distinct molecular phenotype.  
 
 BioTIP apply to data meeting these premises, including both single-cell and bulk-cell transcriptomes. The impending-transition states are called ‘critical transition states’ or ‘tipping points.’
 
