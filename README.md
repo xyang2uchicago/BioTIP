@@ -27,7 +27,7 @@ Overview of BioTIP.
 
 ![](imgs/FigS1_BioTIP_pipeline_detailed_v7.jpg)
 
-### Installation
+### How to install?
 To use the newest BioTIP package, either clone/download this repository, or you can install BioTIP with:
 
 ```r
