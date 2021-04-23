@@ -35,16 +35,16 @@ knitr::include_graphics("Fig_Table1_xy.jpg")
      *  ##### [Data Preprocessing](#Data Preprocessing)
      *  ##### [Pre-selection Transcript](#Pre-selection Transcript)
      *  ##### [Network Partition](#Network Partition)
-     *  ##### [Identifying Dynamic Network Biomodule (Module-Criticality Index (MCI))](#Identifying Dynamic Network Biomodule (Module-Criticality Index (MCI)))
-     *  ##### [Finding Tipping Point](#Finding Tipping Point)
+     *  ##### [Identifying putative Critical Transition Signals (CTS) using the DNB Module](#Identifying putative Critical Transition Signals (CTS) using the DNB Module)
+     *  ##### [Finding Tipping Point and Evaluating CTS](#Finding Tipping Point and Evaluating CTS)
    * [Applying to scRNA-seq Data](#Applying to scRNA-seq Data)
      *  ##### [Advanced Estimation for Pearson Correlation Coefficient Matrix](#Advanced Estimation for Pearson Correlation Coefficient Matrix) 
      *  ##### [Data Preprocessing with Trajectory Building Tools](#Data Preprocessing with Trajectory Building Tools)
      *  ##### [Predicting Tipping Point (Advanced Index of Critical Transition (IC*))](#Predicting Tipping Point (Advanced Index of Critical Transition (IC*)))
      *  ##### [Gene Pre-selection](#Gene Pre-selection)
      *  ##### [Network Partition](#Network Partition2)
-     *  ##### [Identifying Dynamic Network Biomodule (MCI)](#Identifying Dynamic Network Biomodule (MCI))
-     *  ##### [Finding Tipping Point (Random Permutation and Delta Score)](#Finding Tipping Point (Random Permutation and Delta Score))
+     *  ##### [Identifying putative Critical Transition Signals (CTS) using the DNB Module](#Identifying putative Critical Transition Signals (CTS) using the DNB Module)
+     *  ##### [Finding Tipping Point and Evaluating CTS](#Finding Tipping Point and Evaluating CTS)
      *  ##### [Inferring Tipping Point-Driven Transcription Factors](#Inferring Tipping Point-Driven Transcription Factors)
    * [Transcript Annotation and Biotype](#Transcript Annotation and Biotype)
      *  ##### [Quick Start](#Quick Start)
@@ -154,9 +154,9 @@ names(cluster)
 ```
 
 [Go to Top](#)</a> 
-<a name="Identifying Dynamic Network Biomodule (Module-Criticality Index (MCI))"></a>
+<a name="Identifying putative Critical Transition Signals (CTS) using the DNB Module"></a>
 
-__Identifying Dynamic Network Biomodule (Module-Criticality Index (MCI))__
+__Identifying putative Critical Transition Signals (CTS) using the DNB Module__
 
 Here, ‘module’ refers to a cluster of network nodes (e.g. transcripts) highly linked (e.g. by correlation). “Biomodule” refers to the module representing the score called “Module-Criticality Index (MCI)” per state.
 
@@ -215,8 +215,8 @@ plot_MCI_Simulation(topMCI[1],simuMCI,las=2)
 
 [Go to Top](#)</a> 
 
-<a name="Finding Tipping Point"></a>
- __Finding Tipping Point__
+<a name="Finding Tipping Point and Evaluating CTS"></a>
+ __Finding Tipping Point and Evaluating CTS__
 
 The next step is to calculate an Index of Critical transition (Ic score) of the dataset. First, use the `getIc` function to calculate the Ic score based on the biomodule previously identified. We use the `plotIc` function to draw a line plot of the Ic score. 
 
@@ -460,9 +460,9 @@ preselected transcripts at the LIR state. Background colors represent different 
 
 [Go to top](#)</a>
 
-<a name="Identifying Dynamic Network Biomodule (MCI)"></a>
+<a name="Identifying putative Critical Transition Signals (CTS) using the DNB Module"></a>
 
-__Identifying Dynamic Network Biomodule (MCI)__
+__Identifying putative Critical Transition Signals (CTS) using the DNB Module__
 
 Each module is a cluster of network nodes (transcripts) that are linked by correlation in the previous step. Each cell state may have multiple modules identified. Biomodules are the modules with relatively higher MCI scores in the system that has discrete states, while empirically significant. 
 
@@ -523,9 +523,9 @@ names(CTS)
 
 [Go to top](#)</a>
 
-<a name="Finding Tipping Point (Random Permutation and Delta Score)"></a>
+<a name="Finding Tipping Point and Evaluating CTS"></a>
 
-__Finding Tipping Point (Random Permutation and Delta Score)__
+__Finding Tipping Point and Evaluating CTS__
 
 To find the tipping point of the above-detected tipping point candidates we calculate the Index of Critical Transition or the Ic score using the `getIc` function. The `plotIc` function is used to obtain a line plot of the Ic score. The function `simulation_Ic` calculates random Ic scores by permutating transcript expression values. The function `simulation_Ic_sample` calculates random Ic scores by shuffling cell labels. Only the states with significant Ic scores are where the tipping points will be identified. 
 
