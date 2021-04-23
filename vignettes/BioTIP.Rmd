@@ -24,7 +24,7 @@ knitr::opts_chunk$set(
 We designed the BioTIP workflow in the following five steps (Fig 1). In this workflow, two steps (Steps 2 and 5) calculated the random scores from randomly selected genes. In step 2, the distribution of random scores is designed to predict the potential tipping point. The rationale is that random genes can, in cases, capture the "symmetry-breaking destabilization" at tipping points (Mojtahedi 2016). In step 5, the random scores are used to validate the significance of the predicted critical transition signals (CTSs). A CTS measures the loss of resilience of previous states and the gain of instability during transitions (Scheffer, 2012). Because a CTS could be both "regulated" or "chaotic", the detection of non-random CTSs is important and has successes in development and diseases (Chen, 2012, Sarkar, 2019). The same R function (Table 1) can be used to calculate the random scores, for which we demonstrate the implication of Step 5 in the two following sections. 
 
 
-```{r, echo=FALSE, fig.cap="Fig 1. BioTIP workflow with five key analytical steps. RTF: relative transcript fluctuation; PCC: Pearson correlation coefficient; MCI: Module-Criticality Index; Ic: index of critical transition.", fig.align='center', out.width = '60%'}
+```{r, echo=FALSE, fig.cap="Fig 1. BioTIP workflow with five key analytical steps. RTF: relative transcript fluctuation; PCC: Pearson correlation coefficient; DNB: Dynamic Network Biomarker, of which the score was called as Module-Criticality Index (MCI) in the R package BioTIP; Ic: index of critical transition."; Ic*: our redefined Ic, which is also referred to as the BioTIP score, fig.align='center', out.width = '60%'}
 knitr::include_graphics("FigS1_BioTIP_pipeline_detailed_v7.jpg")
 ```
 
@@ -40,9 +40,9 @@ knitr::include_graphics("Fig_Table1_xy.jpg")
    * [Applying to scRNA-seq Data](#Applying to scRNA-seq Data)
      *  ##### [Advanced Estimation for Pearson Correlation Coefficient Matrix](#Advanced Estimation for Pearson Correlation Coefficient Matrix) 
      *  ##### [Data Preprocessing with Trajectory Building Tools](#Data Preprocessing with Trajectory Building Tools)
+     *  ##### [Predicting Tipping Point (Advanced Index of Critical Transition (IC*))](#Predicting Tipping Point (Advanced Index of Critical Transition (IC*)))
      *  ##### [Gene Pre-selection](#Gene Pre-selection)
      *  ##### [Network Partition](#Network Partition2)
-     *  ##### [Predicting Tipping Point (Advanced Index of Critical Transition (IC*))](#Predicting Tipping Point (Advanced Index of Critical Transition (IC*)))
      *  ##### [Identifying Dynamic Network Biomodule (MCI)](#Identifying Dynamic Network Biomodule (MCI))
      *  ##### [Finding Tipping Point (Random Permutation and Delta Score)](#Finding Tipping Point (Random Permutation and Delta Score))
      *  ##### [Inferring Tipping Point-Driven Transcription Factors](#Inferring Tipping Point-Driven Transcription Factors)
@@ -259,6 +259,13 @@ sample_Ic = simulation_Ic_sample(df, sampleNo=3, genes=CTS[[1]], plot=TRUE)
 ############################################
 
 As scRNA-seq is becoming more popular, there is a vast amount of information and computational tools. We recommend Bioconductor Workshops which have a variety of topics for not only beginner users but also novice users and developers. Helpful information is available at https://bioconductor.github.io/BiocWorkshops/. For orchestrating scRNA-seq analysis with Bioconductor, we recommend the online tutorial https://osca.bioconductor.org/. 
+The following figure shows BioTIP's analytic pipeline of single-cell RNA-seq analysis, as an alternative to differential expression analysis - instead of discovering marker genes from the differential-expression analysis between stable states, BioTIP introduces the tipping-point analysis that focuses on unstable transition states. The orange arrows show that BioTIP is applied to cell state ensembles (clusters) without the pseudo-order information. The dashed orange arrow shows that BioTIP may use pseudo-order information to focus cell states on the trajectory of interests.
+
+```{r, echo=FALSE, fig.cap="Fig 2. BioTIP Single-Cell Expression Data-Analytical Pipeline.", fig.align='center', out.width = '60%'}
+knitr::include_graphics("Fig1_scRNARNAseq_pipeline_2021_xy.jpg")
+```
+
+
 
 <a name="Advanced Estimation for Pearson Correlation Coefficient Matrix"></a>
 
@@ -267,6 +274,7 @@ __Advanced Estimation for Pearson Correlation Coefficient Matrix__
 Ic (Index of criticity) and DNB (dynamic network module which we renamed as MCI) are two existing tipping-point models applied to gene expression profiles (Mojtahedi M 2016, Chen 2012). These two modules have an intrinsic flaw in the standard correlation calculation that is inappropriate for large-scale genomic data (Schafer 2005). This flaw establishes a bias towards small-sized populations. Having differences in population sizes of 10-fold, ScRNAseq data is particularly vulnerable to this deficiency. We propose an advanced estimation of correlation matrices (Schafer 2005) to correct the bias of the existing mathematical models. The implication is the functions `ave.cor.shrink`. Using this shrinkage estimation strategy, we refined the tipping-point identification with Ic score, by calling the function `getIc` and setting the parameter fun=’BioTIP’. We also refined the CTS identification with MCI score, by calling the function `getMCI` and setting the parameter fun=’BioTIP’. Remember that when running corresponding functions for random scores (e.g., `simulation_Ic`, `simulation_Ic_sample`, and `simulationMCI`, also set the parameter fun=’BioTIP.’ Following is an example of applications to scRNA-seq data. 
 
 [Go to top](#)</a>
+
 
 <a name="Data Preprocessing with Trajectory Building Tools"></a>
 
@@ -361,6 +369,33 @@ all(colnames(counts) %in% as.character(rownames(cell_info)))
 if(max(counts)>20) counts = log2(counts)
 ## Check the overall distribution using histogram
 # hist (counts, 100)  
+```
+
+[Go to top](#)</a>
+
+<a name="Predicting Tipping Point (Advanced Index of Critical Transition (IC))"></a>
+
+__Predicting Tipping Point (Advanced Index of Critical Transition (IC))__
+
+Before the identification of CTS, we first ask whether the tipping point could be inferred from the global transcriptome of this dataset by estimating IC score from random genes. For the theoretical details, please see the original publication of the IC score. 
+
+```{r, results=FALSE}
+## First, estimate the random Ic-scores by permuting the expression values of genes
+  RandomIc_g = list()
+  set.seed(2020)
+  C= 10 # for real data analysis C = at least 500
+  i = 1  
+  n <- 200 # randomly pick up 200 genes
+  RandomIc_g[[i]]  <- simulation_Ic(n, samplesL, counts, 
+                                    B=C,
+                                    fun="BioTIP")
+  names(RandomIc_g)[i] = paste0("Simulation",i,"gene")
+
+  medianIc = apply(RandomIc_g[[i]],1,median)
+  par(mfrow = c(1,1))
+  plot_Ic_Simulation(medianIc, RandomIc_g[[i]], las = 2, ylab="BioTIP",
+                       main= paste("Simulation using",n,"transcripts"),
+                       fun="boxplot", ylim=c(0,0.3))
 ```
 
 [Go to top](#)</a>
@@ -572,8 +607,6 @@ knitr::include_graphics("MCI_Sim_M.jpg")
                                     fun="BioTIP")
   names(RandomIc_g)[i] = names(CTS)[i]
 
-  
-  
 #  par(mfrow=c(1,length(int)))
 #  for(i in 1:length(newIc_score)){ Not to run the full loop B plotting
     par(mfrow = c(1,1))
