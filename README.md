@@ -23,6 +23,12 @@ We have successfully applied BioTIP to identify temporal features of molecular-n
 
 Please refer to [BioTIP Applications](https://github.com/xyang2uchicago/BioTIP_application) for (1) exampled case studies on bulk or single-cell datasets, and (2) the detailed workflow of BioTIP.
 
+In particular, we exampled the following datasets:
+
+1. [Nestorowa 2016](https://pubmed.ncbi.nlm.nih.gov/27365425/): single-cell mouse hematopoietic stem and progenitor cell ([Experiment on Nestorowa](https://github.com/xyang2uchicago/BioTIP_application#example-with-single-cell-rna-dataset-bloodnet-nestorowa-2016)).
+2. GSE6136:
+([Experiment on GSE6136](https://github.com/xyang2uchicago/BioTIP_application#example-with-bulk-rna-dataset-gse6136)).
+
 
 ### How to install?
 To use the newest BioTIP package, either clone/download this repository, or you can install BioTIP with:
@@ -42,6 +48,9 @@ or even better:
 source('http://bioconductor.org/biocLite.R')
 biocLite("BioTIP")
 ```
+
+### Sample Experiment of BioTIP for Users
+BioTIP contains numerous functions as a tool in characterizing tipping points and identifying CTSs. We have written a [vignette](https://bioconductor.org/packages/release/bioc/vignettes/BioTIP/inst/doc/BioTIP.html) in order to illustrate how key functions should be used in BioTIP's pipeline. 
 
 ### Acknowledgements
 BioTIP is made possible by contributions from the following authors: Xinan H Yang, Zhezhen Wang, Andrew Goldstein, Yuxi Sun, Dannie Griggs, Antonio Feliciano, Yanqiu Wang, Biniam Feleke, Qier An, Ieva Tolkaciovaite, and John M Cunningham. 
