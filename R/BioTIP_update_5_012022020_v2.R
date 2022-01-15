@@ -1,8 +1,9 @@
 
 ## Author:  Zhezhen Wang; Andrew Goldstein; Yuxi Sun; Xinan H Yang
 ## Email: zhezhen@uchicago.edu;andrewgoldstein@uchicago.edu; ysun11@uchicago.edu; xyang2@uchicago.edu
-## Last update:  1/04/2021
+## Last update:  1/15/2022
 ## Acknowledgement: National Institutes of Health  R21LM012619 
+## 1/15/2022 update optimize.sd_selection() to track system running progress with the packae utils by Holly Yang
 ## 1/04/2021 updated getIc:  allowing NA values in the countC matrix to be calculated for PCCs
 ## 12/02/2020 updated the following:
 ## Allow direct calculation of the average of PCCs which equals to an average of PCCs matrix shrunk toward 'average', 
@@ -102,7 +103,7 @@
 
 getBiotypes <- function(full_gr,  gencode_gr,  intron_gr = NULL,  minoverlap = 1L) 
 {
-  #  require(GenomicRanges)
+  #  require(GenomicRanges)  
   if (all(is(full_gr) != "GRanges"))
     stop("please give full_gr as a \"GRanges\" object")
   if (all(is(gencode_gr) != "GRanges"))
@@ -458,6 +459,8 @@ optimize.sd_selection = function(df,  samplesL,  B = 100,  percent = 0.8,
                                  method = c('other', 'reference', 'previous', 'itself', 'longitudinal reference'), 
                                  control_df = NULL, control_samplesL = NULL)
 {
+  require(utils) 
+   
   method = match.arg(method)
   if(is.null(names(samplesL))) stop('please provide name to samplesL')
   if(any(!do.call(c, lapply(samplesL, as.character)) %in% colnames(df))) 
@@ -474,6 +477,9 @@ optimize.sd_selection = function(df,  samplesL,  B = 100,  percent = 0.8,
   #  Y <- sapply(lociL, nrow)
   
   for(i in c(1:B)) {
+    #Sys.sleep(0.5); 
+    setTxtProgressBar(pb, i)
+    
     random_sample_id = lapply(seq_along(k), 
                               function(x) sample(1:N[[x]], k[[x]]))  # replace = FALSE by default
     names(random_sample_id) = names(samplesL)
@@ -550,7 +556,9 @@ optimize.sd_selection = function(df,  samplesL,  B = 100,  percent = 0.8,
       N.random[[j]][sdtop[[j]], i] = 1 # mark the selection
     }
   }
-  
+  Sys.sleep(0.01)
+  close(pb)
+                     
   times = times*B
   stable = lapply(N.random, function(x) row.names(x[rowSums(x)>times, ]))
   names(stable) = tmp
