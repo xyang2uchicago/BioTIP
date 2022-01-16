@@ -3,7 +3,7 @@
 ## Email: zhezhen@uchicago.edu;andrewgoldstein@uchicago.edu; ysun11@uchicago.edu; xyang2@uchicago.edu
 ## Last update:  1/15/2022
 ## Acknowledgement: National Institutes of Health  R21LM012619 
-## 1/15/2022 update optimize.sd_selection() to track system running progress with the packae utils by Holly Yang
+## 1/15/2022 update optimize.sd_selection() to track system running progress with the packae utils, suppress the warnning in the function getMCI() by Holly Yang
 ## 1/04/2021 updated getIc:  allowing NA values in the countC matrix to be calculated for PCCs
 ## 12/02/2020 updated the following:
 ## Allow direct calculation of the average of PCCs which equals to an average of PCCs matrix shrunk toward 'average', 
@@ -1900,7 +1900,7 @@ getMCI <- function (groups,  countsL,  adjust.size = FALSE,
         }
         if(fun ==  "BioTIP") {
           if(is.null(df)) {
-            warning("MCI with the 'BioTIP'method is performing local estimation")
+            # warning("MCI with the 'BioTIP'method is performing local estimation") # suppressed on 01/15/2022
             PCCo_avg = lapply(names(comple),  
                               function(x) avg.cor.shrink(comple[[x]], Y = m[[x]], 
                                                          abs = TRUE, 
