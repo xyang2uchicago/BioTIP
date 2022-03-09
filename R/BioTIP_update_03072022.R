@@ -296,14 +296,6 @@ getReadthrough = function(gr, cod_gr)
 #'
 #' @export
 #'
-#' @examples
-#' counts = matrix(sample(1:100, 18), 2, 9)
-#' colnames(counts) = 1:9
-#' row.names(counts) = c('loci1', 'loci2')
-#' cli = cbind(1:9, rep(c('state1', 'state2', 'state3'), each = 3))
-#' colnames(cli) = c('samples', 'group')
-#' samplesL <- split(cli[, 1], f = cli[, 'group'])
-#' test_sd_selection <- sd_selection(counts,  samplesL,  0.01)
 #'
 #' @seealso \code{\link{optimize.sd_selection}}
 #' @import psych
@@ -444,15 +436,6 @@ sd_selection = function(df,  samplesL,  cutoff = 0.01,
 #' @seealso \code{\link{sd_selection}}
 #' 
 #' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}
-#' @examples
-#'
-#' counts = matrix(sample(1:100, 30), 2, 30)
-#' colnames(counts) = 1:30
-#' row.names(counts) = paste0('loci', 1:2)
-#' cli = cbind(1:30, rep(c('state1', 'state2', 'state3'), each = 10))
-#' colnames(cli) = c('samples', 'group')
-#' samplesL <- split(cli[, 1], f = cli[, 'group'])
-#' test_sd_selection <- optimize.sd_selection(counts,  samplesL,  B = 3,  cutoff = 0.01)
 
 optimize.sd_selection = function(df,  samplesL,  B = 100,  percent = 0.8,  
                                  times = 0.8, cutoff = 0.01, 
