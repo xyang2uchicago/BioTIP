@@ -13,6 +13,10 @@ We applied BioTIP to six datasets and compared BioTIP's performance with other e
 
 <img src="https://github.com/xyang2uchicago/BioTIP/blob/master/6db_for_git.jpg"> 
 
+BioTIP also demonstrated robustness with respect to different clustering methods, as shown in the figure below. 
+
+<img src="https://github.com/xyang2uchicago/BioTIP/blob/master/FigS1_robustness_xy_v3.jpg"> 
+
 
 ### Where to apply BioTIP?
 To adopt tipping-point theory to transcriptomic analysis, there are two commonly accepted premises:  
@@ -26,7 +30,7 @@ We have successfully applied BioTIP to identify temporal features of molecular-n
 
 ### How does BioTIP work? 
 
-1. [BioTIP tutorial](https://htmlpreview.github.io/?https://github.com/xyang2uchicago/BioTIP/blob/master/Gastrulation.html): This is a detailed walkthrough of BioTIP on one of our key results (Mouse Gastrulation, [GSE87038](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE87038)). 
+1. [BioTIP tutorial](https://htmlpreview.github.io/?https://github.com/xyang2uchicago/BioTIP/blob/master/Gastrulation.html): This is a detailed walkthrough of BioTIP on one of our key results (Mouse Gastrulation, GSE87038, [E8.25 2019](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE87038)). 
 
 2. [Vignette](https://bioconductor.org/packages/release/bioc/vignettes/BioTIP/inst/doc/BioTIP.html): This documented exampled case studies on bulk (GSE6136) and single-cell ([Nestorowa 2016](https://pubmed.ncbi.nlm.nih.gov/27365425/)) datasets.
 
