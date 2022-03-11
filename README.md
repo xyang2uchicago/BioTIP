@@ -21,9 +21,9 @@ We have successfully applied BioTIP to identify temporal features of molecular-n
 
 ### How does BioTIP work? 
 
-1. [BioTIP tutorial](https://htmlpreview.github.io/?https://github.com/xyang2uchicago/BioTIP/blob/master/Gastrulation.html): This is a detailed walkthrough of BioTIP on one of our key results (Mouse Gastrulation, GSE87038). 
+1. [BioTIP tutorial](https://htmlpreview.github.io/?https://github.com/xyang2uchicago/BioTIP/blob/master/Gastrulation.html): This is a detailed walkthrough of BioTIP on one of our key results (Mouse Gastrulation, [GSE87038](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE87038)). 
 
-2. Vignette: Please refer to [BioTIP Applications](https://github.com/xyang2uchicago/BioTIP_application) for (1) exampled case studies on bulk (GSE6136, see [Experiment on GSE6136](https://github.com/xyang2uchicago/BioTIP_application#example-with-bulk-rna-dataset-gse6136)) and single-cell (Nestorowa 2016, see [Experiment on Nestorowa](https://github.com/xyang2uchicago/BioTIP_application#example-with-single-cell-rna-dataset-bloodnet-nestorowa-2016)) datasets, and (2) the detailed workflow of BioTIP.
+2. [Vignette](https://bioconductor.org/packages/release/bioc/vignettes/BioTIP/inst/doc/BioTIP.html): This documented exampled case studies on bulk (GSE6136) and single-cell ([Nestorowa 2016](https://pubmed.ncbi.nlm.nih.gov/27365425/)) datasets.
 
 ### How to install?
 To use the newest BioTIP package, either clone/download this repository, or you can install BioTIP with:
