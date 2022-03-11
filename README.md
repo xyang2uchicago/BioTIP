@@ -9,6 +9,10 @@ BioTIP addresses and shows robust performances by addressing three analytical ch
 2. Multiple tipping points may coexist during an observed progression and multiple CTSs may coexist in the same critical transition state. 
 3. Under exposure to a stimulus, the same population of cells faces multiple trajectories.
 
+We applied BioTIP to six datasets and compared BioTIP's performance with other existing tools.
+
+
+
 ### Where to apply BioTIP?
 To adopt tipping-point theory to transcriptomic analysis, there are two commonly accepted premises:  
 
