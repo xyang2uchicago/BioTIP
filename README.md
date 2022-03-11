@@ -11,6 +11,7 @@ BioTIP addresses and shows robust performances by addressing three analytical ch
 
 We applied BioTIP to six datasets and compared BioTIP's performance with other existing tools.
 
+<img src="https://github.com/xyang2uchicago/BioTIP/blob/master/6db_for_git.jpg"> 
 
 
 ### Where to apply BioTIP?
