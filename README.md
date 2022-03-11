@@ -53,8 +53,5 @@ source('http://bioconductor.org/biocLite.R')
 biocLite("BioTIP")
 ```
 
-### Sample Experiment of BioTIP for Users
-BioTIP contains numerous functions as a tool in characterizing tipping points and identifying CTSs. We have written a [vignette](https://bioconductor.org/packages/release/bioc/vignettes/BioTIP/inst/doc/BioTIP.html) in order to illustrate how key functions should be used in BioTIP's pipeline. 
-
 ### Acknowledgements
 BioTIP is made possible by contributions from the following authors: Xinan H Yang, Zhezhen Wang, Andrew Goldstein, Yuxi Sun, Dannie Griggs, Antonio Feliciano, Yanqiu Wang, Biniam Feleke, Qier An, Ieva Tolkaciovaite, and John M Cunningham. 
