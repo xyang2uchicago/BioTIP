@@ -21,7 +21,9 @@ We have successfully applied BioTIP to identify temporal features of molecular-n
 
 ### How does BioTIP work? 
 
-Please refer to [BioTIP Applications](https://github.com/xyang2uchicago/BioTIP_application) for (1) exampled case studies on bulk or single-cell datasets, and (2) the detailed workflow of BioTIP.
+1. [BioTIP tutorial]: This is a detailed walkthrough of BioTIP on one of our key results (Mouse Gastrulation, GSE87038). 
+
+2. Vignette: Please refer to [BioTIP Applications](https://github.com/xyang2uchicago/BioTIP_application) for (1) exampled case studies on bulk or single-cell datasets, and (2) the detailed workflow of BioTIP.
 
 In particular, we exampled the following datasets:
 
