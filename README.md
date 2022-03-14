@@ -23,7 +23,7 @@ For each dataset, cell-type biomarkers or cluster identities are given by the or
 
 <img src="https://github.com/xyang2uchicago/BioTIP/blob/master/6db_for_git.jpg"> 
 
-BioTIP also demonstrated robustness with respect to different clustering methods. Details can be found [here](https://github.com/xyang2uchicago/BioTIP/blob/master/FigS1_robustness_xy_v3.jpg). 
+BioTIP also demonstrated robustness with respect to different clustering methods. Details can be found [here](https://github.com/xyang2uchicago/BioTIP/blob/master/robustness.md). 
 
 
 ### Where to apply BioTIP?
