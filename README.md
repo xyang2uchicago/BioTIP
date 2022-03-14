@@ -9,13 +9,21 @@ BioTIP addresses and shows robust performances by addressing three analytical ch
 2. Multiple tipping points may coexist during an observed progression and multiple CTSs may coexist in the same critical transition state. 
 3. Under exposure to a stimulus, the same population of cells faces multiple trajectories.
 
-We applied BioTIP to six datasets and compared BioTIP's performance with other existing tools.
+We applied BioTIP to six datasets and compared BioTIP's performance with other existing tools. The six datasets are as following:
+
+1. Dataset 1 consists of 96 selected genes in 929 human embryonic stem cells (hESCs) of predefined 9 clusters ([Bargaje et al., 2017](https://pubmed.ncbi.nlm.nih.gov/28167799/)). 
+2. Dataset 2 consists of 10.3k genes in 131 mouse lung alveolar type (AT2) development, collected at four time points ([Treutlein et al., 2014](https://pubmed.ncbi.nlm.nih.gov/24739965/)). 
+3. Dataset 3 consists of 10.9k genes of 7,240 developing mesoderm cells collected at embryonic day (E) 8.25 when precursor cells of major organs have been formed ([Pijuan-Sala et al., 2019](https://pubmed.ncbi.nlm.nih.gov/30787436/)). 
+4. Dataset 4 contained 12.7k genes in 11k E8.25 cells, with 16 predefined developing mesoderm subtypes ([Ibarra-Soria et al., 2018](https://www.nature.com/articles/s41556-017-0013-z)). 
+5. Dataset 5 contained 15.2k genes of 1,531 mesoderm cells of embryoid bodies (EB), describing how hemangiogenic (HA) and smooth muscle lineages are specified from FLK1-expressing (FLK1+) mesoderm ([Zhao and Choi, 2019](https://pubmed.ncbi.nlm.nih.gov/31740535/)). 
+6. Dataset 6 is an epithelial-to-mesenchymal transition (EMT) data simulated from an established 18-gene regulatory network of 5,363 cells consisting of four stable states and between-state transition cells ([Sha et al., 2020](https://academic.oup.com/nar/article/48/17/9505/5900115)). 
+
+For each dataset, cell-type biomarkers or cluster identities are given by the original publications. The scRNA-seq data quality control (e.g., removing triplicate cell and mitochondria gene), normalize distinct sequencing depths, general feature selections, and cell cluster are performed following the corresponding manuscripts and described in S Methods.
+
 
 <img src="https://github.com/xyang2uchicago/BioTIP/blob/master/6db_for_git.jpg"> 
 
-BioTIP also demonstrated robustness with respect to different clustering methods, as shown in the figure below. 
-
-<img src="https://github.com/xyang2uchicago/BioTIP/blob/master/FigS1_robustness_xy_v3.jpg"> 
+BioTIP also demonstrated robustness with respect to different clustering methods. Details can be found [here](https://github.com/xyang2uchicago/BioTIP/blob/master/FigS1_robustness_xy_v3.jpg). 
 
 
 ### Where to apply BioTIP?
