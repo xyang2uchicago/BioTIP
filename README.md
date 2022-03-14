@@ -17,7 +17,7 @@ BioTIP addresses and shows robust performances by addressing three analytical ch
 2. Multiple tipping points may coexist during an observed progression and multiple CTSs may coexist in the same critical transition state. BioTIP can detect multiple tipping points and CTSs. 
 3. Under exposure to a stimulus, the same population of cells faces multiple trajectories. BioTIP has robust performance for different trajectory inference methods. 
 
-We applied BioTIP to six datasets and compared BioTIP's performance with other existing tools. The six datasets are as following:
+We applied BioTIP to six datasets and compared BioTIP's performance with other existing tools (see [code](https://github.com/xyang2uchicago/BioTIP/blob/master/code)). The six datasets are as following:
 
 1. Dataset 1 consists of 96 selected genes in 929 human embryonic stem cells (hESCs) of predefined 9 clusters ([Bargaje et al., 2017](https://pubmed.ncbi.nlm.nih.gov/28167799/)). 
 2. Dataset 2 consists of 10.3k genes in 131 mouse lung alveolar type (AT2) development, collected at four time points ([Treutlein et al., 2014](https://pubmed.ncbi.nlm.nih.gov/24739965/)). 
