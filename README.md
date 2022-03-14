@@ -2,12 +2,16 @@
 ### What is BioTIP?
 Abrupt and often irreversible changes (or tipping points) are decisive in the progression of biological processes. We, therefore, developed this R-package for the characterization of biological tipping points using gene expression profiles. BioTIP is the first toolset that amalgamates two computational impediments in multivariate expression-data analysis: (1) detection of tipping points accurately, and (2) identification of significant critical transition signals (CTSs). 
 
+The following figure outlines BioTIP pipeline. BioTIP does not on the traditional trajectory inference and differential expression analysis. 
+
+<img src="https://github.com/xyang2uchicago/BioTIP/blob/master/Fig1_BioTIP_github.jpg"> 
+
 ### Why BioTIP?
 BioTIP addresses and shows robust performances by addressing three analytical challenges of the existing tipping-point methods:
 
-1. The sizes of the statistical ensembles (e.g., cellular populations) vary considerably.
-2. Multiple tipping points may coexist during an observed progression and multiple CTSs may coexist in the same critical transition state. 
-3. Under exposure to a stimulus, the same population of cells faces multiple trajectories.
+1. The sizes of the statistical ensembles (e.g., cellular populations) vary considerably. BioTIP provides Ic.shrink score (an improved version on Ic score) to address the bias towards differently sized populations.
+2. Multiple tipping points may coexist during an observed progression and multiple CTSs may coexist in the same critical transition state. BioTIP can detect multiple tipping points and CTSs. 
+3. Under exposure to a stimulus, the same population of cells faces multiple trajectories. BioTIP has robust performance for different trajectory inference methods. 
 
 We applied BioTIP to six datasets and compared BioTIP's performance with other existing tools. The six datasets are as following:
 
