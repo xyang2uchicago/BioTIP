@@ -1,6 +1,6 @@
 # Robustness of BioTIP
 
-<img src="https://github.com/xyang2uchicago/BioTIP/blob/master/FigS1_robustness_xy_v3.jpg"> 
+<img src="https://github.com/xyang2uchicago/BioTIP/blob/master/results/FigS1_robustness_xy_v3.jpg"> 
 
 **Figure S 1. Robustness of BioTIP, related to Figures 2, 3, 5, S7d, S13, S14**
 a, Results of the hESC data running on different clustering methods and variable key parameters (y-labels). Listed in parathesis is the defined number of cell clusters. Red start indicates the published clusters for this dataset, based on which the BioTIP predictions serve as the gold standard (GS).   Left: Green bars showing the Jaccard scores quantifying a CT detection against the GS – the established CT at primitive streak (PS) and the repeatedly detected CT at cardiac progenitor (CP) (by three tools -- BioTIP, MuTrans, and QuanTC). Green squares checks when a prediction includes a transition state. Blue bars show the normalized F1 scores indicating each CT state, respectively. Red squares check if a CTS contains a previously evaluated transition markers at day 2.5 (around the PS state), respectively for each run.  Right: ROC plot comparing five clustering methods (with optimal parameters) that detected both established markers as CTS members at PS, using nine consistently identified CTS member genes as a proxy gold standard (PGS). AUC scores are given in paratheses.
