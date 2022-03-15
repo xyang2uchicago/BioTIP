@@ -65,16 +65,6 @@ The \code{optimize.sd_selection} filters a multi-state dataset
 based on a cutoff value for standard deviation per state and optimizes.
 By default, a cutoff value of 0.01 is used. Suggested if each state contains more than 10 samples.
 }
-\examples{
-
-counts = matrix(sample(1:100, 30), 2, 30)
-colnames(counts) = 1:30
-row.names(counts) = paste0('loci', 1:2)
-cli = cbind(1:30, rep(c('state1', 'state2', 'state3'), each = 10))
-colnames(cli) = c('samples', 'group')
-samplesL <- split(cli[, 1], f = cli[, 'group'])
-test_sd_selection <- optimize.sd_selection(counts,  samplesL,  B = 3,  cutoff =0.01)
-}
 \seealso{
 \code{\link{sd_selection}}
 }
