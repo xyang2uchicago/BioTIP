@@ -17,6 +17,6 @@ score, strand, frame and attribute}
 gencode
 }
 \description{
-
+A chr21 data from GENCODE GRCh37
 }
 \keyword{datasets}

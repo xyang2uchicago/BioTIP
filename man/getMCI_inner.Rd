@@ -37,9 +37,6 @@ A vector recording one MCI score per state.
 This function calculates random MCI score,  allowing an estimation
 of correlation matrix using the Schafer-Strimmer Method for the PCC_in component in the MCI score.
 }
-\examples{
-
-}
 \author{
 Zhezhen Wang \email{zhezhen@uchicago.edu}; Xinan H Yang \email{xyang2@uchicago.edu}
 }

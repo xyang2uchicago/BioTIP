@@ -36,6 +36,8 @@
 
 #' @import utils
 #' @import MASS
+#' @import SingleCellExperiment
+#' @import monocle3
 
 #' @title Assigning Transcript Biotypes
 #'
@@ -442,7 +444,7 @@ optimize.sd_selection = function(df,  samplesL,  B = 100,  percent = 0.8,
                                  method = c('other', 'reference', 'previous', 'itself', 'longitudinal reference'), 
                                  control_df = NULL, control_samplesL = NULL)
 {
-  require(utils) 
+#  require(utils) 
    
   method = match.arg(method)
   if(is.null(names(samplesL))) stop('please provide name to samplesL')
@@ -2783,13 +2785,13 @@ BioTIP.wrap <- function(sce, samplesL, subDir = 'newrun',
                         permutation.method=c('gene','both','sample'),
                         verbose=FALSE, plot=TRUE )
 {
-  require(SingleCellExperiment)
+#  require(SingleCellExperiment)
   if(!'logcounts' %in% assayNames(sce) & !'counts' %in% assayNames(sce)) stop("no 'counts' nor logcounts' in names(assays(sce))")
   if(! permutation.method %in% c('gene','both','sample')) {
     permutation.method='gene'
     warning('No permutation.method found for Ic signicance, gene permutation is performed')
   }
-  require(ggplot2)
+#  require(ggplot2)
   
   mainDir = getwd()
   if (!file.exists(subDir)){
@@ -2873,7 +2875,7 @@ BioTIP.wrap <- function(sce, samplesL, subDir = 'newrun',
   
   #logcounts normalized by library size
   if(grepl("cell_data_set", class(dat))) {
-    require(monocle3)
+#    require(monocle3)
     logmat <- as.matrix(normalized_counts(dat))
   } else if((grepl("SingleCellExperiment", class(dat)))) logmat <- as.matrix(logcounts(dat))
   

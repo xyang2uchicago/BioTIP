@@ -64,9 +64,6 @@ getIc.new(X, method = "BioTIP", output ='PCCg') # 0.8287838
 (oldscore = getIc.new(X, method = "Ic"))
 
 }
-\references{
-
-}
 \author{
 Andrew Goldstein \email{andrewgoldstein@uchicago.edu}
 }

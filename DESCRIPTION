@@ -27,5 +27,5 @@ Imports:
     psych,
     stringr,
     GenomicRanges,
-    Hmisc,
-    MASS
+    MASS, 
+    scran
