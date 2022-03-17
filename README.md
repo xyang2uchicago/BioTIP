@@ -17,6 +17,8 @@ BioTIP addresses and shows robust performances by addressing three analytical ch
 2. Multiple tipping points may coexist during an observed progression and multiple CTSs may coexist in the same critical transition state. BioTIP can detect multiple tipping points and CTSs. 
 3. Under exposure to a stimulus, the same population of cells faces multiple trajectories. BioTIP has robust performance for different trajectory inference methods. 
 
+#### 6 Case Studies
+
 We applied BioTIP to six datasets and compared BioTIP's performance with other existing tools (see [code](https://github.com/xyang2uchicago/BioTIP/blob/master/code)). The six datasets are as following:
 
 1. Dataset 1 consists of 96 selected genes in 929 human embryonic stem cells (hESCs) of predefined 9 clusters ([Bargaje et al., 2017](https://pubmed.ncbi.nlm.nih.gov/28167799/)). 
@@ -28,8 +30,11 @@ We applied BioTIP to six datasets and compared BioTIP's performance with other e
 
 For each dataset, cell-type biomarkers or cluster identities are given by the original publications. The scRNA-seq data quality control (e.g., removing triplicate cell and mitochondria gene), normalize distinct sequencing depths, general feature selections, and cell cluster are performed following the corresponding manuscripts and described in S Methods.
 
+#### Method Comparison
 
 <img src="https://github.com/xyang2uchicago/BioTIP/blob/master/results/6db_for_git.jpg"> 
+
+#### Robustness
 
 BioTIP also demonstrated robustness with respect to different clustering methods. Details can be found [here](https://github.com/xyang2uchicago/BioTIP/blob/master/results/robustness.md). 
 
