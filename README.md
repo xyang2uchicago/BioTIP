@@ -36,6 +36,8 @@ For each dataset, cell-type biomarkers or cluster identities are given by the or
 
 #### Robustness
 
+Cell clustering is a prerequisite for CTS identification with BioTIP. While different cell cluster numbers may affect BioTIP's prediction, a reasonable clustering method (with reasonably chosen parameters) will not have a major impact on the CTSs identified. BioTIP is designed for the case where the transition state can be identified as a cell cluster, and therefore soft clustering is not always applicable. 
+
 BioTIP also demonstrated robustness with respect to different clustering methods. Details can be found [here](https://github.com/xyang2uchicago/BioTIP/blob/master/results/robustness.md). 
 
 
