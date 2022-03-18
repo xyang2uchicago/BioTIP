@@ -35,9 +35,6 @@ Default is 0,  meaning labels are parallel.
 \item{main}{A character vector. The title of the plot. Default is NULL.}
 
 \item{ylab}{titles y axes, as in plot.}
-
-\item{which2point}{A character (or integer) which state's values were used to set up the three horizontal lines.
-by default is NULL, indicating the values of all states will be used.}
 }
 \value{
 Return a plot of the observed Ic (red) and simulated Ic (grey) scores per state.
