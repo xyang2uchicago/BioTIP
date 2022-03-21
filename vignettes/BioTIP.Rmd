@@ -589,7 +589,7 @@ all(names(CTS) == names(maxMCI))
 We provided the detail step for calculating the M matrix and plotting MCI simulation but skipped the calculation of M matrix for size and run time concerns. The result of the simulation is described in the plot below:
 
 ```{r, echo=FALSE, fig.align='center', out.width = '60%'}
-knitr::include_graphics("MCI_Sim_M.jpg")
+knitr::include_graphics("DNB_Sim_M.jpg")
 ```
 
 ```{r, results=FALSE}

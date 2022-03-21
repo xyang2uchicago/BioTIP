@@ -785,7 +785,7 @@ plotBar_MCI = function(MCIl, ylim = NULL, nr = 1, nc = NULL,
                   #legend = paste0('#', names(m), ' = ', sapply(m, nrow)), 
                   #main = paste0(i, ' (n = ',  max(m), ')'),  
                   main = '',  ## update 08/28/2020
-                  ylab = 'MCI', 
+                  ylab = 'DNB score', 
                   xlab = 'modules', #args.legend = list(cex = cex)
                   ylim = ylim, 
                   cex.axis = 1.5,  
@@ -1111,7 +1111,7 @@ plotMaxMCI = function(maxMCIms,  MCIl,  las = 0,  order = NULL,  states = NULL)
     CI[is.na(CI)] = 0
     ln = names(CI) = states
   }
-  matplot(CI, type = 'l', ylab = 'MCI(m|r)', axes = FALSE)
+  matplot(CI, type = 'l', ylab = 'DNB score', axes = FALSE)
   len = sapply(ln, function(x) length(maxMCIms[[2]][[x]]))
   len[is.na(len)] = 0
   names(len) = ln
