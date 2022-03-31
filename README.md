@@ -28,7 +28,7 @@ We applied BioTIP to six datasets and compared BioTIP's performance with other e
 5. Dataset 5 contained 15.2k genes of 1,531 mesoderm cells of embryoid bodies (EB), describing how hemangiogenic (HA) and smooth muscle lineages are specified from FLK1-expressing (FLK1+) mesoderm ([Zhao and Choi, 2019](https://pubmed.ncbi.nlm.nih.gov/31740535/)). 
 6. Dataset 6 is an epithelial-to-mesenchymal transition (EMT) data simulated from an established 18-gene regulatory network of 5,363 cells consisting of four stable states and between-state transition cells ([Sha et al., 2020](https://academic.oup.com/nar/article/48/17/9505/5900115)). 
 
-For each dataset, cell-type biomarkers or cluster identities are given by the original publications. The scRNA-seq data quality control (e.g., removing triplicate cell and mitochondria gene), normalize distinct sequencing depths, general feature selections, and cell cluster are performed following the corresponding manuscripts and described in S Methods.
+For each dataset, cell-type biomarkers or cluster identities are given by the original publications. The scRNA-seq data quality control (e.g., removing triplicate cell and mitochondria gene), normalize distinct sequencing depths, general feature selections, and cell cluster are performed following the corresponding manuscripts.
 
 #### Method Comparison
 
