@@ -133,7 +133,9 @@ F1.norm
 ## extract the DNB's F1 scores --------------------------
 # for which db3 (E8.25 2019), db5 (EB) data can not detect the cluster of interest with the highest DNB score
 F1.norm <- rbind(F1.norm, 'DNB'=rep(0, ncol(F1.norm)))
-F1.norm['DNB', 'E8.25_2018'] <- 1 ## we used the C5_33g as gold standard
+#F1.norm['DNB', 'E8.25_2018'] <- 1 ## we used the C5_33g as gold standard
+F1.norm['DNB', 'E8.25_2018'] <- F1.norm['BioTIP', 'E8.25_2018'] ## we used the C5_33g as gold standard
+
 
 DNB.subfold.ID <-c(1,2,6)
 cluster.to.calculate.F1[DNB.subfold.ID] <- c('Norm.F1.PS.DNB', 'Norm.F1.DNB','Norm.F1.TC')

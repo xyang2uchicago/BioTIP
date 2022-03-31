@@ -19,7 +19,7 @@ BioTIP addresses and shows robust performances by addressing three analytical ch
 
 #### 6 Case Studies
 
-We applied BioTIP to six datasets and compared BioTIP's performance with other existing tools (see [example](https://github.com/xyang2uchicago/BioTIP/blob/master/example)). The six datasets are as following:
+We applied BioTIP to six datasets and compared BioTIP's performance with other existing tools (see [examples](https://github.com/xyang2uchicago/BioTIP/blob/master/examples)). The six datasets are as following:
 
 1. Dataset 1 consists of 96 selected genes in 929 human embryonic stem cells (hESCs) of predefined 9 clusters ([Bargaje et al., 2017](https://pubmed.ncbi.nlm.nih.gov/28167799/)). 
 2. Dataset 2 consists of 10.3k genes in 131 mouse lung alveolar type (AT2) development, collected at four time points ([Treutlein et al., 2014](https://pubmed.ncbi.nlm.nih.gov/24739965/)). 
