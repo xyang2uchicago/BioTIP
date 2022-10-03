@@ -3191,8 +3191,8 @@ BioTIP.wrap <- function(sce, samplesL, subDir = 'newrun',
         for(i in 1:n){
           if (IC.rank==1) x2[i] = ifelse(names(which.max(BioTIP_scores[[i]])) == names(BioTIP_scores)[i],
                                          TRUE, FALSE) else{
-                                           n <- length(BioTIP_scores[[i]])
-                                           which.high <- rank(BioTIP_scores[[i]])[n:(n-IC.rank+1)] 
+                                           n2 <- length(BioTIP_scores[[i]])
+                                           which.high <- rank(BioTIP_scores[[i]])[n2:(n2-IC.rank+1)] 
                                            x2[i][which.high] <- TRUE
                                          }
         }
