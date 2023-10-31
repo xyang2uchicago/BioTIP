@@ -73,7 +73,6 @@ Start by installing the package 'BioTIP' and other dependent packages such as st
 library(BioTIP)
 library(cluster)
 library(GenomicRanges)
-# library(Hmisc)
 library(MASS)
 require(stringr)
 require(psych)
