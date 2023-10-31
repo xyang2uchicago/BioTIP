@@ -1,1 +1,0 @@
-Vignette can be viewed [here](https://bioconductor.org/packages/release/bioc/vignettes/BioTIP/inst/doc/BioTIP.html). 
