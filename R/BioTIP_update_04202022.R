@@ -2554,7 +2554,8 @@ cor.shrink = function(X,  Y = NULL,  MARGIN = c(1,  2),  shrink = TRUE,
 plot_SS_Simulation <- function(Ic,  simulation,  las = 0,  
                                xlim = NULL,  ylim = NULL,  order = NULL,  
                                main = "1st max - 2nd max",     
-                               ylab = "Density")
+                               ylab = "Density",
+                               na.rm = TRUE)
 {
   if (any(is.null(names(Ic)))) 
     stop("Please provide name for vector \"Ic\" ")
@@ -2579,7 +2580,7 @@ plot_SS_Simulation <- function(Ic,  simulation,  las = 0,
   diff_Ic <- apply(simulation,  MARGIN = 2,   
                    function(x) sort(x,  decreasing = TRUE)[2:1])
   diff_Ic <- apply(diff_Ic,  MARGIN = 2,  diff)
-  density_diff = density(diff_Ic)  # # Kernel Density
+  density_diff = density(diff_Ic, na.rm=na.rm)  # # Kernel Density
   if(is.null(ylim))  # correct 09/29/2020
     ylim = c(0,  .1 + max(density_diff$y))
   if(is.null(xlim)) {  # correct 09/29/2020
