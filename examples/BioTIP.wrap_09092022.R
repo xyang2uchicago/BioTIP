@@ -528,7 +528,7 @@ BioTIP.wrap <- function(sce, samplesL, subDir = 'newrun',
         cat('All CTS.candidate are insignificant in DMB model')
       }
       
-      if(!is.null(getTopMCI.gene.maxsiz)) {
+      if(!is.null(getTopMCI.gene.maxsize)) {
         x <- lengths(CTS.candidate)
         dropoff <- which(x> getTopMCI.gene.maxsize)
         if(length(dropoff)>0){
