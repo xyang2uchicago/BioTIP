@@ -1,5 +1,5 @@
 
-myplotIc <- function(filename,BioTIP_scores, CTS.candidate,SimResults_g ,
+myplotIc <- function(filename,BioTIP_scores, CTS.candidate,SimResults_g , p.IC,
                      width=10, height=6, local.IC.p = TRUE, nn=NULL){
   require(BioTIP)
   
