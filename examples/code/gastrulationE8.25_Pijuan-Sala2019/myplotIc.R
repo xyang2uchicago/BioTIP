@@ -10,7 +10,7 @@ myplotIc <- function(filename,BioTIP_scores, CTS.candidate, SimResults_g , p.IC,
   if(all(names(p.IC) %in% names(CTS.candidate))) names(p.IC) = names(CTS.candidate) else print('names(p.IC) != names(CTS.candidate)')
     
   ## reformate the names of MCI to be within the original names of cell clsuters for visualization ; added by xyang2
-  if(grepl('.', names(BioTIP_scores), fixed=TRUE){
+  if(grepl('.', names(BioTIP_scores), fixed=TRUE)){
     names(BioTIP_scores) = lapply(names(BioTIP_scores), function(x) unlist(strsplit(x, split='.', fixed=T))[1]) %>% unlist
 	  names(CTS.candidate) = lapply(names(CTS.candidate), function(x) unlist(strsplit(x, split='.', fixed=T))[1]) %>% unlist
 	  names(SimResults_g) = lapply(names(SimResults_g), function(x) unlist(strsplit(x, split='.', fixed=T))[1]) %>% unlist
