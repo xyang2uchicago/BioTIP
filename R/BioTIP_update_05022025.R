@@ -3,6 +3,15 @@
 ## Email: zhezhen@uchicago.edu;andrewgoldstein@uchicago.edu; ysun11@uchicago.edu; xyang2@uchicago.edu
 ## Last update:  04/20/2022
 ## Acknowledgement: National Institutes of Health  R21LM012619 
+## 5/2/2025  updating the the function optimize.sd_selection() by moving the 'pre-calcualte the SD Calculation across sampels outside each cluster' step 
+## outside the iteration loop. 
+## 5/2/2025 updating the simulationb_IC function to allowing parallel computing. with two new parameters 'n_cores' and 'doParallel'. 
+#' @param doParallel Default is TRUE  
+## 2/24/2025  For the plotIcSignificance(), return an empirical P value and a plot of the observed Delta (of the 1st highest and 2nd highest) Ic score
+## 2/6/2025  add the parameter SimMCI.figWidth to the demon code to solve the error of 'figure margins too large' for plot_MCI_Simulation()
+## 2/3/2025  enable parallel running for loop calling the function optimize.sd_selection(); tus requiring 2 new dependent packages: foreachdo, Parallel. 
+## 12/24/2024 rename the function myplotIc() to be 	plotIcSignificance() and add the parameters p.IC, local.IC.p = TRUE, fixedylim=FALSE)
+## 12/9/2024 initiate the pd object for optimize.sd_selection()
 ## 1/15/2022 update optimize.sd_selection() to track system running progress with the packae utils, suppress the warnning in the function getMCI() by Holly Yang
 ## 1/04/2021 updated getIc:  allowing NA values in the countC matrix to be calculated for PCCs
 ## 12/02/2020 updated the following:
@@ -23,10 +32,10 @@
 ## 10/05/2020 Update optimize.sd_selection() 
 ## 9/29/2020 Updates are the following: 
 ## Fix bugs in the function cor.shrink() to shrink PCC_s (towards average by modifying the theory of the the Schafer-Strimmer method) 
-## plot_SS_Simulation() allows the parameer xlim 
+## plot_SS_Simulation() allows the parameter xlim 
 ## 8/28/2020 Updates are the following: 
 ## Clean the bugs when calling optimize.sd_selection() with parameters method = 'previous',method = 'reference' or cuttoff = 1
-## Customalize the font size of title in the function plotBar_MCI() 
+## Customized the font size of title in the function plotBar_MCI() 
 ## 06/19/2020 Updates are the following: 
 ## Add the parameter for the function getMaxMCImember() 
 ## Add new functions to estimate pairwise-correlation matric which is the key statistics for tipping-point identificaion. 
@@ -429,6 +438,11 @@ sd_selection = function(df,  samplesL,  cutoff = 0.01,
 #' 
 #' @param control_samplesL A list of characters with stages as names of control
 #'   samples,  required for method 'longitudinal reference'.
+#'
+#' @param n_cores An integer setting the --cpus-per-task. Default is 3, 
+#'	 ignored if turning off the parameter doParallel. 
+#'   
+#' @param doParallel Default is TRUE 
 #'   
 #' @return A list of dataframe of filtered transcripts with the highest standard
 #'   deviation are selected from \code{df} based on a cutoff value assigned. The
@@ -437,123 +451,232 @@ sd_selection = function(df,  samplesL,  cutoff = 0.01,
 #' @export
 #' @seealso \code{\link{sd_selection}}
 #' 
-#' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}
+#' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}; Xinan Yang {xyang2@uchicago.edu}
 
-optimize.sd_selection = function(df,  samplesL,  B = 100,  percent = 0.8,  
-                                 times = 0.8, cutoff = 0.01, 
-                                 method = c('other', 'reference', 'previous', 'itself', 'longitudinal reference'), 
-                                 control_df = NULL, control_samplesL = NULL)
-{
-#  require(utils) 
-   
-  method = match.arg(method)
-  if(is.null(names(samplesL))) stop('please provide name to samplesL')
-  if(any(!do.call(c, lapply(samplesL, as.character)) %in% colnames(df))) 
-    stop('please check if all sample names provided in "samplesL" are in colnames of "df"')
-  if(any(lengths(samplesL)<2)) stop('please make sure there are at least one sample in every state')
-  N.random = lapply(seq_along(samplesL),  function(x) matrix(0,  nrow = nrow(df), ncol = B))
-  for(i in seq_along(N.random)){
-    row.names(N.random[[i]]) = row.names(df)
-  }
-  
-  N = lengths(samplesL)
-  k = round(N*percent)
-  #   X <- nrow(counts)*top
-  #  Y <- sapply(lociL, nrow)
-  
-  for(i in c(1:B)) {
-    #Sys.sleep(0.5); 
-    setTxtProgressBar(pb, i)
+optimize.sd_selection =  function (df, samplesL, B = 100, percent = 0.8, times = 0.8, 
+    cutoff = 0.01, method = c("other", "reference", "previous", 
+        "itself", "longitudinal reference"), control_df = NULL, 
+    control_samplesL = NULL, n_cores=3, doParallel=TRUE) 
+{	
+	# Parallel Setup
+	library(foreach)
+	library(doParallel)
+	if (n_cores>0 & doParallel == TRUE)  {
+		n_cores_avail <- detectCores()
+		if(n_cores > n_cores_avail-1 ) n_cores = n_cores_avail-1 
+        cat('nCore: ', n_cores,'\n')
+	}
+	
+	# Sample Validation
+	method = match.arg(method)
+    if (is.null(names(samplesL))) 
+        stop("please provide name to samplesL")
+    if (any(!do.call(c, lapply(samplesL, as.character)) %in% 
+        colnames(df))) 
+        stop("please check if all sample names provided in \"samplesL\" are in colnames of \"df\"")
+    if (any(lengths(samplesL) < 2)) 
+        stop("please make sure there are at least one sample in every state")
     
-    random_sample_id = lapply(seq_along(k), 
-                              function(x) sample(1:N[[x]], k[[x]]))  # replace = FALSE by default
-    names(random_sample_id) = names(samplesL)
-    selected_matrix = lapply(names(samplesL),  
-                             function(x) df[, samplesL[[x]][random_sample_id[[x]]]])  ## update 10/05/2020
-    test2 = sapply(selected_matrix,  
-                   function(x) apply(x, 1, sd, na.rm = TRUE)) # a matrix of gene_sd in row and class in column
-    tmp = names(samplesL)
-    colnames(test2) = tmp
-    
-    if(method ==  'reference'){
-      #ref = selected_counts[[1]]
-      #sdref = apply(ref, 1, sd, na.rm = TRUE)
-      sdref = test2[,1]  ## simplified on 8/28/2020
-      #sds = lapply(tmp, function(x) test2[, x]/sdref[, x])
-      sds = sapply(tmp, function(x) test2[, x]/sdref) ## correct on 8/28/2020
-      names(sds) = tmp
-      
-    }else if(method ==  'other'){
-      samplesL = lapply(samplesL, as.character)
-      othersample = lapply(seq_along(tmp),  
-                           function(x) do.call(c, samplesL[-x]))
-      names(othersample) = tmp
-      selecteddf = do.call(cbind, selected_matrix)
-      #selecteds = lapply(tmp,  function(x) othersample[[x]][othersample[[x]] %in% colnames(selecteddf)])
-      sdother = sapply(tmp,  
-                       function(x) apply(df[, othersample[[x]]],  1,  
-                                         function(y) sd(y, na.rm = TRUE)))
-      
-      sds = lapply(tmp, function(x) test2[, x]/sdother[, x])
-      names(sds) = tmp
-      
-    }else if(method ==  'previous'){
-      cat('Using method "previous",  make sure sampleL is in the right order')
-      sds = lapply(2:ncol(test2), function(x) test2[, x]/test2[, x-1])
-      tmp <- tmp[-1]  ## corrected 08/28/2020 
-      names(sds) = tmp  
-      
-    }else if(method ==  'itself'){
-      if(cutoff>1) stop('Using method "itself",  cutoff must be smaller or equal to 1')
-      sds = lapply(tmp, function(x) test2[, x])
-      names(sds) = tmp
-      
-    }else if(method ==  'longitudinal reference'){
-      if(is.null(control_df) | is.null(control_samplesL))
-        stop('Using method "longitudinal reference",  
-             make sure "control_df" and "sampleL" are assigned')
-      if(nrow(df) != nrow(control_df) | !all(row.names(df) %in% row.names(control_df)))
-        stop('please make sure the row numbers of "control_df" 
-             is the same as "df" and all transcripts in "df" are also in "control_df".')
-      control = sapply(tmp,  function(x) 
-        apply(control_df[, as.character(control_samplesL[[x]])], 1, sd, na.rm = TRUE))
-      sds = lapply(tmp, function(x) test2[, x]/control[, x])
-      names(sds) = tmp
-      
-    }else{
-      stop("method need to be selected from 'reference', 
-           'other', 'previous', 'itself', 'longitudinal reference'")
+	# Random Selection of Samples
+	# N.random is a list of  matrix of 0/1 recording if a gene (row) is been selected in the y(column)-th iteration
+	N.random = lapply(seq_along(samplesL), function(x) matrix(0, 
+        nrow = nrow(df), ncol = B))
+    for (i in seq_along(N.random)) {
+        row.names(N.random[[i]]) = row.names(df)
     }
-    
-    if(cutoff<= 1){
-      topdf = nrow(selected_matrix[[1]])*cutoff  # each selected_counts[[i]] has the same rownames as the input df
-      ## topdf = nrow(selected_matrix[[i]])*cutoff  # error-causing when (i in 1:B) larger than the lengths of samplesL
-      sdtop = lapply(tmp,  
-                     function(x) names(sds[[x]][order(sds[[x]], decreasing = TRUE)[1:topdf]]))
-    }else{
-      sdtop = lapply(tmp,  function(x) names(sds[[x]][sds[[x]]>cutoff]))
-    }
-    
-    # cat(i, '\t')
-    names(sdtop) = tmp
-    names(N.random) = tmp
-    for(j in tmp){
-      N.random[[j]][sdtop[[j]], i] = 1 # mark the selection
-    }
-  }
-  Sys.sleep(0.01)
-  close(pb)
-                     
-  times = times*B
-  stable = lapply(N.random, function(x) row.names(x[rowSums(x)>times, ]))
-  names(stable) = tmp
-  subdf = lapply(tmp, function(x) df[, as.character(samplesL[[x]])])
-  names(subdf) = tmp
-  subm = lapply(names(subdf),  
-                function(x) subset(subdf[[x]], row.names(subdf[[x]]) %in% stable[[x]]))
-  names(subm) = tmp
-  
-  return(subm)
+    N = lengths(samplesL)
+    k = round(N * percent)
+	clusterID = names(samplesL)
+	names(N.random) = clusterID
+
+	if(method ==  'other') {
+	# pre-calcualte the SD Calculation across sampels outside each cluster, this step just nees to be run once !!
+		samplesL = lapply(samplesL, as.character)
+		othersample = lapply(seq_along(clusterID),  
+							   function(x) do.call(c, samplesL[-x]))
+		names(othersample) = clusterID
+		# sdotehr is a matrix of sd calcualted for nrow(df) genes (in row) and length(clusterID) (in columns) but acorss genes outside the named clusterID
+		sdother = sapply(clusterID,  
+						   function(x) apply(df[, othersample[[x]]],  1,  
+										 function(y) sd(y, na.rm = TRUE)))
+	}
+	
+	if(!doParallel){
+		pb <- txtProgressBar(min = 0, max = 100, style = 3)
+		for(i in c(1:B)) {
+			#Sys.sleep(0.5); 
+			setTxtProgressBar(pb, i)
+			# SD Calculation for across the randomly selected sampels within each cluster
+			random_sample_id = lapply(seq_along(k), 
+									  function(x) sample(1:N[[x]], k[[x]]))  # replace = FALSE by default
+			names(random_sample_id) = names(samplesL)
+			selected_matrix = lapply(names(samplesL),  
+									 function(x) df[, samplesL[[x]][random_sample_id[[x]]]])  ## update 10/05/2020
+			test2 = sapply(selected_matrix,  
+						   function(x) apply(x, 1, sd, na.rm = TRUE)) # a matrix of gene_sd in row and class in column
+			clusterID = names(samplesL)
+			colnames(test2) = clusterID
+			
+			if(method ==  'reference'){
+			  #ref = selected_counts[[1]]
+			  #sdref = apply(ref, 1, sd, na.rm = TRUE)
+			  sdref = test2[,1]  ## simplified on 8/28/2020
+			  #sds = lapply(clusterID, function(x) test2[, x]/sdref[, x])
+			  sds = sapply(clusterID, function(x) test2[, x]/sdref) ## correct on 8/28/2020
+			  names(sds) = clusterID
+			  
+			}else if(method ==  'other'){		  
+			  sds = lapply(clusterID, function(x) test2[, x]/sdother[, x])
+			  names(sds) = clusterID
+			  
+			}else if(method ==  'previous'){
+			  cat('Using method "previous",  make sure sampleL is in the right order')
+			  sds = lapply(2:ncol(test2), function(x) test2[, x]/test2[, x-1])
+			  clusterID <- clusterID[-1]  ## corrected 08/28/2020 
+			  names(sds) = clusterID  
+			  
+			}else if(method ==  'itself'){
+			  if(cutoff>1) stop('Using method "itself",  cutoff must be smaller or equal to 1')
+			  sds = lapply(clusterID, function(x) test2[, x])
+			  names(sds) = clusterID
+			  
+			}else if(method ==  'longitudinal reference'){
+			  if(is.null(control_df) | is.null(control_samplesL))
+				stop('Using method "longitudinal reference",  
+					 make sure "control_df" and "sampleL" are assigned')
+			  if(nrow(df) != nrow(control_df) | !all(row.names(df) %in% row.names(control_df)))
+				stop('please make sure the row numbers of "control_df" 
+					 is the same as "df" and all transcripts in "df" are also in "control_df".')
+			  control = sapply(clusterID,  function(x) 
+				apply(control_df[, as.character(control_samplesL[[x]])], 1, sd, na.rm = TRUE))
+			  sds = lapply(clusterID, function(x) test2[, x]/control[, x])
+			  names(sds) = clusterID
+			  
+			}else{
+			  stop("method need to be selected from 'reference', 
+				   'other', 'previous', 'itself', 'longitudinal reference'")
+			}
+			
+			if(cutoff<= 1){
+			  topdf = nrow(selected_matrix[[1]])*cutoff  # each selected_counts[[i]] has the same rownames as the input df
+			  ## topdf = nrow(selected_matrix[[i]])*cutoff  # error-causing when (i in 1:B) larger than the lengths of samplesL
+			  sdtop = lapply(clusterID,  
+							 function(x) names(sds[[x]][order(sds[[x]], decreasing = TRUE)[1:topdf]]))
+			}else{
+			  sdtop = lapply(clusterID,  function(x) names(sds[[x]][sds[[x]]>cutoff]))
+			}
+			
+			# cat(i, '\t')
+			names(sdtop) = clusterID
+			names(N.random) = clusterID
+			for(j in clusterID){
+			  N.random[[j]][sdtop[[j]], i] = 1 # mark the selection
+			}
+		  }  # for(i in c(1:B))
+		  Sys.sleep(0.01)
+		  close(pb)
+	} # if(!doParallel)
+	
+	if(doParallel){
+		# Register cluster
+		cluster <- makeCluster(n_cores)
+		registerDoParallel(cluster)
+
+		# How many times will the loop run
+		n_iterations <- B
+		# To save the results
+		sdtop_results <- list()
+		
+		# Use foreach and %dopar% to run the loop in parallel
+		sdtop_results <- foreach(i = 1:n_iterations) %dopar% {
+			random_sample_id = lapply(seq_along(k), function(x) sample(1:N[[x]], 
+				k[[x]]))
+			names(random_sample_id) = names(samplesL)
+			selected_matrix = lapply(names(samplesL), function(x) df[, 
+				samplesL[[x]][random_sample_id[[x]]]])
+			test2 = sapply(selected_matrix, function(x) apply(x, 
+				1, sd, na.rm = TRUE))
+			colnames(test2) = clusterID
+			
+			if (method == "reference") {
+				sdref = test2[, 1]
+				sds = sapply(clusterID, function(x) test2[, x]/sdref)
+				names(sds) = clusterID
+			} else if (method == "other") {
+				# samplesL = lapply(samplesL, as.character)
+				# othersample = lapply(seq_along(clusterID), function(x) do.call(c, 
+					# samplesL[-x]))
+				# names(othersample) = clusterID
+				## selecteddf = do.call(cbind, selected_matrix)
+				# sdother = sapply(clusterID, function(x) apply(df[, othersample[[x]]], 
+					# 1, function(y) sd(y, na.rm = TRUE)))
+				sds = lapply(clusterID, function(x) test2[, x]/sdother[, 
+					x])
+				names(sds) = clusterID
+			} else if (method == "previous") {
+				cat("Using method \"previous\",  make sure sampleL is in the right order")
+				sds = lapply(2:ncol(test2), function(x) test2[, x]/test2[, 
+					x - 1])
+				clusterID <- clusterID[-1]
+				names(sds) = clusterID
+			} else if (method == "itself") {
+				if (cutoff > 1) 
+					stop("Using method \"itself\",  cutoff must be smaller or equal to 1")
+				sds = lapply(clusterID, function(x) test2[, x])
+				names(sds) = clusterID
+			} else if (method == "longitudinal reference") {
+				if (is.null(control_df) | is.null(control_samplesL)) 
+					stop("Using method \"longitudinal reference\",  \n             make sure \"control_df\" and \"sampleL\" are assigned")
+				if (nrow(df) != nrow(control_df) | !all(row.names(df) %in% 
+					row.names(control_df))) 
+					stop("please make sure the row numbers of \"control_df\" \n             is the same as \"df\" and all transcripts in \"df\" are also in \"control_df\".")
+				control = sapply(clusterID, function(x) apply(control_df[, 
+					as.character(control_samplesL[[x]])], 1, sd, 
+					na.rm = TRUE))
+				sds = lapply(clusterID, function(x) test2[, x]/control[, 
+					x])
+				names(sds) = clusterID
+			} else {
+				stop("method need to be selected from 'reference', \n           'other', 'previous', 'itself', 'longitudinal reference'")
+			}			 
+
+		if (cutoff <= 1) {
+			topdf = nrow(df) * cutoff
+			sdtop = lapply(clusterID, function(x) names(sds[[x]][order(sds[[x]], 
+				decreasing = TRUE)[1:topdf]]))
+		} else {
+			sdtop = lapply(clusterID, function(x) names(sds[[x]][sds[[x]] > 
+				cutoff]))
+		}		
+		names(sdtop) = clusterID
+
+		# Store the results 
+		sdtop_results[[i]] <- sdtop
+		}  # end of the loop in parallel
+		
+		# Don't fotget to stop the cluster
+		stopCluster(cl = cluster)
+	
+	
+		for(i in c(1:B)) {
+			sdtop = sdtop_results[[i]]
+			for (j in clusterID) {
+				N.random[[j]][sdtop[[j]], i] = 1
+			}
+		}
+	} # if(doParallel)
+	
+	
+    times = times * B
+    stable = lapply(N.random, function(x) row.names(x[rowSums(x) > 
+        times, ]))
+    names(stable) = clusterID
+    subdf = lapply(clusterID, function(x) df[, as.character(samplesL[[x]])])
+    names(subdf) = clusterID
+    subm = lapply(names(subdf), function(x) subset(subdf[[x]], 
+        row.names(subdf[[x]]) %in% stable[[x]]))
+    names(subm) = clusterID
+    return(subm)
 }
 
 
@@ -1585,9 +1708,15 @@ getIc <- function(counts,  sampleL,  genes,  output = c('Ic', 'PCCg', 'PCCs'),
 #' This must be (an abbreviation of) one of the strings "everything",  "all.obs",  
 #' "complete.obs",  "na.or.complete",  or "pairwise.complete.obs". 
 #' 
+#' @param n_cores An intergel setting the --cpus-per-task. Default is 3, 
+#'	 being ignored if turnnign off the parameter doParallel. 
+#'   
+#' @param doParallel Default is TRUE  
+#'
 #' @return A matrix of \code{y} rows and \code{B} columns where \code{y} 
 #' is the length of \code{sampleL} and \code{B} is self-defined. Each column is a set of Ic scores calculated for each state
 #'
+#' @author Xinan Holly Yang \email{xyang2@@uchicago.edu}
 #' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}
 #' @export
 #' 
@@ -1604,11 +1733,20 @@ simulation_Ic <- function(obs.x,  sampleL,  counts,  B = 1000,  fun = c("cor", "
                           shrink = TRUE, 
                           use = c("everything",  "all.obs",  "complete.obs",  "na.or.complete",  "pairwise.complete.obs"),
                           output = c('Ic', 'PCCg', 'PCCs'),
-                          PCC_sample.target = 1) ## 12/02/2020
+                          PCC_sample.target = 1,  ## 12/02/2020
+						  n_cores=3, doParallel=TRUE)
 {
   fun <- match.arg(fun)
   use <- match.arg(use)
   
+  library(foreach)
+  library(doParallel)
+  if (n_cores>0 & doParallel == TRUE)  {
+		n_cores_avail <- detectCores()
+		if(n_cores > n_cores_avail-1 ) n_cores = n_cores_avail-1 
+        cat('nCore: ', n_cores,'\n')
+	}
+	
   #PCC_sample.target = 'average'
   # begin ## 12/02/2020
   # PCC_sample.target = match.arg(PCC_sample.target)
@@ -1625,31 +1763,52 @@ simulation_Ic <- function(obs.x,  sampleL,  counts,  B = 1000,  fun = c("cor", "
   
   #  set.seed(2020)
   random = sapply(1:B,  function(x) sample(row.names(counts), obs.x))
-  
-  # create progress bar
-  pb <- txtProgressBar(min = 0,  max = B,  style = 3)
   m <- matrix(nrow = length(sampleL),  ncol = B)
-  for(i in 1:B)
-  {
-    setTxtProgressBar(pb,  i)
-    m[, i] <- getIc(counts, sampleL = sampleL, genes = random[, i], output = output,  ## updated 02/17/20
-                    fun = fun,  
-                    shrink = shrink, 
-                    use = use,
-                    PCC_sample.target = PCC_sample.target)
-    Sys.sleep(0.01)
-    if(i ==  B) cat("Done!\n")
+
+  # create progress bar
+  if(!doParallel) { 
+	pb <- txtProgressBar(min = 0,  max = B,  style = 3)  
+
+	for(i in 1:B){
+		setTxtProgressBar(pb,  i)
+		m[, i] <- BioTIP::getIc(counts, sampleL = sampleL, genes = random[, i], output = output,  ## updated 02/17/20
+						fun = fun,  
+						shrink = shrink, 
+						use = use,
+						PCC_sample.target = PCC_sample.target)
+		Sys.sleep(0.01)
+		if(i ==  B) cat("Done!\n")
+		}
+	close(pb)	
+	}
+  if(doParallel) {
+    # Register cluster
+	  cluster <- makeCluster(n_cores)
+	  registerDoParallel(cluster)
+
+	  # How many times will the loop run: B
+
+	  # Using m to save the results 
+	
+	  # Use foreach and %dopar% to run the loop in parallel
+	  m <- foreach(i = 1:B, .combine = cbind) %dopar% {
+	     BioTIP::getIc(counts, sampleL = sampleL, genes = random[, i], output = output,  ## updated 02/17/20
+						fun = fun,  
+						shrink = shrink, 
+						use = use,
+						PCC_sample.target = PCC_sample.target)
+	   
+	}  # end of the loop in parallel
+	
+	# Don't fotget to stop the cluster
+	stopCluster(cl = cluster)
   }
-  # m = sapply(1:B,  function(x) getIc(counts, sampleL, random[, x], output = 'Ic',  
-  #                                    fun = fun,  shrink = TRUE, 
-  #                                    PCC_sample.target = PCC_sample.target,  
-  #                                    PCC_gene.target = PCC_gene.target, 
-  #                                    use = use))
+  
   
   row.names(m) = names(sampleL)
+  
   return(m)
 }
-
 
 
 #' @title Line or boxplot of an observed and its simulated scores
@@ -2524,7 +2683,7 @@ cor.shrink = function(X,  Y = NULL,  MARGIN = c(1,  2),  shrink = TRUE,
 
 #' @title Density plot the leading two distance between any two states from random scores of all states in a system.
 #'
-#' @description Generate a density plot of Ic score (orBioTIP score) from a simulation, 
+#' @description Generate a density plot of Delta of Ic scores from a simulation, 
 #' which is the distance between the first-larget and the second-largest random scores. 
 #' This is an alternative method to estimate the significance of an observed BioTIP (or Ic) score in a system. 
 #' This measurement makes more sense to evaluate random scores of sample-label shuffling, 
@@ -2539,7 +2698,7 @@ cor.shrink = function(X,  Y = NULL,  MARGIN = c(1,  2),  shrink = TRUE,
 #' 
 #' @export
 #' 
-#' @return Return a P value and a plot of the observed Ic (red) and simulated Ic (grey) scores per state.
+#' @return Return a P value and a plot of the observed Delta Ic (red) and simulated Delta Ic (grey) scores per state.
 #' 
 #' @author Xinan H Yang \email{xyang2@@uchicago.edu}
 #' 
@@ -2804,8 +2963,8 @@ BioTIP.wrap <- function(sce, samplesL, subDir = 'newrun',
   (tmp = lengths(samplesL))
   if(any(tmp < smallest.population.size))  samplesL <- samplesL[-which(tmp < smallest.population.size)]
   sce = sce[,unlist(samplesL)]
-  
-  myplotIc <- function(filename,BioTIP_scores, CTS.candidate,SimResults_g ){
+    
+myplotIc <- function(filename,BioTIP_scores, CTS.candidate,SimResults_g ){
     pdf(file=filename, width=10, height=6)
     n = length(BioTIP_scores)
     # x.row= ifelse(n>=4, 2, 1)
@@ -2854,8 +3013,7 @@ BioTIP.wrap <- function(sce, samplesL, subDir = 'newrun',
     }
     dev.off() 
   }
-  
-  
+    
   ######## 1) select global HVG ######################
   if(globa.HVG.select){
     if(is.null(dec.pois)){
@@ -3234,4 +3392,150 @@ BioTIP.wrap <- function(sce, samplesL, subDir = 'newrun',
   
   # setwd(file.path(mainDir))
   
+}
+
+#' Plot Significance of IC Scores for Gene Clusters
+#'
+#' This function generates visualizations to evaluate the significance of the IC scores for different gene modules (i.e. candidate critical transition genes (CTSs)). 
+#' It creates a series of plots comparing the observed BioTIP scores and simulation results, as well as the delta IC shrinkage for each gene modules.
+#'
+#' @param filename A character string specifying the output file name where the plots will be saved (e.g., "output.pdf").
+#' @param BioTIP_scores A list of BioTIP scores for each gene module.
+#' @param CTS.candidate A named list of candidate critical transition genes (CTSs) for each module.
+#' @param SimResults_g A list of simulation results corresponding to each gene module.
+##' @param p.IC A numeric vector containing p-values for the IC scores for each module.
+#' @param width Numeric value specifying the width of the output plot in inches. Default is 10.
+#' @param height Numeric value specifying the height of the output plot in inches. Default is 6.
+##' @param local.IC.p Logical. If TRUE, local p-values are used for plotting. If FALSE, global p-values are used. Default is TRUE.
+#' @param fixedylim Logical. If TRUE, a fixed y-axis limit will be used across all plots. Default is FALSE.
+#' @param nc Integer specifying the number of panels to plot within 1 page. Default is NULL, which adjusts based on the number of gene modules (Defaiult is <=8 per row).
+#' 
+#' @details
+#' The function generates a set of plots for each gene cluster. For each cluster, it generates two types of plots:
+#' 1. Boxplots of IC shrinkage (BioTIP scores and simulation results).
+#' 2. Delta IC shrinkage, comparing observed and simulated values.
+#' The function allows users to customize the plot layout, axis limits, and the use of local or global p-values.
+#'
+#' @return Return an empirical P value and a plot of the observed Delta (of the 1st highest and 2nd highest) Ic score. 
+#' The function saves the generated plots to the specified `filename`, with 4 states ( in 8 columns) per page.
+#'
+#' @examples
+#' # Example usage of the function:
+#' plotIcSignificance(
+#'   filename = "plot_output.pdf", 
+#'   BioTIP_scores = bioTIP_scores_list, 
+#'   CTS.candidate = candidate_genes_list, 
+#'   SimResults_g = sim_results_list, 
+#'   p.IC = p_values_vector
+#' )
+#'
+#' @import BioTIP
+#' @importFrom graphics plot text
+#' @export
+
+# function improving the internal function myplotIc()
+plotIcSignificance <- function(filename, BioTIP_scores, CTS.candidate, SimResults_g , #p.IC,
+                     width=10, height=6, #local.IC.p = TRUE, 
+					 fixedylim=FALSE, nc=NULL){
+  ## nc: an interger indicating how many column to be plot
+  require(BioTIP)
+  
+  n = length(BioTIP_scores)
+  P_delta_Ic = array(dim=n)
+  names(P_delta_Ic) = names(BioTIP_scores)
+  
+  if(is.null(names(CTS.candidate))) stop('pls give a named list of "CTS.candidate" ')
+   ## ensure the same order                       
+  if(all(names(BioTIP_scores) %in% names(CTS.candidate))) names(BioTIP_scores) = names(CTS.candidate) else print('names(BioTIP_scores) != names(CTS.candidate)')
+  if(all(names(SimResults_g) %in% names(CTS.candidate))) names(SimResults_g) = names(CTS.candidate) else print('names(SimResults_g) != names(CTS.candidate)')
+  #if(all(names(p.IC) %in% names(CTS.candidate))) names(p.IC) = names(CTS.candidate) else print('names(p.IC) != names(CTS.candidate)')
+    
+  ## reformate the names of MCI to be within the original names of cell clsuters for visualization ; added by xyang2
+  if(any(grepl('.', names(BioTIP_scores), fixed=TRUE))){
+    names(BioTIP_scores) = lapply(names(BioTIP_scores), function(x) unlist(strsplit(x, split='.', fixed=T))[1]) %>% unlist
+	  names(CTS.candidate) = lapply(names(CTS.candidate), function(x) unlist(strsplit(x, split='.', fixed=T))[1]) %>% unlist
+	  names(SimResults_g) = lapply(names(SimResults_g), function(x) unlist(strsplit(x, split='.', fixed=T))[1]) %>% unlist
+   # names(p.IC) = lapply(names(p.IC), function(x) unlist(strsplit(x, split='.', fixed=T))[1]) %>% unlist
+  }
+    
+    # General function for plotting Ic and SS simulations
+  plot_simulation <- function(i) {
+    x = length(CTS.candidate[[i]])
+    if (fixedylim) ylim = c(0, max(unlist(BioTIP_scores))) else ylim = c(0, max(BioTIP_scores[[i]]))
+    
+    plot_Ic_Simulation(BioTIP_scores[[i]], SimResults_g[[i]], 
+                       ylim = ylim,
+                       las = 2, ylab = "Ic.shrink",
+                       main = paste("Cluster", names(BioTIP_scores)[i], "\n", x, "genes"),
+                       fun = "boxplot",  # fun="matplot",
+                       which2point = names(BioTIP_scores)[i])
+
+    P = plot_SS_Simulation(BioTIP_scores[[i]], SimResults_g[[i]], 
+                       main = paste("Delta Ic.shrink", x, "genes"), 
+                       ylab = NULL,
+                       xlim = range(c(BioTIP_scores[[i]][names(BioTIP_scores)[i]], SimResults_g[[i]])))
+	return(P)				   
+  }
+  
+  pdf(file=filename, width=width, height= height)
+ 
+  # Determine the number of columns
+  if(is.null(nc)) nc <- ifelse(n>8, 8 ,n)
+  newPageFLAG <- ifelse (n>8, TRUE , FALSE)
+  par(mfrow=c(2, nc)) # 8 plots per page, SimResults_g
+     
+  # Plot the simulations for the first page (first nc items)
+  for (i in 1:nc) P_delta_Ic[1:nc] = plot_simulation(i)
+  
+  # Plot the next pages if needed, based on the newPageFLAG
+  if (newPageFLAG) {
+    if (n > 8 & n <= 16) {
+      for (i in (nc + 1):n)  P_delta_Ic[i] = plot_simulation(i)
+    }
+    if (n > 16 & n <= 24) {
+	  for (i in (nc + 1):(2 * nc)) P_delta_Ic[i] = plot_simulation(i)
+      for (i in (2 * nc + 1):n) P_delta_Ic[i] = plot_simulation(i)
+    }
+    if (n > 24 & n <= 32) {
+	  for (i in (nc + 1):(2 * nc)) P_delta_Ic[i] = plot_simulation(i)
+	  for (i in (2* nc + 1):(3 * nc)) P_delta_Ic[i] = plot_simulation(i)
+      for (i in (3 * nc + 1):n) P_delta_Ic[i] = plot_simulation(i)
+    }
+	if (n > 32 & n <= 40) {
+	  for (i in (nc + 1):(2 * nc)) P_delta_Ic[i] = plot_simulation(i)
+	  for (i in (2* nc + 1):(3 * nc)) P_delta_Ic[i] = plot_simulation(i)
+	  for (i in (3* nc + 1):(4 * nc)) P_delta_Ic[i] = plot_simulation(i)
+      for (i in (4 * nc + 1):n) P_delta_Ic[i] = plot_simulation(i)
+    }
+	if (n > 40 & n <= 48) {
+	  for (i in (nc + 1):(2 * nc)) P_delta_Ic[i] = plot_simulation(i)
+	  for (i in (2* nc + 1):(3 * nc)) P_delta_Ic[i] = plot_simulation(i)
+	  for (i in (3* nc + 1):(4 * nc)) P_delta_Ic[i] = plot_simulation(i)
+	  for (i in (4* nc + 1):(5 * nc)) P_delta_Ic[i] = plot_simulation(i)
+      for (i in (5 * nc + 1):n) P_delta_Ic[i] = plot_simulation(i)
+    }
+	if (n > 48 & n <= 56) {
+	  for (i in (nc + 1):(2 * nc)) P_delta_Ic[i] = plot_simulation(i)
+	  for (i in (2* nc + 1):(3 * nc)) P_delta_Ic[i] = plot_simulation(i)
+	  for (i in (3* nc + 1):(4 * nc)) P_delta_Ic[i] = plot_simulation(i)
+	  for (i in (4* nc + 1):(5 * nc)) P_delta_Ic[i] = plot_simulation(i)
+	  for (i in (5* nc + 1):(6 * nc)) P_delta_Ic[i] = plot_simulation(i)
+      for (i in (6 * nc + 1):n) P_delta_Ic[i] = plot_simulation(i)
+    }
+	if (n > 56 & n <= 64) {
+	  for (i in (nc + 1):(2 * nc)) P_delta_Ic[i] = plot_simulation(i)
+	  for (i in (2* nc + 1):(3 * nc)) P_delta_Ic[i] = plot_simulation(i)
+	  for (i in (3* nc + 1):(4 * nc)) P_delta_Ic[i] = plot_simulation(i)
+	  for (i in (4* nc + 1):(5 * nc)) P_delta_Ic[i] = plot_simulation(i)
+	  for (i in (5* nc + 1):(6 * nc)) P_delta_Ic[i] = plot_simulation(i)
+	  for (i in (6* nc + 1):(7 * nc)) P_delta_Ic[i] = plot_simulation(i)
+      for (i in (7 * nc + 1):n) P_delta_Ic[i] = plot_simulation(i)
+    }
+	if(n>64) warning('only the first 65 cases were plotted')
+  }
+    
+  
+  dev.off() 
+  
+  return(P_delta_Ic)
 }
