@@ -450,6 +450,11 @@ sd_selection = function(df,  samplesL,  cutoff = 0.01,
 #'   
 #' @export
 #' @seealso \code{\link{sd_selection}}
+#'
+#' @importFrom parallel detectCores
+#' @importFrom doParallel registerDoParallel makeCluster stopCluster
+#' @importFrom foreach %dopar%
+#' @importFrom stats sd
 #' 
 #' @author Zhezhen Wang \email{zhezhen@@uchicago.edu}; Xinan Yang {xyang2@uchicago.edu}
 
