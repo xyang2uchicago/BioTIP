@@ -239,7 +239,7 @@ par(mar = c(10,5,0,2))
 plot_Ic_Simulation(IC,simuIC,las = 2)
 ```
 
-Another function `plot_simulation_sample` calculates random Ic-scores by shuffling
+Another function `simulation_Ic_sample` calculates random Ic-scores by shuffling
 samples and visualizes the results. Showing in the plot is observed Ic-score
 (red vertical line) comparing to the density of random scores (grey), at the
 tipping point identified.

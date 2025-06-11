@@ -1,22 +1,8 @@
 
-myplotIc <- function(filename,BioTIP_scores, CTS.candidate, SimResults_g , p.IC,
-                     width=10, height=6, local.IC.p = TRUE, nn=NULL){
+myplotIc <- function(filename,BioTIP_scores, CTS.candidate,SimResults_g ,
+                     width=10, height=6, nn=NULL){
   require(BioTIP)
-
-  if(is.null(names(CTS.candidate))) stop('pls give a named list of "CTS.candidate" ')
-   ## ensure the same order                       
-  if(all(names(BioTIP_scores) %in% names(CTS.candidate))) names(BioTIP_scores) = names(CTS.candidate) else print('names(BioTIP_scores) != names(CTS.candidate)')
-  if(all(names(SimResults_g) %in% names(CTS.candidate))) names(SimResults_g) = names(CTS.candidate) else print('names(SimResults_g) != names(CTS.candidate)')
-  if(all(names(p.IC) %in% names(CTS.candidate))) names(p.IC) = names(CTS.candidate) else print('names(p.IC) != names(CTS.candidate)')
-    
-  ## reformate the names of MCI to be within the original names of cell clsuters for visualization ; added by xyang2
-  if(any(grepl('.', names(BioTIP_scores), fixed=TRUE))){
-    names(BioTIP_scores) = lapply(names(BioTIP_scores), function(x) unlist(strsplit(x, split='.', fixed=T))[1]) %>% unlist
-	  names(CTS.candidate) = lapply(names(CTS.candidate), function(x) unlist(strsplit(x, split='.', fixed=T))[1]) %>% unlist
-	  names(SimResults_g) = lapply(names(SimResults_g), function(x) unlist(strsplit(x, split='.', fixed=T))[1]) %>% unlist
-    names(p.IC) = lapply(names(p.IC), function(x) unlist(strsplit(x, split='.', fixed=T))[1]) %>% unlist
-  }
-    
+  
   pdf(file=filename, width=width, height= height)
   n = length(BioTIP_scores)
   # x.row= ifelse(n>=4, 2, 1)
