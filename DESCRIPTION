@@ -28,4 +28,11 @@ Imports:
     stringr,
     GenomicRanges,
     MASS, 
-    scran
+    scran,
+    methods,
+    stats,
+    utils,
+    grDevices,
+    graphics,
+    foreach,
+    doParallel
