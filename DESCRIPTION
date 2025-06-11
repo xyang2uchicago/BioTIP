@@ -3,7 +3,7 @@ Type: Package
 Title: BioTIP: An R package for characterization of Biological Tipping-Point
 Version: 1.19.0
 Author: Zhezhen Wang, Andrew Goldstein, Yuxi Sun, Biniam Feleke, Qier An, Antonio Feliciano, Xinan Yang
-Maintainer: Yuxi (Jennifer) Sun <ysun11@uchicago.edu>, Zhezhen Wang <zhezhen@uchicago.edu>, and X Holly Yang <xyang2@uchicago.edu>
+Maintainer: Felix Yu <felixy@uchicago.edu> and X Holly Yang <xyang2@uchicago.edu>
 Description: Adopting tipping-point theory to transcriptome profiles 
      to unravel disease regulatory trajectory.
 Depends: R (>= 3.6)
