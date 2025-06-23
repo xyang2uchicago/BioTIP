@@ -3,6 +3,7 @@
 ## Email: zhezhen@uchicago.edu;andrewgoldstein@uchicago.edu; ysun11@uchicago.edu; xyang2@uchicago.edu
 ## Last update:  04/20/2022
 ## Acknowledgement: National Institutes of Health  R21LM012619 
+## 6/16/2025 using  Matrix::tcrossprod() instead of base tcrossprod() in the cor.shrink() to ensure the handling of sparse matrix
 ## 5/2/2025  updating the the function optimize.sd_selection() by moving the 'pre-calcualte the SD Calculation across sampels outside each cluster' step 
 ## outside the iteration loop. 
 ## 5/2/2025 updating the simulationb_IC function to allowing parallel computing. with two new parameters 'n_cores' and 'doParallel'. 
@@ -2582,6 +2583,7 @@ avg.cor.shrink = function(X,  Y = NULL,  MARGIN = c(1,  2),  shrink = TRUE,
 #' dim(cor.matrix)   #[1] 120  120
 #' mean(upper.tri(cor.matrix, diag = FALSE))  # 0.4954545
 #' 
+#' @importFrom Matrix crossprod tcrossprod    # ** new 6/16/2025
 #' @author Andrew Goldstein \email{andrewgoldstein@@uchicago.edu}; Xinan H Yang \email{xyang2@@uchicago.edu}
 # 
 
@@ -2633,15 +2635,15 @@ cor.shrink = function(X,  Y = NULL,  MARGIN = c(1,  2),  shrink = TRUE,
   Y = !is.na(X_std) # contains pattern of non-missing values
   X_std[!Y] = 0 # set missing to 0 to not add to (t)crossprod (but # of not missing encoded in Y)
   
-  # calculate quantities needed
+  # calculate quantities needed,  
   if (MARGIN ==  1) {
-    XtX = tcrossprod(X_std)
-    X2tX2 = tcrossprod(X_std^2)
-    YtY = tcrossprod(Y)
+    XtX = Matrix::tcrossprod(X_std)   # ** updated 6/16/2025 
+    X2tX2 = Matrix::tcrossprod(X_std^2) # ** updated 6/16/2025
+    YtY = Matrix::tcrossprod(Y)  # ** updated 6/16/2025
   } else {
-    XtX = crossprod(X_std)
-    X2tX2 = crossprod(X_std^2)
-    YtY = crossprod(Y)
+    XtX = Matrix::crossprod(X_std)  # ** updated 6/16/2025
+    X2tX2 = Matrix::crossprod(X_std^2)  # ** updated 6/16/2025
+    YtY = Matrix::crossprod(Y)  # ** updated 6/16/2025
   }
   
   # calculate empirical correlation
